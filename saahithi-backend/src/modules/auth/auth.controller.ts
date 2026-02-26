@@ -12,7 +12,9 @@ import { RegisterUserDto } from './dto/register-user.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { Response, Request as ExpressRequest } from 'express';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -20,6 +22,12 @@ export class AuthController {
   /**
    * POST /auth/register - Register a new user
    */
+
+  @ApiOperation({ summary: 'Register a new user' })
+  @ApiResponse({ status: 201, description: 'User registered successfully.' })
+  @ApiResponse({ status: 400, description: 'Invalid input data.' })
+  @ApiResponse({ status: 409, description: 'Email already exists.' })
+  @ApiResponse({ status: 500, description: 'Internal server error.' })
   @Post('register')
   async register(@Body() registerUserDto: RegisterUserDto) {
     await this.authService.register(registerUserDto);
@@ -31,6 +39,27 @@ export class AuthController {
    * The @Request() req object is populated with the user details from LocalStrategy validation.
    */
   @UseGuards(LocalAuthGuard)
+  @ApiOperation({ summary: 'User login' })
+  // @ApiBody({
+  //   description: 'User login credentials',
+  //   schema: {
+  //     type: 'object',
+  //     properties: {
+  //       email: { type: 'string', example: 'user@example.com' },
+  //       password: { type: 'string', example: 'password123' },
+  //     },
+  //   },
+  // })
+  @ApiResponse({
+    status: 200,
+    description: 'Login successful. Returns access token.',
+  })
+  @ApiResponse({ status: 400, description: 'Invalid email or password.' })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized. Invalid credentials.',
+  })
+  @ApiResponse({ status: 500, description: 'Internal server error.' })
   @Post('login')
   async login(
     @Request() req: ExpressRequest,

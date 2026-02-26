@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import * as cookieParser from 'cookie-parser';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
 import { TransformInterceptor } from './interceptors/transform.interceptor';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -26,6 +27,16 @@ async function bootstrap() {
 
   // Global response format:
   app.useGlobalInterceptors(new TransformInterceptor());
+
+  const config = new DocumentBuilder()
+    .setTitle('Saahithi')
+    .setDescription('API documentation for Saahithi')
+    .setVersion('1.0')
+    .addBearerAuth() // Optional: if API uses Bearer token authentication
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api-docs', app, document); // The documentation will be available at http://localhost:3060/api/api-docs
 
   await app.listen(process.env.PORT ?? 3060);
   console.log(`Application is running on: ${await app.getUrl()}`);
