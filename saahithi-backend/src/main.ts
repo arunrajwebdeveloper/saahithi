@@ -10,11 +10,11 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const configService = app.get(ConfigService);
-  const origin = configService.get<string>('CORS_ORIGIN')!;
+  const client_url = configService.get<string>('CLIENT_URL')!;
 
   // app.enableCors();
   app.enableCors({
-    origin: ['http://localhost:5173', 'http://localhost:3000', origin],
+    origin: ['http://localhost:5173', client_url],
     credentials: true, // Allow cookies
   });
 
