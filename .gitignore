@@ -1,0 +1,45 @@
+# === Global ===
+*.log
+.DS_Store
+Thumbs.db
+.env
+.env.local
+.env.*.local
+.vscode/
+.idea/
+*.sw?
+*.tsbuildinfo
+
+# === Client (Next.js) ===
+saahithi-client/node_modules/
+saahithi-client/.next/
+saahithi-client/out/
+saahithi-client/.env
+saahithi-client/.env.local
+saahithi-client/.env.development.local
+saahithi-client/.env.production.local
+saahithi-client/coverage/
+saahithi-client/.vercel
+
+# === Admin (React.js) ===
+saahithi-admin/node_modules/
+saahithi-admin/dist/
+saahithi-admin/.env
+saahithi-admin/.env.local
+saahithi-admin/.env.development.local
+saahithi-admin/.env.production.local
+saahithi-admin/logs
+saahithi-admin/*.log
+
+# === Server (NestJS) ===
+saahithi-backend/node_modules/
+saahithi-backend/dist/
+saahithi-backend/build/
+saahithi-backend/.env
+saahithi-backend/.env.local
+saahithi-backend/.env.development.local
+saahithi-backend/.env.production.local
+saahithi-backend/coverage/
+saahithi-backend/report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+saahithi-backend/.temp
+saahithi-backend/.tmp
