@@ -91,9 +91,11 @@ export class AuthService {
 
   async login(user: any, res: Response) {
     const payload = {
-      email: user.email,
-      userId: user._id,
       sub: user._id,
+      userId: user._id,
+      email: user.email,
+      role: user.role,
+      isPremium: user.isPremium,
     };
 
     const { accessToken, refreshToken } = this.getTokens(payload);
@@ -118,6 +120,8 @@ export class AuthService {
         sub: payload?.sub,
         userId: payload?.userId,
         email: payload?.email,
+        role: payload?.role,
+        isPremium: payload?.isPremium,
       };
 
       // Issue NEW tokens (Rotation)

@@ -31,8 +31,8 @@ export class UserController {
     description: 'User not found.',
   })
   @Get('me')
-  async getMe(@Req() req): Promise<UserDocument | null> {
-    const userId = req.user.userId;
+  async getMe(@Req() req: any): Promise<UserDocument | null> {
+    const userId = req.user?.userId;
     const user = await this.userService.findOneById(userId);
 
     if (!user) {
