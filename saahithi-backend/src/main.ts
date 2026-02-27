@@ -5,6 +5,7 @@ import * as cookieParser from 'cookie-parser';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
 import { TransformInterceptor } from './interceptors/transform.interceptor';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -21,6 +22,14 @@ async function bootstrap() {
   app.use(cookieParser());
 
   app.setGlobalPrefix('api');
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true, // Strips away any properties that aren't in the DTO
+      forbidNonWhitelisted: true, // Throws error if extra properties are sent
+      transform: true, // Automatically transforms payloads to DTO instances
+    }),
+  );
 
   // Global exception filter for consistent error responses
   app.useGlobalFilters(new HttpExceptionFilter());

@@ -6,11 +6,13 @@ import {
   MaxLength,
   Matches,
   IsEnum,
+  IsNotEmpty,
+  IsOptional,
 } from 'class-validator';
 
 export enum UserRole {
-  User = 'user',
-  Admin = 'admin',
+  USER = 'user',
+  ADMIN = 'admin',
 }
 
 export class RegisterUserDto {
@@ -56,6 +58,9 @@ export class RegisterUserDto {
     description: 'The role of the user',
     example: 'Admin or User',
   })
-  @IsEnum(UserRole)
-  role!: UserRole;
+  @IsEnum(UserRole, {
+    message: 'Role must be either admin or user',
+  })
+  @IsOptional()
+  role?: UserRole;
 }

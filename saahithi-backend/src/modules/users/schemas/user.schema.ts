@@ -21,9 +21,14 @@ export class User {
   @Prop({
     type: String,
     enum: Object.values(UserRole),
-    default: UserRole.User,
+    default: UserRole.USER,
   })
   role!: UserRole;
+
+  @Prop({ required: true, default: false })
+  isPremium!: boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+
+UserSchema.index({ email: 1, firstName: 1, lastName: 1 }, { unique: true });

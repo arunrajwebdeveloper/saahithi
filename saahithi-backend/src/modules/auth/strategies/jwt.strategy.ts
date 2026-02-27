@@ -29,9 +29,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     }
 
     return {
-      userId: payload.userId, // Match the key used in AuthService login payload
       email: payload.email,
-      sub: payload.sub,
+      userId: payload.sub,
+      sub: payload._id,
     };
   }
 }
