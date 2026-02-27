@@ -9,6 +9,9 @@ import { UserDocument } from './schemas/user.schema';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { RolesGuard } from '@/guards/roles.guard';
+import { UserRole } from '../auth/dto/register-user.dto';
+import { Roles } from '@/decorators/roles.decorator';
 
 @UseGuards(JwtAuthGuard)
 @ApiTags('Users')
@@ -42,4 +45,16 @@ export class UserController {
     const { password, ...userObject } = user?.toObject();
     return userObject as UserDocument;
   }
+
+  // ONLY FOR ADMIN
+  @Get('list')
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN) //   @Roles(UserRole.ADMIN, UserRole.USER)
+  findAll() {
+    return this.userService.findAll();
+  }
 }
+
+// NEED TO ADD (ADMIN ONLY)
+// REMOVE USER
+// EDIT USER
