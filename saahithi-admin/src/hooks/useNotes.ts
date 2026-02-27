@@ -1,0 +1,537 @@
+import { useEffect, useState } from "react";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+  type InfiniteData,
+} from "@tanstack/react-query";
+import { notesAPI } from "../api/endpoints/notes.api";
+import type {
+  Note,
+  NoteFilterState,
+  NotesResponse,
+  NoteType,
+  ToggleArchiveType,
+} from "../types/note.types";
+import { useDebounce } from "../utils/useDebounce";
+import { useDelete } from "./useDelete";
+
+type NoteQueryKey = ["get_notes", NoteFilterState];
+
+export const useNotes = ({
+  enabled = false,
+  limit = 10,
+}: {
+  enabled: boolean;
+  limit?: number;
+}) => {
+  const queryClient = useQueryClient();
+
+  const [filterState, setFilterState] = useState<NoteFilterState>({
+    limit,
+    search: "",
+    tagId: null,
+    sortBy: "orderIndex",
+    sortOrder: "desc",
+    noteType: "active",
+  });
+  const [localSearch, setLocalSearch] = useState<string>(filterState.search);
+  const [isOpenNoteModal, setIsOpenNoteModal] = useState<boolean>(false);
+  const [isOpenTagModal, setIsOpenTagModal] = useState<boolean>(false);
+  const [isOpenSearchModal, setIsOpenSearchModal] = useState<boolean>(false);
+  const [selectedNote, setSelectedNote] = useState<Note | null>(null);
+  const [deletingNoteTagIds, setDeletingNoteTagIds] = useState<
+    Map<string, string[]>
+  >(new Map());
+  const [archivingNoteIds, setArchivingNoteIds] = useState<Set<string>>(
+    new Set(),
+  );
+  const [deletetingTrashNoteIds, setDeletetingTrashNoteIds] = useState<
+    Set<string>
+  >(new Set());
+  const [restoringTrashNoteIds, setRestoringTrashNoteIds] = useState<
+    Set<string>
+  >(new Set());
+
+  const debouncedSearch = useDebounce(localSearch, 500);
+  const { deleteInfo, onDelete, resetDeleteInfo } = useDelete();
+
+  useEffect(() => {
+    if (debouncedSearch !== filterState.search) {
+      setFilterState((prev) => ({
+        ...prev,
+        search: debouncedSearch,
+      }));
+    }
+  }, [debouncedSearch, filterState.search]);
+
+  const openNoteModal = (note?: Note | null) => {
+    setSelectedNote(note || null);
+    setIsOpenNoteModal(true);
+  };
+
+  const closeNoteModal = () => {
+    setIsOpenNoteModal(false);
+    setSelectedNote(null);
+  };
+
+  const openTagModal = () => {
+    setIsOpenTagModal(true);
+  };
+
+  const closeTagModal = () => {
+    setIsOpenTagModal(false);
+  };
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newSearchValue = event.target.value;
+    setLocalSearch(newSearchValue);
+    // If the user starts typing, immediately clear the selected tag.
+    if (newSearchValue !== "" && filterState.tagId !== null) {
+      setFilterState((prev) => ({
+        ...prev,
+        tagId: null,
+      }));
+    }
+  };
+
+  const handleTagSelect = (tagId: string) => {
+    const newSelectedTagId = filterState.tagId === tagId ? null : tagId;
+
+    setFilterState((prev) => ({
+      ...prev,
+      tagId: newSelectedTagId,
+      search: "",
+      noteType: "active",
+    }));
+
+    setLocalSearch("");
+  };
+
+  const handleNoteType = (type: string) => {
+    setFilterState((prev) => ({
+      ...prev,
+      noteType: type as NoteType,
+      tagId: null,
+    }));
+  };
+
+  const clearSearchModal = () => {
+    setLocalSearch("");
+  };
+
+  const openSearchModal = () => {
+    setIsOpenSearchModal(true);
+  };
+  const closeSearchModal = () => {
+    setIsOpenSearchModal(false);
+  };
+
+  const closeOrClearSearchModal = () => {
+    if (localSearch) {
+      clearSearchModal();
+    } else {
+      setIsOpenSearchModal(false);
+    }
+  };
+
+  const onDeleteNote = (id: string) => {
+    onDelete({
+      id,
+      action: "note",
+    });
+  };
+
+  const handleDelete = (id: string | null) => {
+    if (id) {
+      deleteNoteMutation.mutate(
+        { id },
+        {
+          onSettled: () => {
+            resetDeleteInfo();
+          },
+        },
+      );
+    }
+  };
+
+  const toggleArchive = ({ id, type }: ToggleArchiveType) => {
+    if (type === "archive") {
+      archiveNoteMutation.mutate({ id });
+    } else {
+      unarchiveNoteMutation.mutate({ id });
+    }
+  };
+
+  const restoreNote = (id: string) => {
+    restoreNoteMutation.mutate({ id });
+  };
+
+  const deleteTrashNote = (id: string) => {
+    deleteNoteFromTrashMutation.mutate({ id });
+  };
+
+  const emptyTrash = () => {
+    emptyTrashMutation.mutate(undefined, {
+      onSettled: () => {
+        resetDeleteInfo();
+      },
+    });
+  };
+
+  const onRemoveNoteTag = (id: string, tagId: string) => {
+    removeNoteTagMutation.mutate({ id, payload: { tagId } });
+  };
+
+  const notes = useInfiniteQuery<
+    NotesResponse, // TQueryFnData: Single page data type
+    Error, // TError
+    InfiniteData<NotesResponse, number>, // TData: The CORRECT type for the 'data' property
+    NoteQueryKey, // TQueryKey
+    number // TPageParam
+  >({
+    queryKey: ["get_notes", filterState],
+    initialPageParam: 1,
+    queryFn: ({ pageParam = 1, queryKey }) => {
+      // Destructure the filter state from the second element of the queryKey
+      const [, filters] = queryKey;
+      return notesAPI.getNotes({
+        page: pageParam,
+        ...filters,
+      });
+    },
+
+    getNextPageParam: (lastPage: NotesResponse) => {
+      if (lastPage.hasNext) {
+        return lastPage.page + 1;
+      }
+      return undefined;
+    },
+
+    // staleTime: 1000 * 60 * 5,
+  });
+
+  const {
+    data: tags,
+    isLoading: isLoadingTagsList,
+    isFetching: isFetchingTags,
+  } = useQuery({
+    queryKey: ["get_tags"],
+    queryFn: notesAPI.getTags,
+    enabled: enabled,
+  });
+
+  const createNoteMutation = useMutation({
+    mutationFn: notesAPI.createNote,
+    onSuccess: (newNote) => {
+      queryClient.setQueryData(["get_notes", filterState], (oldData: any) => {
+        if (!oldData) return oldData;
+
+        const updatedPages = oldData?.pages.map((page: any, index: number) => {
+          if (index === 0) {
+            return {
+              ...page,
+              result: [newNote, ...page.result],
+              total: (page.total || 0) + 1, // increment total if exists
+            };
+          }
+          return page;
+        });
+
+        return {
+          ...oldData,
+          pages: updatedPages,
+        };
+      });
+    },
+    onError: (error: any) => {
+      console.error(
+        "Note creation failed:",
+        error.response?.data?.result?.message || error.message,
+      );
+    },
+    onSettled: () => {
+      closeNoteModal();
+    },
+  });
+
+  const updateNoteMutation = useMutation({
+    mutationFn: ({ id, payload }: { id: string; payload: any }) =>
+      notesAPI.updateNote(id, payload),
+    onSuccess: (updatedNote, { id }) => {
+      queryClient.setQueryData(["get_notes", filterState], (oldData: any) => {
+        if (!oldData) return oldData;
+
+        return {
+          ...oldData,
+          pages: oldData.pages.map((page: any) => ({
+            ...page,
+            result: page.result.map((note: any) =>
+              note._id === id ? updatedNote : note,
+            ),
+          })),
+        };
+      });
+    },
+    onError: (error: any) => {
+      console.error(
+        "Note updation failed:",
+        error.response?.data?.result?.message || error.message,
+      );
+    },
+    onSettled: () => {
+      closeNoteModal();
+    },
+  });
+
+  const deleteNoteMutation = useMutation({
+    mutationFn: notesAPI.deleteNote,
+    onSuccess: (_, { id }) => {
+      queryClient.setQueryData(["get_notes", filterState], (oldData: any) => {
+        if (!oldData) return oldData;
+
+        return {
+          ...oldData,
+          pages: oldData.pages.map((page: any) => ({
+            ...page,
+            result: page.result.filter((note: any) => note._id !== id),
+            total: Math.max((page.total || 0) - 1, 0),
+          })),
+        };
+      });
+    },
+    onError: (error: any) => {
+      console.error(
+        "Note deletion failed:",
+        error.response?.data?.result?.message || error.message,
+      );
+    },
+  });
+
+  const createTagMutation = useMutation({
+    mutationFn: notesAPI.createTag,
+    onSuccess: (newTag) => {
+      queryClient.setQueryData(["get_tags"], (oldData: any) => {
+        if (!oldData) return oldData;
+        return [newTag, ...oldData]?.sort((a, b) =>
+          a.name.localeCompare(b.name),
+        );
+      });
+    },
+    onError: (error: any) => {
+      console.error(
+        "Tag creation failed:",
+        error.response?.data?.result?.message || error.message,
+      );
+    },
+  });
+
+  const updateTagMutation = useMutation({
+    mutationFn: ({ id, payload }: { id: string; payload: any }) =>
+      notesAPI.editTag(id, payload),
+    onSuccess: async (newTag) => {
+      await Promise.all([
+        queryClient.setQueryData(["get_tags"], (oldData: any) => {
+          if (!oldData) return oldData;
+
+          return oldData.map((tag: any) =>
+            tag._id === newTag._id ? newTag : tag,
+          );
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ["get_notes", filterState],
+        }),
+      ]);
+    },
+  });
+
+  const deleteTagMutation = useMutation({
+    mutationFn: notesAPI.deleteTag,
+    onSuccess: async (_, { id }) => {
+      await Promise.all([
+        queryClient.setQueryData(["get_tags"], (oldData: any) => {
+          if (!oldData) return oldData;
+          return oldData.filter((tag: any) => tag._id !== id);
+        }),
+        queryClient.invalidateQueries({ queryKey: ["get_notes", filterState] }),
+      ]);
+    },
+  });
+
+  const removeNoteTagMutation = useMutation({
+    mutationFn: notesAPI.removeNoteTag,
+    onMutate: ({ id: noteId, payload: { tagId } }) => {
+      const tid = String(tagId);
+      const nid = String(noteId);
+
+      setDeletingNoteTagIds((prevMap) => {
+        const newMap = new Map(prevMap);
+        const existingTags = newMap.get(nid) || [];
+
+        // Add tagId to the array for this specific note
+        newMap.set(nid, [...existingTags, tid]);
+        return newMap;
+      });
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["get_notes", filterState],
+      });
+    },
+    onSettled: (_, __, { id: noteId, payload: { tagId } }) => {
+      const tid = String(tagId);
+      const nid = String(noteId);
+
+      setDeletingNoteTagIds((prevMap) => {
+        const newMap = new Map(prevMap);
+        const existingTags = newMap.get(nid) || [];
+
+        // Filter out the tag that just finished deleting
+        const updatedTags = existingTags.filter((id) => id !== tid);
+
+        if (updatedTags.length === 0) {
+          newMap.delete(nid); // Clean up the key if no tags are left deleting
+        } else {
+          newMap.set(nid, updatedTags);
+        }
+
+        return newMap;
+      });
+    },
+  });
+
+  const restoreNoteMutation = useMutation({
+    mutationFn: notesAPI.restoreNote,
+    onMutate: ({ id }) => {
+      setRestoringTrashNoteIds((prev) => new Set([...prev, String(id)]));
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["get_notes", filterState],
+      });
+    },
+    onSettled: (_, __, { id }) => {
+      setRestoringTrashNoteIds((prev) => {
+        const next = new Set(prev);
+        next.delete(String(id));
+        return next;
+      });
+    },
+  });
+
+  const deleteNoteFromTrashMutation = useMutation({
+    mutationFn: notesAPI.deleteNoteFromTrash,
+    onMutate: ({ id }) => {
+      setDeletetingTrashNoteIds((prev) => new Set([...prev, String(id)]));
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["get_notes", filterState],
+      });
+    },
+    onSettled: (_, __, { id }) => {
+      setDeletetingTrashNoteIds((prev) => {
+        const next = new Set(prev);
+        next.delete(String(id));
+        return next;
+      });
+    },
+  });
+
+  const emptyTrashMutation = useMutation({
+    mutationFn: notesAPI.emptyTrash,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["get_notes", filterState],
+      });
+    },
+  });
+
+  const archiveNoteMutation = useMutation({
+    mutationFn: notesAPI.archiveNote,
+    onMutate: ({ id }) => {
+      setArchivingNoteIds((prev) => new Set([...prev, String(id)]));
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["get_notes", filterState],
+      });
+    },
+    onSettled: (_, __, { id }) => {
+      setArchivingNoteIds((prev) => {
+        const next = new Set(prev);
+        next.delete(String(id));
+        return next;
+      });
+    },
+  });
+
+  const unarchiveNoteMutation = useMutation({
+    mutationFn: notesAPI.unarchiveNote,
+    onMutate: ({ id }) => {
+      setArchivingNoteIds((prev) => new Set([...prev, String(id)]));
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["get_notes", filterState],
+      });
+    },
+    onSettled: (_, __, { id }) => {
+      setArchivingNoteIds((prev) => {
+        const next = new Set(prev);
+        next.delete(String(id));
+        return next;
+      });
+    },
+  });
+
+  return {
+    notes,
+    tags,
+    isLoadingTags: isLoadingTagsList || isFetchingTags,
+    isOpenNoteModal,
+    openNoteModal,
+    closeNoteModal,
+    createNoteMutation,
+    updateNoteMutation,
+    deleteNoteMutation,
+    selectedNote,
+    handleSearchChange,
+    handleTagSelect,
+    closeSearchModal,
+    openSearchModal,
+    clearSearchModal,
+    closeOrClearSearchModal,
+    filterState,
+    localSearch,
+    isOpenTagModal,
+    isOpenSearchModal,
+    openTagModal,
+    closeTagModal,
+    handleNoteType,
+    createTagMutation,
+    updateTagMutation,
+    deleteTagMutation,
+    archiveNoteMutation,
+    unarchiveNoteMutation,
+    restoreNoteMutation,
+    deleteNoteFromTrashMutation,
+    emptyTrashMutation,
+    removeNoteTagMutation,
+    deletingNoteTagIds,
+    archivingNoteIds,
+    deletetingTrashNoteIds,
+    restoringTrashNoteIds,
+    deleteInfo,
+    onDelete,
+    resetDeleteInfo,
+    onDeleteNote,
+    handleDelete,
+    toggleArchive,
+    restoreNote,
+    deleteTrashNote,
+    emptyTrash,
+    onRemoveNoteTag,
+  };
+};
