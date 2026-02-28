@@ -15,7 +15,7 @@ async function bootstrap() {
 
   // app.enableCors();
   app.enableCors({
-    origin: ['http://localhost:5173', client_url],
+    origin: [client_url],
     credentials: true, // Allow cookies
   });
 

@@ -66,6 +66,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
+    // password removed from this response
     const { password, ...result } = user.toObject();
     return result;
   }

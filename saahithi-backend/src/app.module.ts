@@ -3,6 +3,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './modules/auth/auth.module';
 import { ContentModule } from './modules/content/content.module';
+import { AdminModule } from './modules/admin/admin.module';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [
@@ -23,6 +25,8 @@ import { ContentModule } from './modules/content/content.module';
 
     // Feature Modules
     AuthModule,
+    AdminModule,
+    UsersModule,
     ContentModule,
   ],
 })
