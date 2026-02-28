@@ -3,7 +3,6 @@ import { store } from "../store/store";
 import { logout } from "../store/features/authSlice";
 
 const baseURL = "/api";
-// import.meta.env.VITE_API_BASE_URL || "http://localhost:3050/api";
 
 // Create axios instance
 export const apiClient: AxiosInstance = axios.create({

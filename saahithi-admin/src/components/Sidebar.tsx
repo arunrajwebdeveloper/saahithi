@@ -1,26 +1,13 @@
 import { Archive, Plus, Trash2 } from "lucide-react";
-import type { Note, NoteFilterState, TagItem } from "../types/note.types";
-import TagsSidebar from "./TagsSidebar";
+import type { Note } from "../types/note.types";
 import Tooltip from "./common/Tooltip";
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
 import { closeSidebar } from "../store/features/sidebarSlice";
 
 function Sidebar({
-  tags,
-  isLoadingTags,
-  isLoadingNotes,
-  handleTagSelect,
-  filterState,
-  openTagModal,
   handleNoteType,
   openNoteModal,
 }: {
-  tags: TagItem[];
-  isLoadingTags: boolean;
-  isLoadingNotes: boolean;
-  handleTagSelect: (tagId: string) => void;
-  filterState: NoteFilterState;
-  openTagModal: () => void;
   handleNoteType: (type: string) => void;
   openNoteModal: (note: Note | null) => void;
 }) {
@@ -38,7 +25,7 @@ function Sidebar({
 
   return (
     <aside className={`h-dvh w-auto ${isOpenSidebar ? "flex" : "hidden"}`}>
-      <div className="w-[60px] lg:w-[100px] h-full flex flex-col justify-between items-center py-6 border-r border-r-slate-200">
+      <div className="w-15 lg:w-25 h-full flex flex-col justify-between items-center py-6 border-r border-r-slate-200">
         {/* Logo */}
         <div className="flex flex-col items-center">
           <p className="text-xl font-semibold text-black m-auto leading-5 select-none">
@@ -80,19 +67,6 @@ function Sidebar({
           </button>
         </div>
       </div>
-
-      {/* Tags Sidebar */}
-
-      <TagsSidebar
-        tags={tags}
-        isLoadingTags={isLoadingTags}
-        isLoadingNotes={isLoadingNotes}
-        handleTagSelect={handleTagSelect}
-        filterState={filterState}
-        openTagModal={openTagModal}
-        handleNoteType={handleNoteType}
-        closeSidebarOnSmDevice={closeSidebarOnSmDevice}
-      />
     </aside>
   );
 }

@@ -16,7 +16,6 @@ function NotesPage() {
   const {
     notes: notesData,
     tags,
-    isLoadingTags,
     isOpenNoteModal,
     openNoteModal,
     closeNoteModal,
@@ -25,12 +24,10 @@ function NotesPage() {
     deleteNoteMutation,
     selectedNote,
     handleSearchChange,
-    handleTagSelect,
     filterState,
     localSearch,
     isOpenTagModal,
     isOpenSearchModal,
-    openTagModal,
     closeTagModal,
     handleNoteType,
     closeSearchModal,
@@ -75,16 +72,7 @@ function NotesPage() {
 
   return (
     <div className="flex h-dvh w-full overflow-hidden">
-      <Sidebar
-        tags={tags}
-        isLoadingTags={isLoadingTags}
-        isLoadingNotes={isLoadingNotes}
-        handleTagSelect={handleTagSelect}
-        filterState={filterState}
-        openTagModal={openTagModal}
-        handleNoteType={handleNoteType}
-        openNoteModal={openNoteModal}
-      />
+      <Sidebar handleNoteType={handleNoteType} openNoteModal={openNoteModal} />
 
       <div
         className={`w-full overflow-y-auto px-4 sm:px-6 lg:px-10 transition duration-300 

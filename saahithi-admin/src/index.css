@@ -9,14 +9,17 @@
   line-height: 1.5;
   font-weight: normal;
 
-  /* color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424; */
+  /* color-scheme: light dark; */
+  /* color: rgba(255, 255, 255, 0.87);
+  background-color: #1d1d25; */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  background-color: #d7dadf;
+  color: #222329;
 }
 
 /* @media (prefers-color-scheme: light) {
@@ -52,14 +55,3 @@ button {
 .virtualized-list:hover > div[role="list"]::-webkit-scrollbar-thumb {
   background-color: #99a1af;
 }
-
-/* .note-item .note-actions {
-  opacity: 0;
-  visibility: hidden;
-  transition: 0.3s ease;
-}
-
-.note-item:hover .note-actions {
-  opacity: 1;
-  visibility: visible;
-} */
