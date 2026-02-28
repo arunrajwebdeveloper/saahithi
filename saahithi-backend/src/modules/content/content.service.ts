@@ -24,7 +24,7 @@ export class ContentService {
   async create(
     createDto: CreateContentDto,
     authorId: string,
-  ): Promise<ContentDocument> {
+  ): Promise<ContentDocument | null> {
     const slugBase = createDto.slug || createDto.title;
     let finalSlug = this.slugify(slugBase);
 
@@ -47,7 +47,7 @@ export class ContentService {
   async update(
     id: string,
     updateContentDto: UpdateContentDto,
-  ): Promise<ContentDocument> {
+  ): Promise<ContentDocument | null> {
     const existingContent = await this.contentModel
       .findByIdAndUpdate(id, updateContentDto, { new: true })
       .exec();
@@ -59,33 +59,57 @@ export class ContentService {
     return existingContent;
   }
 
-  async findOne(id: string): Promise<ContentDocument> {
+  async findOne(id: string): Promise<ContentDocument | null> {
     const content = await this.contentModel.findById(id).exec();
     if (!content) throw new NotFoundException('Content not found');
     return content;
   }
 
   async findAll(): Promise<ContentDocument[]> {
-    return this.contentModel.find().select('title createdAt').exec();
+    return this.contentModel.find().select('title').exec();
   }
 
-  async saveDraft(id: string, updateDto: any): Promise<ContentDocument> {
-    return this.update(id, { ...updateDto, isPublished: false });
+  async findUserContent(author: string): Promise<ContentDocument[]> {
+    return this.contentModel.find({ author }).select('title').exec();
   }
 
-  async softDelete(id: string): Promise<ContentDocument> {
+  async saveAsDraft(id: string): Promise<ContentDocument | null> {
+    const drafted = this.contentModel.findByIdAndUpdate(
+      id,
+      { $set: { isPublished: false } },
+      { new: true },
+    );
+    if (!drafted) throw new NotFoundException('Content not found');
+    return drafted;
+  }
+
+  async publishContent(id: string): Promise<ContentDocument | null> {
+    const published = this.contentModel.findByIdAndUpdate(
+      id,
+      { $set: { isPublished: true } },
+      { new: true }, // return the updated document
+    );
+    if (!published) throw new NotFoundException('Content not found');
+    return published;
+  }
+
+  async softDelete(id: string): Promise<ContentDocument | null> {
     const trashed = await this.contentModel
-      .findByIdAndUpdate(id, { isTrashed: true }, { new: true })
+      .findByIdAndUpdate(id, { $set: { isTrashed: true } }, { new: true })
       .exec();
     if (!trashed) throw new NotFoundException('Content not found');
     return trashed;
   }
 
-  async restore(id: string): Promise<ContentDocument> {
-    return this.update(id, { isTrashed: false });
+  async restore(id: string): Promise<ContentDocument | null> {
+    const restored = await this.contentModel
+      .findByIdAndUpdate(id, { $set: { isTrashed: false } }, { new: true })
+      .exec();
+    if (!restored) throw new NotFoundException('Content not found');
+    return restored;
   }
 
-  async permanentDelete(id: string): Promise<any> {
+  async permanentDelete(id: string): Promise<{ deleted: boolean; id: string }> {
     const result = await this.contentModel.findByIdAndDelete(id).exec();
     if (!result) throw new NotFoundException('Content not found');
     return { deleted: true, id };

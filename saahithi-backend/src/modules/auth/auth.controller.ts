@@ -89,6 +89,7 @@ export class AuthController {
    */
 
   @Post('logout')
+  // @UseGuards(JwtAuthGuard)
   async logout(@Res({ passthrough: true }) res: Response) {
     res.clearCookie('access_token', { path: '/' });
     res.clearCookie('refresh_token', { path: '/api/auth/refresh' });
@@ -99,8 +100,8 @@ export class AuthController {
    * GET /auth/profile - Example of a protected route to get user profile.
    * Uses JwtAuthGuard to execute the JwtStrategy and validate the token.
    */
-  @UseGuards(JwtAuthGuard)
   @Get('profile')
+  @UseGuards(JwtAuthGuard)
   getProfile(@Request() req: ExpressRequest) {
     return req.user;
   }

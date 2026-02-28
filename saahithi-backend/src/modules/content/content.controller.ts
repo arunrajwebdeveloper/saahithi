@@ -45,14 +45,16 @@ export class ContentController {
     return this.contentService.update(id, updateDto);
   }
 
-  @Get('list')
+  @Get(':author/list')
   @UseGuards(RolesGuard)
-  @Roles(UserRole.ADMIN) //   @Roles(UserRole.ADMIN, UserRole.USER)
-  findAll() {
-    return this.contentService.findAll();
+  @Roles(UserRole.USER, UserRole.ADMIN) //   @Roles(UserRole.ADMIN, UserRole.USER)
+  findUserContent(@Param('author') author: string) {
+    return this.contentService.findUserContent(author);
   }
 
   @Get(':id')
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.USER, UserRole.ADMIN)
   findOne(@Param('id') id: string) {
     return this.contentService.findOne(id);
   }
@@ -60,8 +62,15 @@ export class ContentController {
   @Patch(':id/draft')
   @UseGuards(PremiumGuard)
   @PremiumOnly()
-  async saveDraft(@Param('id') id: string, @Body() dto: any) {
-    return this.contentService.saveDraft(id, dto);
+  async saveAsDraft(@Param('id') id: string) {
+    return this.contentService.saveAsDraft(id);
+  }
+
+  @Patch(':id/publish')
+  @UseGuards(PremiumGuard)
+  @PremiumOnly()
+  async publishContent(@Param('id') id: string) {
+    return this.contentService.publishContent(id);
   }
 
   @Patch(':id/trash')

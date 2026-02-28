@@ -2,21 +2,28 @@ import { Controller, Get, UseGuards } from '@nestjs/common';
 // import { AdminService } from './admin.service';
 import { RolesGuard } from '@/guards/roles.guard';
 import { UserRole } from '../auth/dto/register-user.dto';
-import { UsersService } from '../users/users.service';
 import { Roles } from '@/decorators/roles.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { UsersService } from '../users/users.service';
+import { ContentService } from '../content/content.service';
 
-@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('admin')
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(UserRole.ADMIN)
 export class AdminController {
   constructor(
     // private readonly adminService: AdminService,
     private readonly userService: UsersService,
+    private readonly contentService: ContentService,
   ) {}
 
   @Get('user-list')
-  @Roles(UserRole.ADMIN)
-  findAll() {
+  getUserList() {
     return this.userService.findAll();
+  }
+
+  @Get('content-list')
+  getContentList() {
+    return this.contentService.findAll();
   }
 }
