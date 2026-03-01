@@ -123,15 +123,16 @@ export class ContentService {
   // FOR ADMIN USE
 
   async countAll() {
-    return this.contentModel.countDocuments();
+    return this.contentModel.countDocuments().exec();
   }
 
   async countPublished() {
-    return this.contentModel.countDocuments({ isPublished: true });
+    return this.contentModel.countDocuments({ isPublished: true }).exec();
   }
 
   async getAllCategories() {
-    return this.contentModel.distinct('category');
+    // return this.contentModel.distinct('category',  { isPublished: true }).exec();
+    return this.contentModel.distinct('category').exec();
   }
 
   async calculateGrowth() {
@@ -159,24 +160,42 @@ export class ContentService {
 
   async getMostActiveAuthors() {
     const authors = await this.contentModel.aggregate([
+      // Group by the author field (assuming it holds the User ID)
       { $group: { _id: '$author', postCount: { $sum: 1 } } },
+
+      // Sort by highest count and limit
       { $sort: { postCount: -1 } },
       { $limit: 5 },
+
+      // Join with the users collection
       {
         $lookup: {
-          from: 'users',
-          localField: '_id',
-          foreignField: '_id',
-          as: 'user',
+          from: 'users', // Double-check this is exactly your collection name
+          localField: '_id', // The author ID from the group stage
+          foreignField: '_id', // The ID in the users collection
+          as: 'userDetails',
         },
       },
-      { $unwind: '$user' },
+
+      // Convert userDetails array to an object
+      { $unwind: '$userDetails' },
+
+      // Shape the final output
       {
         $project: {
           _id: 0,
-          authorId: '$user._id',
-          name: '$user.name',
           postCount: 1,
+          author: {
+            id: '$userDetails._id',
+            name: {
+              $concat: [
+                { $ifNull: ['$userDetails.firstName', ''] },
+                ' ',
+                { $ifNull: ['$userDetails.lastName', ''] },
+              ],
+            },
+            email: '$userDetails.email',
+          },
         },
       },
     ]);
@@ -189,7 +208,13 @@ export class ContentService {
       .find()
       .sort({ createdAt: -1 })
       .limit(5)
-      .select('title category createdAt');
+      .populate({
+        path: 'author',
+        select: 'firstName lastName email',
+      })
+      .select('title category author createdAt')
+      .lean()
+      .exec();
   }
 
   async getCategoryDistribution() {

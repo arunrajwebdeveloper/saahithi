@@ -45,11 +45,11 @@ export class UsersService {
   // FOR ADMIN USE
 
   async countAll() {
-    return this.userModel.countDocuments();
+    return this.userModel.countDocuments().exec();
   }
 
   async countPremiumUsers() {
-    return this.userModel.countDocuments({ isPremium: true });
+    return this.userModel.countDocuments({ isPremium: true }).exec();
   }
 
   async calculateGrowth() {
@@ -78,7 +78,9 @@ export class UsersService {
       .find()
       .sort({ createdAt: -1 })
       .limit(5)
-      .select('name email createdAt');
+      .select('name email createdAt')
+      .lean()
+      .exec();
   }
 
   async getProgressData(range: 'day' | 'week' | 'month' | 'year') {
