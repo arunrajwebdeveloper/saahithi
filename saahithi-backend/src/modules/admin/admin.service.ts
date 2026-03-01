@@ -21,6 +21,9 @@ export class AdminService {
       categories,
       mostActiveAuthors,
       recentPosts,
+      userGrowth,
+      postGrowth,
+      categoryDistribution,
     ] = await Promise.all([
       this.userService.countAll(),
       this.userService.countPremiumUsers(),
@@ -30,10 +33,10 @@ export class AdminService {
       this.contentService.getAllCategories(),
       this.contentService.getMostActiveAuthors(),
       this.contentService.getRecentPosts(),
+      this.userService.calculateGrowth(),
+      this.contentService.calculateGrowth(),
+      this.contentService.getCategoryDistribution(),
     ]);
-
-    const userGrowth = await this.userService.calculateGrowth();
-    const postGrowth = await this.contentService.calculateGrowth();
 
     return {
       totalUsers,
@@ -48,6 +51,7 @@ export class AdminService {
       userGrowth,
       postGrowth,
       recentPosts,
+      categoryDistribution,
     };
   }
 

@@ -38,9 +38,4 @@ export class AdminController {
   ) {
     return this.adminService.getProgressData(range);
   }
-
-  @Get('category-distribution')
-  getCategoryDistribution() {
-    return this.contentService.getCategoryDistribution();
-  }
 }
