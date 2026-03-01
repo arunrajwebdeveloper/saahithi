@@ -4,14 +4,14 @@ import { UpdateContentDto } from './dto/update-content.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Content, ContentDocument } from './schemas/content.schema';
 import { Model, Types } from 'mongoose';
-// import { AdminService } from '../admin/admin.service';
+// import { ContentEvents } from '@/common/events/content.events';
 
 @Injectable()
 export class ContentService {
   constructor(
     @InjectModel(Content.name)
     private contentModel: Model<Content>,
-    // private adminService: AdminService,
+    // private readonly contentEvents: ContentEvents,
   ) {}
 
   private slugify(text: string): string {
@@ -44,7 +44,12 @@ export class ContentService {
       author: new Types.ObjectId(authorId),
     });
 
-    // await this.adminService.emitLiveUpdate();
+    // this.contentEvents.emitContentCreated({
+    //   id: created._id?.toString(),
+    //   title: created.title,
+    //   author: created.author?.toString(),
+    //   category: created.category,
+    // });
 
     return created.save();
   }

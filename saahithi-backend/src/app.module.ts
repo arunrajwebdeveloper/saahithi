@@ -6,6 +6,7 @@ import { ContentModule } from './modules/content/content.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { UsersModule } from './modules/users/users.module';
 import { GatewayModule } from './common/gateway/gateway.module';
+import { EventsModule } from './common/events/events.module';
 
 @Module({
   imports: [
@@ -26,8 +27,9 @@ import { GatewayModule } from './common/gateway/gateway.module';
 
     // Feature Modules
     GatewayModule,
-    AuthModule,
+    EventsModule,
     AdminModule,
+    AuthModule,
     UsersModule,
     ContentModule,
   ],
