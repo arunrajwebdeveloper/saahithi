@@ -1,5 +1,5 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
-// import { AdminService } from './admin.service';
+import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { AdminService } from './admin.service';
 import { RolesGuard } from '@/guards/roles.guard';
 import { UserRole } from '../auth/dto/register-user.dto';
 import { Roles } from '@/decorators/roles.decorator';
@@ -7,12 +7,12 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { UsersService } from '../users/users.service';
 import { ContentService } from '../content/content.service';
 
-@Controller('admin')
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles(UserRole.ADMIN)
+@Controller('admin')
 export class AdminController {
   constructor(
-    // private readonly adminService: AdminService,
+    private readonly adminService: AdminService,
     private readonly userService: UsersService,
     private readonly contentService: ContentService,
   ) {}
@@ -25,5 +25,22 @@ export class AdminController {
   @Get('content-list')
   getContentList() {
     return this.contentService.findAll();
+  }
+
+  @Get('stats')
+  getDashboardStats() {
+    return this.adminService.getDashboardStats();
+  }
+
+  @Get('progress')
+  getProgressData(
+    @Query('range') range: 'day' | 'week' | 'month' | 'year' = 'month',
+  ) {
+    return this.adminService.getProgressData(range);
+  }
+
+  @Get('category-distribution')
+  getCategoryDistribution() {
+    return this.contentService.getCategoryDistribution();
   }
 }

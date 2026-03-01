@@ -4,11 +4,13 @@ import { ContentController } from './content.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Content, ContentSchema } from './schemas/content.schema';
 import { UsersModule } from '../users/users.module';
+// import { AdminModule } from '../admin/admin.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Content.name, schema: ContentSchema }]),
     UsersModule,
+    // AdminModule,
   ],
   controllers: [ContentController],
   providers: [ContentService],

@@ -9,7 +9,7 @@ import * as bcrypt from 'bcrypt';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { RegisterUserDto } from './dto/register-user.dto';
-import { User } from '../users/schemas/user.schema';
+import { User, UserDocument } from '../users/schemas/user.schema';
 import { UsersService } from '../users/users.service';
 
 // Create a custom type that includes partitioned
@@ -137,7 +137,9 @@ export class AuthService {
    * Registers a new user
    */
 
-  async register(registerUserDto: RegisterUserDto): Promise<User> {
+  async register(
+    registerUserDto: RegisterUserDto,
+  ): Promise<UserDocument | null> {
     const existingUser = await this.usersService.findOneByEmail(
       registerUserDto.email,
     );
