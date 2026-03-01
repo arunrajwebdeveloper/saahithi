@@ -19,7 +19,9 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@/*": ["src/*"]
-    }
+    },
+    "typeRoots": ["./node_modules/@types"],
+    "types": ["node", "express", "multer"]
   },
   "exclude": ["node_modules", "dist"]
 }
