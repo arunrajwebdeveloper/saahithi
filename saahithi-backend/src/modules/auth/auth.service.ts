@@ -9,8 +9,9 @@ import * as bcrypt from 'bcrypt';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { RegisterUserDto } from './dto/register-user.dto';
-import { User } from '../users/schemas/user.schema';
+import { User, UserDocument } from '../users/schemas/user.schema';
 import { UsersService } from '../users/users.service';
+import { UserStatus } from '@/common/constants/user';
 
 // Create a custom type that includes partitioned
 interface CustomCookieOptions {
@@ -61,11 +62,18 @@ export class AuthService {
       throw new NotFoundException(`User with email "${email}" not found`);
     }
 
+    if (user && user.status === UserStatus.BLOCKED) {
+      throw new UnauthorizedException(
+        'Your account is blocked due to policy violations.', // make cause dynamically
+      );
+    }
+
     const isPasswordValid = await bcrypt.compare(pass, user.password);
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
+    // password removed from this response
     const { password, ...result } = user.toObject();
     return result;
   }
@@ -77,10 +85,8 @@ export class AuthService {
   getTokens(payload: { email: string; userId: string; sub: string }) {
     const accessToken = this.jwtService.sign(payload);
     const refreshToken = this.jwtService.sign(payload, {
-      secret: this.configService.get<string>('JWT_REFRESH_SECRET') as any,
-      expiresIn: this.configService.get<string>(
-        'JWT_REFRESH_EXPIRATION_TIME',
-      ) as any,
+      secret: this.configService.get('JWT_REFRESH_SECRET'),
+      expiresIn: this.configService.get('JWT_REFRESH_EXPIRATION_TIME'),
     });
     return { accessToken, refreshToken };
   }
@@ -113,7 +119,7 @@ export class AuthService {
 
     try {
       const payload = this.jwtService.verify(token, {
-        secret: this.configService.get<string>('JWT_REFRESH_SECRET') as any,
+        secret: this.configService.get('JWT_REFRESH_SECRET'),
       });
 
       const newPayload = {
@@ -138,7 +144,9 @@ export class AuthService {
    * Registers a new user
    */
 
-  async register(registerUserDto: RegisterUserDto): Promise<User> {
+  async register(
+    registerUserDto: RegisterUserDto,
+  ): Promise<UserDocument | null> {
     const existingUser = await this.usersService.findOneByEmail(
       registerUserDto.email,
     );

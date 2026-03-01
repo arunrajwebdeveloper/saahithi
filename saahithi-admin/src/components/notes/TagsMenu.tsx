@@ -1,0 +1,109 @@
+import Toggler from "../common/Toggler";
+import Tooltip from "../common/Tooltip";
+import { CircleCheck, Tag } from "lucide-react";
+import type { Tag as TagType } from "../../types/note.types";
+import { useMemo } from "react";
+
+interface TagsMenuProps {
+  tags: TagType[];
+  selectedTags: TagType[];
+  onChange: (tags: TagType[]) => void;
+  isLoading?: boolean;
+}
+
+function TagsMenu({
+  tags = [],
+  selectedTags = [],
+  onChange,
+  isLoading = false,
+}: TagsMenuProps) {
+  const selectedTagIds = new Set(selectedTags.map((tag) => tag._id));
+
+  const onChooseTag = (tag: TagType) => {
+    const isSelected = selectedTagIds.has(tag._id);
+    const updatedTags = isSelected
+      ? selectedTags.filter((t) => t._id !== tag._id)
+      : [tag, ...selectedTags];
+
+    onChange(updatedTags);
+  };
+
+  const sortedTagList = useMemo(() => {
+    return [...tags].sort((a, b) => {
+      const aSelected = selectedTagIds.has(a._id);
+      const bSelected = selectedTagIds.has(b._id);
+
+      if (aSelected && !bSelected) return -1; // a first
+      if (!aSelected && bSelected) return 1; // b first
+      return 0; // keep same order otherwise
+    });
+  }, [tags, selectedTags]);
+
+  return (
+    <Toggler>
+      <Toggler.Toggle isLoading={isLoading}>
+        {({ isOpen }) => (
+          <div
+            className={`w-12 h-12  group flex items-center justify-center rounded-full cursor-pointer transition duration-300
+                ${isOpen ? " bg-emerald-200" : " text-slate-900"}`}
+          >
+            <Tag size={20} />
+            {!isOpen && !isLoading && (
+              <Tooltip content="Choose Tags" position="top" />
+            )}
+          </div>
+        )}
+      </Toggler.Toggle>
+      <Toggler.Menu>
+        {() => (
+          <div
+            className="space-y-1 w-55 h-full max-h-96 overflow-y-auto overflow-x-hidden mb-2 bg-white py-4 px-2 rounded-lg shadow-md border border-slate-200 
+          [&::-webkit-scrollbar]:w-1
+        [&::-webkit-scrollbar-track]:bg-gray-100
+        [&::-webkit-scrollbar-thumb]:bg-gray-400
+          "
+            //dark:[&::-webkit-scrollbar-track]:bg-neutral-400
+            //dark:[&::-webkit-scrollbar-thumb]:bg-neutral-700
+          >
+            {sortedTagList?.length !== 0 ? (
+              sortedTagList?.map(({ _id, name }) => {
+                const isSelected = selectedTagIds.has(_id);
+
+                return (
+                  <div
+                    key={`tags-menu-item-${_id}`}
+                    className={`flex items-center relative cursor-pointer bg-white text-sm w-full py-1.5 px-3 ps-9 rounded-lg hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 ${
+                      isSelected ? "text-emerald-600" : "text-gray-800"
+                    }`}
+                    onClick={() => {
+                      onChooseTag({ _id, name });
+                      // closeMenu?.();
+                    }}
+                  >
+                    <CircleCheck
+                      size={18}
+                      className={`absolute left-2 top-1/2 transform -translate-y-1/2 ${
+                        isSelected
+                          ? "text-emerald-600"
+                          : "text-sm text-gray-800"
+                      }`}
+                    />
+                    <span className="whitespace-nowrap overflow-hidden text-ellipsis w-full">
+                      {name}
+                    </span>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="text-center text-sm text-slate-500">
+                <span>No tags yet</span>
+              </div>
+            )}
+          </div>
+        )}
+      </Toggler.Menu>
+    </Toggler>
+  );
+}
+
+export default TagsMenu;

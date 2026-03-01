@@ -1,4 +1,3 @@
-import { UserRole } from '@/modules/auth/dto/register-user.dto';
 import {
   Injectable,
   CanActivate,
@@ -7,6 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { UserRole } from '../constants/user';
 
 @Injectable()
 export class RolesGuard implements CanActivate {

@@ -1,35 +1,92 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Suspense, lazy, useEffect } from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { ProtectedRoute, PublicRoute } from "./components/auth/ProtectedRoute";
+import OfflineModal from "./components/modal/OfflineModal";
+import CircleSpinner from "./components/common/CircleSpinner";
+import { SessionHandler } from "./components/auth/SessionHandler";
+import { useCookieSupport } from "./hooks/useCookieSupport";
+import CookieDisabledModal from "./components/modal/CookieDisabledModal";
+import { useAppDispatch } from "./hooks/hooks";
+import useWindowWidth from "./hooks/useWindowWidth";
+import { setWindowWidth } from "./store/features/windowSlice";
+import CommonLayout from "./components/layout/CommonLayout";
+
+// Lazy load pages
+const NotesPage = lazy(() => import("./view/NotesPage"));
+const LoginPage = lazy(() => import("./view/LoginPage"));
+const RegisterPage = lazy(() => import("./view/RegisterPage"));
+const ProfilePage = lazy(() => import("./view/ProfilePage"));
+const UnauthorizedPage = lazy(() => import("./view/UnauthorizedPage"));
+const NoteFound = lazy(() => import("./view/NoteFound"));
+// const AdminPage = lazy(() => import("./view/AdminPage"));
 
 function App() {
-  const [count, setCount] = useState(0)
+  const dispatch = useAppDispatch();
+  const cookiesEnabled = useCookieSupport();
+  const windowWidth = useWindowWidth();
+
+  useEffect(() => {
+    dispatch(setWindowWidth(windowWidth));
+  }, [windowWidth, dispatch]);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <SessionHandler>
+      <BrowserRouter>
+        <Suspense
+          fallback={
+            <div className="text-center h-screen w-full bg-white text-blue-600 flex justify-center items-center">
+              <CircleSpinner size={36} />
+            </div>
+          }
+        >
+          <Routes>
+            {/* Public routes */}
+            <Route
+              path="/login"
+              element={
+                <PublicRoute>
+                  <LoginPage />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                <PublicRoute>
+                  <RegisterPage />
+                </PublicRoute>
+              }
+            />
+
+            {/* Protected routes */}
+            <Route element={<ProtectedRoute />}>
+              <Route path="/notes" element={<NotesPage />} />
+              <Route
+                path="/profile"
+                element={
+                  <CommonLayout>
+                    <ProfilePage />
+                  </CommonLayout>
+                }
+              />
+            </Route>
+
+            {/* Admin only route */}
+            {/* <Route element={<ProtectedRoute requiredRole="admin" />}>
+                <Route path="/admin" element={<AdminPage />} />
+              </Route> */}
+
+            {/* Error routes */}
+            <Route path="/unauthorized" element={<UnauthorizedPage />} />
+            <Route path="/" element={<Navigate to="/notes" replace />} />
+            <Route path="*" element={<NoteFound />} />
+          </Routes>
+        </Suspense>
+      </BrowserRouter>
+      <OfflineModal />
+      {!cookiesEnabled && <CookieDisabledModal />}
+    </SessionHandler>
+  );
 }
 
-export default App
+export default App;
