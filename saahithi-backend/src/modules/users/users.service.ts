@@ -4,14 +4,14 @@ import { Model } from 'mongoose';
 import { User, UserDocument } from './schemas/user.schema';
 import { RegisterUserDto, UserRole } from '../auth/dto/register-user.dto';
 import { ConfigService } from '@nestjs/config';
-// import { UserEvents } from '@/common/events/user.events';
+import { UserEvents } from '@/common/events/user.events';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User.name) private userModel: Model<User>,
     private configService: ConfigService,
-    // private readonly userEvents: UserEvents,
+    private readonly userEvents: UserEvents,
   ) {}
 
   async create(registerUserDto: RegisterUserDto): Promise<UserDocument | null> {
@@ -24,11 +24,11 @@ export class UsersService {
       createdUser.isPremium = true;
     }
 
-    // this.userEvents.emitUserCreated({
-    //   id: createdUser._id?.toString(),
-    //   email: createdUser.email,
-    //   role: createdUser.role,
-    // });
+    this.userEvents.emitUserCreated({
+      id: createdUser._id?.toString(),
+      email: createdUser.email,
+      role: createdUser.role,
+    });
 
     return createdUser.save();
   }
