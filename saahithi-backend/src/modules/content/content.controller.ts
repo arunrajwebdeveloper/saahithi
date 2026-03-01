@@ -16,9 +16,9 @@ import { GetUser } from '@/common/decorators/get-user.decorator';
 import { ContentDocument } from './schemas/content.schema';
 import { PremiumOnly } from '@/common/decorators/premium.decorator';
 import { Roles } from '@/common/decorators/roles.decorator';
-import { UserRole } from '../auth/dto/register-user.dto';
 import { PremiumGuard } from '@/common/guards/premium.guard';
 import { RolesGuard } from '@/common/guards/roles.guard';
+import { UserRole } from '@/common/constants/user';
 
 @UseGuards(JwtAuthGuard)
 @Controller('content')

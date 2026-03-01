@@ -2,9 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from './schemas/user.schema';
-import { RegisterUserDto, UserRole } from '../auth/dto/register-user.dto';
+import { RegisterUserDto } from '../auth/dto/register-user.dto';
 import { ConfigService } from '@nestjs/config';
 import { UserEvents } from '@/common/events/user.events';
+import { UserRole } from '@/common/constants/user';
 
 @Injectable()
 export class UsersService {

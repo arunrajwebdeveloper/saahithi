@@ -7,8 +7,8 @@ import {
 import { Server, Socket } from 'socket.io';
 import * as cookie from 'cookie';
 import { JwtService } from '@nestjs/jwt';
-import { UserRole } from '@/modules/auth/dto/register-user.dto';
 import { ConfigService } from '@nestjs/config';
+import { UserRole } from '../constants/user';
 
 @WebSocketGateway({
   cors: {

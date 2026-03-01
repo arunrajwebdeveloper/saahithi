@@ -1,11 +1,11 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { AdminService } from './admin.service';
-import { UserRole } from '../auth/dto/register-user.dto';
 import { Roles } from '@/common/decorators/roles.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { UsersService } from '../users/users.service';
 import { ContentService } from '../content/content.service';
 import { RolesGuard } from '@/common/guards/roles.guard';
+import { UserRole } from '@/common/constants/user';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles(UserRole.ADMIN)

@@ -1,4 +1,4 @@
-import { UserRole } from '@/modules/auth/dto/register-user.dto';
+import { UserRole } from '@/common/constants/user';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 
