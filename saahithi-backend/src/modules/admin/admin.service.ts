@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { ContentService } from '../content/content.service';
-import { AppGateway } from '@/gateway/app.gateway';
+import { AppGateway } from '@/common/gateway/app.gateway';
 
 @Injectable()
 export class AdminService {

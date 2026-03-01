@@ -5,7 +5,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ContentModule } from './modules/content/content.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { UsersModule } from './modules/users/users.module';
-import { GatewayModule } from './gateway/gateway.module';
+import { GatewayModule } from './common/gateway/gateway.module';
 
 @Module({
   imports: [

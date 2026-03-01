@@ -12,13 +12,13 @@ import { ContentService } from './content.service';
 import { CreateContentDto } from './dto/create-content.dto';
 import { UpdateContentDto } from './dto/update-content.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { GetUser } from '@/decorators/get-user.decorator';
+import { GetUser } from '@/common/decorators/get-user.decorator';
 import { ContentDocument } from './schemas/content.schema';
-import { PremiumGuard } from '@/guards/premium.guard';
-import { PremiumOnly } from '@/decorators/premium.decorator';
-import { RolesGuard } from '@/guards/roles.guard';
-import { Roles } from '@/decorators/roles.decorator';
+import { PremiumOnly } from '@/common/decorators/premium.decorator';
+import { Roles } from '@/common/decorators/roles.decorator';
 import { UserRole } from '../auth/dto/register-user.dto';
+import { PremiumGuard } from '@/common/guards/premium.guard';
+import { RolesGuard } from '@/common/guards/roles.guard';
 
 @UseGuards(JwtAuthGuard)
 @Controller('content')
