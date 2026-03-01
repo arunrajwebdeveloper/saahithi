@@ -1,11 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from './schemas/user.schema';
 import { RegisterUserDto } from '../auth/dto/register-user.dto';
 import { ConfigService } from '@nestjs/config';
 import { UserEvents } from '@/common/events/user.events';
-import { UserRole } from '@/common/constants/user';
+import { UserRole, UserStatus } from '@/common/constants/user';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -34,6 +35,21 @@ export class UsersService {
     return createdUser.save();
   }
 
+  async update(
+    id: string,
+    updateUserDto: UpdateUserDto,
+  ): Promise<UserDocument | null> {
+    const updatedUser = await this.userModel
+      .findByIdAndUpdate(id, updateUserDto, { new: true })
+      .exec();
+
+    if (!updatedUser) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+
+    return updatedUser;
+  }
+
   // Used by the AuthModule (LocalStrategy) to validate credentials
   async findOneByEmail(email: string): Promise<UserDocument | null> {
     return this.userModel.findOne({ email }).exec();
@@ -45,6 +61,62 @@ export class UsersService {
 
   async findAll(): Promise<UserDocument[]> {
     return this.userModel.find().select('-password').exec();
+  }
+
+  async handleMaliciousActivity(id: string) {
+    const user = await this.findOneById(id);
+
+    if (!user) {
+      throw new NotFoundException('User not found.');
+    }
+
+    if (user.warningCount >= 1) {
+      // Second strike: Block
+      user.status = UserStatus.BLOCKED;
+      await user.save();
+      return { message: 'User has been blocked.' };
+    } else {
+      // First strike: Warn
+      user.warningCount += 1;
+      await user.save();
+      return { message: 'Warning issued.' };
+    }
+  }
+
+  async activeUser(id: string): Promise<UserDocument | null> {
+    const user = this.userModel.findByIdAndUpdate(
+      id,
+      { $set: { status: UserStatus.ACTIVE } },
+      { new: true },
+    );
+    if (!user) throw new NotFoundException('User not found');
+    return user;
+  }
+
+  async inactiveUser(id: string): Promise<UserDocument | null> {
+    const user = this.userModel.findByIdAndUpdate(
+      id,
+      { $set: { status: UserStatus.INACTIVE } },
+      { new: true },
+    );
+    if (!user) throw new NotFoundException('User not found');
+    return user;
+  }
+
+  async blockUser(id: string): Promise<UserDocument | null> {
+    const user = this.userModel.findByIdAndUpdate(
+      id,
+      { $set: { status: UserStatus.BLOCKED } },
+      { new: true },
+    );
+    if (!user) throw new NotFoundException('User not found');
+    return user;
+  }
+
+  async permanentDelete(id: string): Promise<{ deleted: boolean; id: string }> {
+    const result = await this.userModel.findByIdAndDelete(id).exec();
+    if (!result) throw new NotFoundException('User not found');
+    return { deleted: true, id };
   }
 
   // FOR ADMIN USE

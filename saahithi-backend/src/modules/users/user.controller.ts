@@ -4,11 +4,17 @@ import {
   UseGuards,
   Req,
   NotFoundException,
+  Patch,
+  Param,
+  Body,
+  Delete,
 } from '@nestjs/common';
 import { UserDocument } from './schemas/user.schema';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { UserStatus } from '@/common/constants/user';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @UseGuards(JwtAuthGuard)
 @ApiTags('Users')
@@ -42,8 +48,32 @@ export class UserController {
     const { password, ...userObject } = user?.toObject();
     return userObject as UserDocument;
   }
-}
 
-// NEED TO ADD (ADMIN ONLY)
-// REMOVE USER
-// EDIT USER
+  @Patch('update/:id')
+  async updateUser(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return this.userService.update(id, updateUserDto);
+  }
+
+  @Patch('activate/:id')
+  async activeUser(@Param('id') id: string) {
+    return this.userService.activeUser(id);
+  }
+
+  @Patch('inactivate/:id')
+  async inactiveUser(@Param('id') id: string) {
+    return this.userService.inactiveUser(id);
+  }
+
+  @Patch('block/:id')
+  async blockUser(@Param('id') id: string) {
+    return this.userService.blockUser(id);
+  }
+
+  @Delete('delete/:id')
+  async permanentDelete(@Param('id') id: string) {
+    return this.userService.permanentDelete(id);
+  }
+}

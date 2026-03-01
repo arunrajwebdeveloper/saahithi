@@ -1,4 +1,4 @@
-import { UserRole } from '@/common/constants/user';
+import { UserRole, UserStatus } from '@/common/constants/user';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 
@@ -27,6 +27,16 @@ export class User {
 
   @Prop({ required: true, default: false })
   isPremium!: boolean;
+
+  @Prop({ default: 0 })
+  warningCount!: number;
+
+  @Prop({
+    type: String,
+    enum: Object.values(UserStatus),
+    default: UserStatus.ACTIVE,
+  })
+  status!: UserStatus;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
