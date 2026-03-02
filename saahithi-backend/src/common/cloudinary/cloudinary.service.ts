@@ -10,11 +10,14 @@ export class CloudinaryService {
    * SERVER-SIDE UPLOAD (Multer)
    * Uploads a file buffer directly to Cloudinary with AI moderation.
    */
-  async uploadImage(file: Express.Multer.File): Promise<UploadApiResponse> {
+  async uploadImage(
+    file: Express.Multer.File,
+    folder: string,
+  ): Promise<UploadApiResponse> {
     return new Promise((resolve, reject) => {
       const upload = cloudinary.uploader.upload_stream(
         {
-          folder: 'user_content',
+          folder,
           // moderation: 'aws_rek', // Automatic AI NSFW check
         },
         (error, result: any) => {
@@ -30,7 +33,7 @@ export class CloudinaryService {
    * SIGNED UPLOAD (For React/Next.js)
    * Returns a signature so the frontend can upload directly to Cloudinary.
    */
-  getUploadSignature(folder: string = 'user_content') {
+  getUploadSignature(folder: string) {
     const timestamp = Math.round(new Date().getTime() / 1000);
     const signature = cloudinary.utils.api_sign_request(
       {
@@ -65,10 +68,10 @@ export class CloudinaryService {
    * CLEANUP (Admin/Cron)
    * Deletes images from Cloudinary that no longer exist in your Database.
    */
-  async cleanupOrphanedImages(dbIds: Set<string>) {
+  async cleanupOrphanedImages(dbIds: Set<string>, folder: string) {
     const { resources } = await cloudinary.api.resources({
       type: 'upload',
-      prefix: 'user_content/',
+      prefix: `${folder}/`,
       max_results: 500,
     });
 

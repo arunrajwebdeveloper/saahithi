@@ -5,6 +5,7 @@ import { Model } from 'mongoose';
 import { CloudinaryService } from './cloudinary.service';
 import { User } from '@/modules/users/schemas/user.schema';
 import { Content } from '@/modules/content/schemas/content.schema';
+import { UPLOAD_LOCATION } from '../constants/uploads';
 
 @Injectable()
 export class CloudinaryTasksService {
@@ -19,20 +20,24 @@ export class CloudinaryTasksService {
   async cloudinaryCleanup() {
     //  Fetch all existing publicIds from your database
     const users = await this.userModel.find({}, 'avatarPublicId').lean();
-    const avatarIds = users
-      .map((u) => u.avatarPublicId)
-      .filter((id): id is string => !!id);
+    const avatarIds = new Set<string>(
+      users.map((u) => u.avatarPublicId).filter((id): id is string => !!id),
+    );
+
+    await this.cloudinaryService.cleanupOrphanedImages(
+      avatarIds,
+      UPLOAD_LOCATION.AVATARS,
+    );
 
     const contents = await this.contentModel.find({}, 'imageRegistry').lean();
-    const contentIds = contents.flatMap((c) => c.imageRegistry || []);
+    const contentIds = new Set<string>(
+      contents.flatMap((c) => c.imageRegistry || []),
+    );
 
-    const dbIds = new Set<string>([...(avatarIds as string[]), ...contentIds]);
-
-    //  Call the service method
-    const deletedCount =
-      await this.cloudinaryService.cleanupOrphanedImages(dbIds);
-
-    return deletedCount;
+    await this.cloudinaryService.cleanupOrphanedImages(
+      contentIds,
+      UPLOAD_LOCATION.CONTENT_IMAGES,
+    );
   }
 
   /**
@@ -41,9 +46,7 @@ export class CloudinaryTasksService {
   @Cron(CronExpression.EVERY_WEEKEND)
   async handleWeeklyCleanup() {
     this.logger.log('Starting automated Cloudinary cleanup...');
-    const deletedCount = await this.cloudinaryCleanup();
-    this.logger.log(
-      `Cleanup complete. Removed ${deletedCount} orphaned images.`,
-    );
+    await this.cloudinaryCleanup();
+    this.logger.log(`Cleanup complete. Removed orphaned images.`);
   }
 }

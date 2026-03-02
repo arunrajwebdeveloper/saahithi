@@ -8,6 +8,7 @@ import {
   UseInterceptors,
   BadRequestException,
   UseGuards,
+  ParseEnumPipe,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
@@ -23,8 +24,9 @@ import { JwtAuthGuard } from '@/modules/auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../guards/roles.guard';
 import { UserRole } from '../constants/user';
 import { Roles } from '../decorators/roles.decorator';
+import { UPLOAD_LOCATION } from '../constants/uploads';
 
-@UseGuards(JwtAuthGuard, RolesGuard)
+// @UseGuards(JwtAuthGuard, RolesGuard)
 @ApiTags('Cloudinary Media')
 @Controller('cloudinary')
 export class CloudinaryController {
@@ -37,8 +39,8 @@ export class CloudinaryController {
    * SECURE SERVER UPLOAD
    * Restricts file size to 5MB and only allows JPG/PNG/WEBP.
    */
-  @Roles(UserRole.USER, UserRole.ADMIN)
-  @Post('upload')
+  // @Roles(UserRole.USER, UserRole.ADMIN)
+  @Post('upload/:folder')
   @ApiOperation({ summary: 'Upload image (Max 5MB, JPG/PNG/WEBP only)' })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -58,20 +60,44 @@ export class CloudinaryController {
       },
     }),
   )
-  async uploadImage(@UploadedFile() file: Express.Multer.File) {
+  async uploadImage(
+    @UploadedFile() file: Express.Multer.File,
+    @Param(
+      'folder',
+      new ParseEnumPipe(UPLOAD_LOCATION, {
+        exceptionFactory: () => {
+          const allowedValues = Object.values(UPLOAD_LOCATION).join(', ');
+          return new BadRequestException(
+            `Invalid upload folder. Supported folders are: ${allowedValues}`,
+          );
+        },
+      }),
+    )
+    folder: UPLOAD_LOCATION,
+  ) {
     if (!file) throw new BadRequestException('File is required');
-    return await this.cloudinaryService.uploadImage(file);
+    return await this.cloudinaryService.uploadImage(file, folder);
   }
 
   /**
    * GET SIGNATURE
    * Direct upload helper for React/Next.js to bypass the server.
    */
+
   @Roles(UserRole.USER, UserRole.ADMIN)
-  @Get('signature')
-  @ApiOperation({ summary: 'Generate signature for direct frontend uploads' })
-  getUploadSignature() {
-    return this.cloudinaryService.getUploadSignature();
+  @Get('signature/avatar')
+  @ApiOperation({ summary: 'Get signature for user avatar upload' })
+  getAvatarSignature() {
+    return this.cloudinaryService.getUploadSignature(UPLOAD_LOCATION.AVATARS);
+  }
+
+  @Roles(UserRole.USER, UserRole.ADMIN)
+  @Get('signature/content_image')
+  @ApiOperation({ summary: 'Get signature for content image upload' })
+  getContentSignature() {
+    return this.cloudinaryService.getUploadSignature(
+      UPLOAD_LOCATION.CONTENT_IMAGES,
+    );
   }
 
   /**
@@ -81,7 +107,7 @@ export class CloudinaryController {
   @Roles(UserRole.USER, UserRole.ADMIN)
   @Delete('image/:publicId')
   @ApiOperation({ summary: 'Delete image by Public ID' })
-  @ApiParam({ name: 'publicId', example: 'user_content/sample_123' })
+  @ApiParam({ name: 'publicId', example: 'foldername/publicId' })
   async deleteImage(@Param('publicId') publicId: string) {
     return await this.cloudinaryService.deleteImage(publicId);
   }
@@ -94,11 +120,11 @@ export class CloudinaryController {
   @Post('manual-cleanup')
   @ApiOperation({ summary: 'Manually trigger cleanup of orphaned images' })
   async triggerManualCleanup() {
-    const deletedCount = await this.cloudinaryTasksService.cloudinaryCleanup();
+    await this.cloudinaryTasksService.cloudinaryCleanup();
 
     return {
       success: true,
-      message: `Cleaned up ${deletedCount} images`,
+      message: 'Cleanup complete. Removed orphaned images.',
     };
   }
 }
