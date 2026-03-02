@@ -91,7 +91,6 @@ export class ContentService {
 
     if (search) {
       const searchRegex = new RegExp(search, 'i');
-
       filter['$or'] = [{ title: { $regex: searchRegex } }];
     }
 
@@ -122,8 +121,54 @@ export class ContentService {
     };
   }
 
-  async findUserContent(author: string): Promise<ContentDocument[]> {
-    return this.contentModel.find({ author }).select('title').exec();
+  async findUserContent(
+    author: string,
+    paginationDto: PaginationDto,
+  ): Promise<{
+    total: number;
+    limit: number;
+    page: number;
+    result: ContentDocument[];
+    hasNext: boolean;
+    hasPrev: boolean;
+  }> {
+    const { page = 1, limit = 10, search, sortOrder } = paginationDto;
+    const skip = (page - 1) * limit;
+
+    const filter: any = {
+      author,
+    };
+
+    if (search) {
+      const searchRegex = new RegExp(search, 'i');
+      filter['$or'] = [{ title: { $regex: searchRegex } }];
+    }
+
+    const sort: any = { createdAt: sortOrder === 'asc' ? 1 : -1 };
+
+    const [contents, total] = await Promise.all([
+      this.contentModel
+        .find(filter)
+        .sort(sort)
+        .skip(skip)
+        .limit(limit)
+        .lean()
+        .exec(),
+      this.contentModel.countDocuments(filter).exec(),
+    ]);
+
+    const totalPages = Math.ceil(total / limit);
+    const hasNext = page < totalPages;
+    const hasPrev = page > 1;
+
+    return {
+      total,
+      limit,
+      page,
+      result: contents as ContentDocument[],
+      hasNext,
+      hasPrev,
+    };
   }
 
   async saveAsDraft(id: string): Promise<ContentDocument | null> {
