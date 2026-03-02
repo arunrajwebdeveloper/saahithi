@@ -62,7 +62,7 @@ export class AuthService {
       throw new NotFoundException(`User with email "${email}" not found`);
     }
 
-    if (user && user.status === UserStatus.BLOCKED) {
+    if (user && user.status === UserStatus.TERMINATED) {
       throw new UnauthorizedException(
         'Your account is blocked due to policy violations.', // make cause dynamically
       );

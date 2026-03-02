@@ -72,9 +72,9 @@ export class UsersService {
 
     if (user.warningCount >= 1) {
       // Second strike: Block
-      user.status = UserStatus.BLOCKED;
+      user.status = UserStatus.TERMINATED;
       await user.save();
-      return { message: 'User has been blocked.' };
+      return { message: 'User has been terminated.' };
     } else {
       // First strike: Warn
       user.warningCount += 1;
@@ -103,10 +103,10 @@ export class UsersService {
     return user;
   }
 
-  async blockUser(id: string): Promise<UserDocument | null> {
+  async terminateUser(id: string): Promise<UserDocument | null> {
     const user = this.userModel.findByIdAndUpdate(
       id,
-      { $set: { status: UserStatus.BLOCKED } },
+      { $set: { status: UserStatus.TERMINATED } },
       { new: true },
     );
     if (!user) throw new NotFoundException('User not found');

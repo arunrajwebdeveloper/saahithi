@@ -67,9 +67,9 @@ export class UserController {
     return this.userService.inactiveUser(id);
   }
 
-  @Patch('block/:id')
-  async blockUser(@Param('id') id: string) {
-    return this.userService.blockUser(id);
+  @Patch('terminate/:id')
+  async terminateUser(@Param('id') id: string) {
+    return this.userService.terminateUser(id);
   }
 
   @Delete('delete/:id')
