@@ -69,11 +69,21 @@ async function bootstrap() {
     .setTitle('Saahithi')
     .setDescription('API documentation for Saahithi')
     .setVersion('1.0')
-    .addBearerAuth() // Optional: if API uses Bearer token authentication
+    .addCookieAuth('access_token', {
+      type: 'apiKey',
+      in: 'cookie',
+      scheme: 'bearer',
+    })
+    // .addBearerAuth() // Optional: if API uses Bearer token authentication
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api-docs', app, document); // The documentation will be available at http://localhost:3060/api/api-docs
+  SwaggerModule.setup('api-docs', app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+      withCredentials: true, // This tells Swagger to send cookies!
+    },
+  }); // The documentation will be available at http://localhost:3060/api/api-docs
 
   await app.listen(process.env.PORT ?? 3060);
   console.log(`Application is running on: ${await app.getUrl()}`);
