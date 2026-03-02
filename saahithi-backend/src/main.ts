@@ -6,9 +6,37 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
+import { WinstonModule } from 'nest-winston';
+import * as winston from 'winston';
+import 'winston-daily-rotate-file';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: WinstonModule.createLogger({
+      transports: [
+        // Log to the terminal (Colorful)
+        new winston.transports.Console({
+          format: winston.format.combine(
+            winston.format.timestamp(),
+            winston.format.colorize(),
+            winston.format.simple(),
+          ),
+        }),
+        // Log to a file (Rotates every day)
+        new winston.transports.DailyRotateFile({
+          filename: 'logs/application-%DATE%.log',
+          datePattern: 'YYYY-MM-DD',
+          zippedArchive: true,
+          maxSize: '20m',
+          maxFiles: '14d', // Keeps logs for 14 days
+          format: winston.format.combine(
+            winston.format.timestamp(),
+            winston.format.json(), // JSON is best for file logs
+          ),
+        }),
+      ],
+    }),
+  });
 
   const configService = app.get(ConfigService);
   const client_url = configService.get<string>('CLIENT_URL')!;

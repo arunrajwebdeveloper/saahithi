@@ -49,6 +49,30 @@ export class Content {
 
   @Prop({ default: false })
   isTrashed!: boolean;
+
+  @Prop({ type: [String], default: [], index: true })
+  imageRegistry!: string[];
 }
 
 export const ContentSchema = SchemaFactory.createForClass(Content);
+
+ContentSchema.pre<ContentDocument>('save', async function () {
+  const foundIds: string[] = [];
+
+  // Recursive helper
+  const traverse = (nodes: any[]) => {
+    for (const node of nodes) {
+      if (node.type === 'img' && node.attributes?.src) {
+        foundIds.push(node.attributes.src);
+      }
+      if (node.children && Array.isArray(node.children)) {
+        traverse(node.children);
+      }
+    }
+  };
+
+  if (this.nodes) {
+    traverse(this.nodes);
+    this.imageRegistry = [...new Set(foundIds)];
+  }
+});

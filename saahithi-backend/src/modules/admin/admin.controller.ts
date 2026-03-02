@@ -6,6 +6,8 @@ import { UsersService } from '../users/users.service';
 import { ContentService } from '../content/content.service';
 import { RolesGuard } from '@/common/guards/roles.guard';
 import { UserRole } from '@/common/constants/user';
+import { ApiOperation } from '@nestjs/swagger';
+import { LogViewerService } from './log-viewer.service';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles(UserRole.ADMIN)
@@ -15,6 +17,7 @@ export class AdminController {
     private readonly adminService: AdminService,
     private readonly userService: UsersService,
     private readonly contentService: ContentService,
+    private readonly logViewer: LogViewerService,
   ) {}
 
   @Get('user-list')
@@ -37,5 +40,11 @@ export class AdminController {
     @Query('range') range: 'day' | 'week' | 'month' | 'year' = 'month',
   ) {
     return this.adminService.getProgressData(range);
+  }
+
+  @Get('logs')
+  @ApiOperation({ summary: 'View the latest application logs' })
+  async viewLogs() {
+    return await this.logViewer.getLatestLogs();
   }
 }

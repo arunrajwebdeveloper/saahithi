@@ -37,6 +37,12 @@ export class User {
     default: UserStatus.ACTIVE,
   })
   status!: UserStatus;
+
+  @Prop({
+    type: String,
+    default: null,
+  })
+  avatarPublicId?: string | null;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
