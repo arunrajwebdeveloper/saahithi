@@ -1,14 +1,7 @@
-import { User as UserEntity } from '@/modules/users/schemas/user.schema';
+import { AuthUser } from '@/common/interfaces/auth.interface';
 
 declare global {
   namespace Express {
-    interface User {
-      userId: string;
-      email: string;
-    }
-
-    interface Request {
-      user?: User;
-    }
+    interface User extends AuthUser {}
   }
 }

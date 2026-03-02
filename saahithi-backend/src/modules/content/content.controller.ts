@@ -20,7 +20,7 @@ import { PremiumOnly } from '@/common/decorators/premium.decorator';
 import { Roles } from '@/common/decorators/roles.decorator';
 import { PremiumGuard } from '@/common/guards/premium.guard';
 import { RolesGuard } from '@/common/guards/roles.guard';
-import { UserRole } from '@/common/constants/user';
+import { UserRole } from '@/common/enums/user';
 import { PaginationDto } from '@/common/dto/pagination.dto';
 import { ApiOperation } from '@nestjs/swagger';
 

@@ -22,9 +22,9 @@ import { CloudinaryService } from './cloudinary.service';
 import { CloudinaryTasksService } from './cloudinary-tasks.service';
 import { JwtAuthGuard } from '@/modules/auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../guards/roles.guard';
-import { UserRole } from '../constants/user';
+import { UserRole } from '../enums/user';
 import { Roles } from '../decorators/roles.decorator';
-import { UPLOAD_LOCATION } from '../constants/uploads';
+import { UPLOAD_LOCATION } from '../enums/uploads';
 import { UploadLocationPipe } from '../pipes/upload-location.pipe';
 
 @UseGuards(JwtAuthGuard, RolesGuard)

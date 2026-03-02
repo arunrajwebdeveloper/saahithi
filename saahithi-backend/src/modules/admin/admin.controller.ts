@@ -5,7 +5,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { UsersService } from '../users/users.service';
 import { ContentService } from '../content/content.service';
 import { RolesGuard } from '@/common/guards/roles.guard';
-import { UserRole } from '@/common/constants/user';
+import { UserRole } from '@/common/enums/user';
 import {
   ApiCookieAuth,
   ApiExtraModels,

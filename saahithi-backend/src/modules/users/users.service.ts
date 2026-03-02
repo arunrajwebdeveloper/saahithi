@@ -5,7 +5,7 @@ import { User, UserDocument } from './schemas/user.schema';
 import { RegisterUserDto } from '../auth/dto/register-user.dto';
 import { ConfigService } from '@nestjs/config';
 import { UserEvents } from '@/common/events/user.events';
-import { UserRole, UserStatus } from '@/common/constants/user';
+import { UserRole, UserStatus } from '@/common/enums/user';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PaginationDto } from '@/common/dto/pagination.dto';
 
@@ -57,7 +57,7 @@ export class UsersService {
   }
 
   async findOneById(id: string): Promise<UserDocument | null> {
-    return this.userModel.findById(id).exec();
+    return this.userModel.findById(id).select('-password -warningCount').exec();
   }
 
   async findAll(paginationDto: PaginationDto): Promise<{

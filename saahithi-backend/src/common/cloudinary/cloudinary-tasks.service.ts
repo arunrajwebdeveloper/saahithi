@@ -5,7 +5,7 @@ import { Model } from 'mongoose';
 import { CloudinaryService } from './cloudinary.service';
 import { User } from '@/modules/users/schemas/user.schema';
 import { Content } from '@/modules/content/schemas/content.schema';
-import { UPLOAD_LOCATION } from '../constants/uploads';
+import { UPLOAD_LOCATION } from '../enums/uploads';
 
 @Injectable()
 export class CloudinaryTasksService {

@@ -13,7 +13,6 @@ import { UserDocument } from './schemas/user.schema';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { UserStatus } from '@/common/constants/user';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @UseGuards(JwtAuthGuard)

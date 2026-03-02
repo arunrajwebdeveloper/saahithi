@@ -11,7 +11,7 @@ import { ConfigService } from '@nestjs/config';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { User, UserDocument } from '../users/schemas/user.schema';
 import { UsersService } from '../users/users.service';
-import { UserStatus } from '@/common/constants/user';
+import { UserStatus } from '@/common/enums/user';
 
 // Create a custom type that includes partitioned
 interface CustomCookieOptions {

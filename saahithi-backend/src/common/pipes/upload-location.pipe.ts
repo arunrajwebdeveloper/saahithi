@@ -1,5 +1,5 @@
 import { BadRequestException, ParseEnumPipe } from '@nestjs/common';
-import { UPLOAD_LOCATION } from '../constants/uploads';
+import { UPLOAD_LOCATION } from '../enums/uploads';
 
 export const UploadLocationPipe = new ParseEnumPipe(UPLOAD_LOCATION, {
   exceptionFactory: () =>

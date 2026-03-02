@@ -1,4 +1,4 @@
-import { UserRole } from '@/common/constants/user';
+import { UserRole } from '@/common/enums/user';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEmail,

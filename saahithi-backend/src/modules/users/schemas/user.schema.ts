@@ -1,4 +1,4 @@
-import { UserRole, UserStatus } from '@/common/constants/user';
+import { UserRole, UserStatus } from '@/common/enums/user';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { HydratedDocument } from 'mongoose';
