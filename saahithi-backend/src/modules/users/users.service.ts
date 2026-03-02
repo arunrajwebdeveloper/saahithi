@@ -60,7 +60,7 @@ export class UsersService {
   }
 
   async findAll(): Promise<UserDocument[]> {
-    return this.userModel.find().select('-password').exec();
+    return this.userModel.find().select('-password -warningCount').exec();
   }
 
   async handleMaliciousActivity(id: string) {
