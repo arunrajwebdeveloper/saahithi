@@ -7,6 +7,7 @@ import { AdminModule } from './modules/admin/admin.module';
 import { UsersModule } from './modules/users/users.module';
 import { GatewayModule } from './common/gateway/gateway.module';
 import { EventsModule } from './common/events/events.module';
+import { CloudinaryModule } from './common/cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { EventsModule } from './common/events/events.module';
     // Feature Modules
     GatewayModule,
     EventsModule,
+    CloudinaryModule,
     AdminModule,
     AuthModule,
     UsersModule,

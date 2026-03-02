@@ -39,7 +39,7 @@ export class AuthController {
    * The @Request() req object is populated with the user details from LocalStrategy validation.
    */
   @UseGuards(LocalAuthGuard)
-  @ApiOperation({ summary: 'User login' })
+  @ApiOperation({ summary: 'User login with email and password' })
   // @ApiBody({
   //   description: 'User login credentials',
   //   schema: {
@@ -75,6 +75,7 @@ export class AuthController {
    */
 
   @Post('refresh')
+  @ApiOperation({ summary: 'Token refresh' })
   async refresh(
     @Request() req: ExpressRequest,
     @Res({ passthrough: true }) res: Response,
@@ -89,6 +90,7 @@ export class AuthController {
    */
 
   @Post('logout')
+  @ApiOperation({ summary: 'Logout current user' })
   // @UseGuards(JwtAuthGuard)
   async logout(@Res({ passthrough: true }) res: Response) {
     res.clearCookie('access_token', { path: '/' });
@@ -101,6 +103,7 @@ export class AuthController {
    * Uses JwtAuthGuard to execute the JwtStrategy and validate the token.
    */
   @Get('profile')
+  @ApiOperation({ summary: 'Current user basic profile data' })
   @UseGuards(JwtAuthGuard)
   getProfile(@Request() req: ExpressRequest) {
     return req.user;

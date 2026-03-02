@@ -7,6 +7,7 @@ import { ConfigService } from '@nestjs/config';
 import { UserEvents } from '@/common/events/user.events';
 import { UserRole, UserStatus } from '@/common/constants/user';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { PaginationDto } from '@/common/dto/pagination.dto';
 
 @Injectable()
 export class UsersService {
@@ -59,8 +60,55 @@ export class UsersService {
     return this.userModel.findById(id).exec();
   }
 
-  async findAll(): Promise<UserDocument[]> {
-    return this.userModel.find().select('-password').exec();
+  async findAll(paginationDto: PaginationDto): Promise<{
+    total: number;
+    limit: number;
+    page: number;
+    result: UserDocument[];
+    hasNext: boolean;
+    hasPrev: boolean;
+  }> {
+    const { page = 1, limit = 10, search, sortOrder } = paginationDto;
+    const skip = (page - 1) * limit;
+
+    const filter: any = {};
+
+    if (search) {
+      const searchRegex = new RegExp(search, 'i');
+
+      filter['$or'] = [
+        { firstName: { $regex: searchRegex } },
+        { lastName: { $regex: searchRegex } },
+        { email: { $regex: searchRegex } },
+      ];
+    }
+
+    const sort: any = { createdAt: sortOrder === 'asc' ? 1 : -1 };
+
+    const [users, total] = await Promise.all([
+      this.userModel
+        .find(filter)
+        .select('-password -warningCount')
+        .sort(sort)
+        .skip(skip)
+        .limit(limit)
+        .lean()
+        .exec(),
+      this.userModel.countDocuments(filter).exec(),
+    ]);
+
+    const totalPages = Math.ceil(total / limit);
+    const hasNext = page < totalPages;
+    const hasPrev = page > 1;
+
+    return {
+      total,
+      limit,
+      page,
+      result: users as UserDocument[],
+      hasNext,
+      hasPrev,
+    };
   }
 
   async handleMaliciousActivity(id: string) {
@@ -72,9 +120,9 @@ export class UsersService {
 
     if (user.warningCount >= 1) {
       // Second strike: Block
-      user.status = UserStatus.BLOCKED;
+      user.status = UserStatus.TERMINATED;
       await user.save();
-      return { message: 'User has been blocked.' };
+      return { message: 'User has been terminated.' };
     } else {
       // First strike: Warn
       user.warningCount += 1;
@@ -103,10 +151,10 @@ export class UsersService {
     return user;
   }
 
-  async blockUser(id: string): Promise<UserDocument | null> {
+  async terminateUser(id: string): Promise<UserDocument | null> {
     const user = this.userModel.findByIdAndUpdate(
       id,
-      { $set: { status: UserStatus.BLOCKED } },
+      { $set: { status: UserStatus.TERMINATED } },
       { new: true },
     );
     if (!user) throw new NotFoundException('User not found');
