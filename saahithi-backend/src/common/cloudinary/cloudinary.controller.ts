@@ -25,9 +25,10 @@ import { RolesGuard } from '../guards/roles.guard';
 import { UserRole } from '../constants/user';
 import { Roles } from '../decorators/roles.decorator';
 import { UPLOAD_LOCATION } from '../constants/uploads';
+import { UploadLocationPipe } from '../pipes/upload-location.pipe';
 
-// @UseGuards(JwtAuthGuard, RolesGuard)
-@ApiTags('Cloudinary Media')
+@UseGuards(JwtAuthGuard, RolesGuard)
+@ApiTags('Cloudinary Uploads')
 @Controller('cloudinary')
 export class CloudinaryController {
   constructor(
@@ -39,8 +40,8 @@ export class CloudinaryController {
    * SECURE SERVER UPLOAD
    * Restricts file size to 5MB and only allows JPG/PNG/WEBP.
    */
-  // @Roles(UserRole.USER, UserRole.ADMIN)
-  @Post('upload/:folder')
+  @Roles(UserRole.USER, UserRole.ADMIN)
+  @Post('upload/:location')
   @ApiOperation({ summary: 'Upload image (Max 5MB, JPG/PNG/WEBP only)' })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -62,21 +63,11 @@ export class CloudinaryController {
   )
   async uploadImage(
     @UploadedFile() file: Express.Multer.File,
-    @Param(
-      'folder',
-      new ParseEnumPipe(UPLOAD_LOCATION, {
-        exceptionFactory: () => {
-          const allowedValues = Object.values(UPLOAD_LOCATION).join(', ');
-          return new BadRequestException(
-            `Invalid upload folder. Supported folders are: ${allowedValues}`,
-          );
-        },
-      }),
-    )
-    folder: UPLOAD_LOCATION,
+    @Param('location', UploadLocationPipe)
+    location: UPLOAD_LOCATION,
   ) {
     if (!file) throw new BadRequestException('File is required');
-    return await this.cloudinaryService.uploadImage(file, folder);
+    return await this.cloudinaryService.uploadImage(file, location);
   }
 
   /**
