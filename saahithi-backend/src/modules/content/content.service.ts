@@ -210,6 +210,11 @@ export class ContentService {
   async permanentDelete(id: string): Promise<{ deleted: boolean; id: string }> {
     const result = await this.contentModel.findByIdAndDelete(id).exec();
     if (!result) throw new NotFoundException('Content not found');
+
+    this.contentEvents.emitContentDeleted({
+      imageIds: [...new Set(...result?.imageRegistry)],
+    });
+
     return { deleted: true, id };
   }
 

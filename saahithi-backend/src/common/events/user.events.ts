@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { AppEvents, UserCreatedPayload } from './event.types';
+import { AppEvents, UserCreatedPayload, UserImageId } from './event.types';
 
 @Injectable()
 export class UserEvents {
@@ -8,5 +8,9 @@ export class UserEvents {
 
   emitUserCreated(payload: UserCreatedPayload) {
     this.eventEmitter.emit(AppEvents.USER_CREATED, payload);
+  }
+
+  emitUserDeleted(payload: UserImageId) {
+    this.eventEmitter.emit(AppEvents.USER_DELETED, payload);
   }
 }

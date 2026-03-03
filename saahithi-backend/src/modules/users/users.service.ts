@@ -164,6 +164,11 @@ export class UsersService {
   async permanentDelete(id: string): Promise<{ deleted: boolean; id: string }> {
     const result = await this.userModel.findByIdAndDelete(id).exec();
     if (!result) throw new NotFoundException('User not found');
+
+    this.userEvents.emitUserDeleted({
+      imageId: result?.avatarPublicId as string,
+    });
+
     return { deleted: true, id };
   }
 
