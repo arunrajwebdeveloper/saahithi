@@ -1,5 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAppSelector } from "../../hooks/hooks";
+import PageLayout from "../layout/PageLayout";
 
 interface ProtectedRouteProps {
   children?: React.ReactNode;
@@ -21,7 +22,7 @@ ProtectedRouteProps) => {
   //   return <Navigate to="/unauthorized" replace />;
   // }
 
-  return children ? <>{children}</> : <Outlet />;
+  return <PageLayout>{children ? <>{children}</> : <Outlet />}</PageLayout>;
 };
 
 // Public Route (redirects to dashboard if already logged in)

@@ -9,15 +9,14 @@ import CookieDisabledModal from "./components/modal/CookieDisabledModal";
 import { useAppDispatch } from "./hooks/hooks";
 import useWindowWidth from "./hooks/useWindowWidth";
 import { setWindowWidth } from "./store/features/windowSlice";
-import CommonLayout from "./components/layout/CommonLayout";
 
 // Lazy load pages
 const LoginPage = lazy(() => import("./view/LoginPage"));
 const RegisterPage = lazy(() => import("./view/RegisterPage"));
+const Dashboard = lazy(() => import("./view/Dashboard"));
 const ProfilePage = lazy(() => import("./view/ProfilePage"));
 const UnauthorizedPage = lazy(() => import("./view/UnauthorizedPage"));
 const NoteFound = lazy(() => import("./view/NoteFound"));
-// const AdminPage = lazy(() => import("./view/AdminPage"));
 
 function App() {
   const dispatch = useAppDispatch();
@@ -59,15 +58,8 @@ function App() {
 
             {/* Protected routes */}
             <Route element={<ProtectedRoute />}>
-              <Route path="/dashboard" element={<h1>You are in!</h1>} />
-              <Route
-                path="/profile"
-                element={
-                  <CommonLayout>
-                    <ProfilePage />
-                  </CommonLayout>
-                }
-              />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/profile" element={<ProfilePage />} />
             </Route>
 
             {/* Admin only route */}
