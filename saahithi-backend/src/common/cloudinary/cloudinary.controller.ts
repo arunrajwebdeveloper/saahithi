@@ -77,7 +77,7 @@ export class CloudinaryController {
 
   @Roles(UserRole.USER, UserRole.ADMIN)
   @Get('signature')
-  @ApiOperation({ summary: 'Get signature for user avatar upload' })
+  @ApiOperation({ summary: 'Get signature for upload assets from client side' })
   getAvatarSignature(location: UPLOAD_LOCATION) {
     return this.cloudinaryService.getUploadSignature(location);
   }
