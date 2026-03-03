@@ -1,4 +1,8 @@
-import { Injectable, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
 import { v2 as cloudinary, UploadApiResponse } from 'cloudinary';
 import * as toStream from 'buffer-to-stream';
 
@@ -61,6 +65,52 @@ export class CloudinaryService {
       return await cloudinary.uploader.destroy(publicId);
     } catch (error: any) {
       this.logger.error(`Delete failed for: ${publicId}`, error?.message);
+    }
+  }
+
+  /**
+   * DELETE RESOURCES
+   * Removes assets from Cloudinary using its Public IDs.
+   */
+
+  async deleteResources(publicIds: string[]) {
+    if (!publicIds || publicIds.length === 0) return;
+
+    try {
+      return await cloudinary.api.delete_resources(publicIds);
+    } catch (error) {
+      throw new InternalServerErrorException('Cloudinary deletion failed');
+    }
+  }
+
+  /**
+   * DELETE FOLDER ASSETS
+   * Removes all folder assets from Cloudinary.
+   */
+
+  async deleteFolderAssets(folderPath: string) {
+    try {
+      // Delete all resources inside the folder
+      await cloudinary.api.delete_resources_by_prefix(folderPath);
+      return { success: true };
+    } catch (error) {
+      console.error('Folder assets deletion failed', error);
+    }
+  }
+
+  /**
+   * DELETE FOLDER
+   * Removes folder from Cloudinary.
+   */
+
+  async deleteFolder(folderPath: string) {
+    try {
+      // Delete the folder
+      await cloudinary.api.delete_folder(folderPath);
+
+      return { success: true };
+    } catch (error) {
+      console.error('Folder deletion failed', error);
     }
   }
 

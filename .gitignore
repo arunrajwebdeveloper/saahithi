@@ -43,3 +43,4 @@ saahithi-backend/coverage/
 saahithi-backend/report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 saahithi-backend/.temp
 saahithi-backend/.tmp
+saahithi-backend/logs
