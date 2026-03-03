@@ -12,7 +12,6 @@ import { setWindowWidth } from "./store/features/windowSlice";
 import CommonLayout from "./components/layout/CommonLayout";
 
 // Lazy load pages
-const NotesPage = lazy(() => import("./view/NotesPage"));
 const LoginPage = lazy(() => import("./view/LoginPage"));
 const RegisterPage = lazy(() => import("./view/RegisterPage"));
 const ProfilePage = lazy(() => import("./view/ProfilePage"));
@@ -60,7 +59,7 @@ function App() {
 
             {/* Protected routes */}
             <Route element={<ProtectedRoute />}>
-              <Route path="/notes" element={<NotesPage />} />
+              <Route path="/dashboard" element={<h1>You are in!</h1>} />
               <Route
                 path="/profile"
                 element={
@@ -78,7 +77,7 @@ function App() {
 
             {/* Error routes */}
             <Route path="/unauthorized" element={<UnauthorizedPage />} />
-            <Route path="/" element={<Navigate to="/notes" replace />} />
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
             <Route path="*" element={<NoteFound />} />
           </Routes>
         </Suspense>

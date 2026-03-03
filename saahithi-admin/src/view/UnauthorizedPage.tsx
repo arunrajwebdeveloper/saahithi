@@ -35,7 +35,7 @@ const UnauthorizedPage = () => {
           You don't have permission to access this page.
         </p>
         <div className="flex justify-center">
-          <Button onClick={() => navigate("/notes")} variant="primary">
+          <Button onClick={() => navigate("/dashboard")} variant="primary">
             Go back
           </Button>
         </div>

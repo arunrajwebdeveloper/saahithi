@@ -29,7 +29,7 @@ export const useAuth = () => {
             user: currentUser,
           }),
         );
-        navigate("/notes", { replace: true });
+        navigate("/dashboard", { replace: true });
       } catch (error) {
         console.error("Failed to fetch user:", error);
         dispatch(logoutAction());

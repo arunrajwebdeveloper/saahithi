@@ -25,7 +25,7 @@ const AdminPage = () => {
           <div className="flex items-center gap-4">
             <span className="text-gray-700">Admin: {user?.firstName}</span>
             <button
-              onClick={() => navigate("/notes")}
+              onClick={() => navigate("/dashboard")}
               className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
             >
               Notes

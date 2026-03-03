@@ -30,7 +30,7 @@ export const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   if (isAuthenticated) {
-    return <Navigate to="/notes" replace />;
+    return <Navigate to="/dashboard" replace />;
   }
 
   return <>{children}</>;

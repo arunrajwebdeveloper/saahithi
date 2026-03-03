@@ -11,7 +11,7 @@ const CommonLayout = ({ children }: { children: ReactNode }) => {
           <h1 className="text-2xl font-bold">Profile</h1>
           <div className="flex items-center gap-4">
             <button
-              onClick={() => navigate("/notes")}
+              onClick={() => navigate("/dashboard")}
               className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
             >
               Back to Notes

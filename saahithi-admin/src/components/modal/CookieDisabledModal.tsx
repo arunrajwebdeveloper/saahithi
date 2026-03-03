@@ -4,7 +4,7 @@ const CookieDisabledModal = () => {
   const handleRetry = () => window.location.reload();
 
   return (
-    <div className="fixed inset-0 bg-gray-900/50 flex items-center justify-center z-[99999] select-none">
+    <div className="fixed inset-0 bg-gray-900/50 flex items-center justify-center z-99999 select-none">
       <div className="bg-white flex px-8 py-12 rounded-lg shadow-xl max-w-sm w-full mx-4 max-h-[90vh] min-h-96 overflow-hidden">
         <div className="m-auto">
           <div className="mb-6 text-center text-yellow-400">
