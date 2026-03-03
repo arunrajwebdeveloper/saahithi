@@ -76,19 +76,10 @@ export class CloudinaryController {
    */
 
   @Roles(UserRole.USER, UserRole.ADMIN)
-  @Get('signature/avatar')
+  @Get('signature')
   @ApiOperation({ summary: 'Get signature for user avatar upload' })
-  getAvatarSignature() {
-    return this.cloudinaryService.getUploadSignature(UPLOAD_LOCATION.AVATARS);
-  }
-
-  @Roles(UserRole.USER, UserRole.ADMIN)
-  @Get('signature/content_image')
-  @ApiOperation({ summary: 'Get signature for content image upload' })
-  getContentSignature() {
-    return this.cloudinaryService.getUploadSignature(
-      UPLOAD_LOCATION.CONTENT_IMAGES,
-    );
+  getAvatarSignature(location: UPLOAD_LOCATION) {
+    return this.cloudinaryService.getUploadSignature(location);
   }
 
   /**
