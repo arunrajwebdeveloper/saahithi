@@ -13,11 +13,13 @@ import { ChartLineMultiple } from "@/components/ChartLineMultiple";
 import { ChartPieDonut } from "@/components/ChartPieDonut";
 import { ChartBarInteractive } from "@/components/ChartBarInteractive";
 import { ButtonGroupElement } from "@/components/ButtonGroupElement";
-import { TableLayout } from "@/components/TableLayout";
+import { UserTableLayout } from "@/components/UserTableLayout";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { formatNumber } from "@/utils";
 import { cn } from "@/lib/utils";
-import CircleSpinner from "@/components/common/CircleSpinner";
+import { AppSpinner } from "@/components/AppSpinner";
+import { ActiveAuthorTableLayout } from "@/components/ActiveAuthorTableLayout";
+import { PostTableLayout } from "@/components/PostTableLayout";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -34,12 +36,7 @@ const Dashboard = () => {
     enabled: true,
   });
 
-  if (isLoadingDashboard)
-    return (
-      <div className="w-full h-dvh flex fixed top-0 left-0 z-6000 bg-slate-100">
-        <CircleSpinner size={24} className="m-auto text-blue-500" />
-      </div>
-    );
+  if (isLoadingDashboard) return <AppSpinner />;
 
   const {
     totalUsers,
@@ -209,7 +206,7 @@ const Dashboard = () => {
             </h1>
             <div className="flex w-full gap-x-6">
               <div className="w-full  bg-white rounded-lg p-4">
-                <TableLayout />
+                <ActiveAuthorTableLayout data={mostActiveAuthors} />
               </div>
             </div>
           </div>
@@ -220,7 +217,7 @@ const Dashboard = () => {
             </h1>
             <div className="flex w-full gap-x-6">
               <div className="w-full bg-white rounded-lg p-4">
-                <TableLayout />
+                <UserTableLayout data={recentUsers} />
               </div>
             </div>
           </div>
@@ -230,7 +227,7 @@ const Dashboard = () => {
               Recent Posts
             </h1>
             <div className="w-full bg-white rounded-lg p-4">
-              <TableLayout />
+              <PostTableLayout data={recentPosts} />
             </div>
           </div>
         </div>

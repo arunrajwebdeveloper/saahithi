@@ -2,13 +2,13 @@ import { Suspense, lazy, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ProtectedRoute, PublicRoute } from "./components/auth/ProtectedRoute";
 import OfflineModal from "./components/modal/OfflineModal";
-import CircleSpinner from "./components/common/CircleSpinner";
 import { SessionHandler } from "./components/auth/SessionHandler";
 import { useCookieSupport } from "./hooks/useCookieSupport";
 import CookieDisabledModal from "./components/modal/CookieDisabledModal";
 import { useAppDispatch } from "./hooks/hooks";
 import useWindowWidth from "./hooks/useWindowWidth";
 import { setWindowWidth } from "./store/features/windowSlice";
+import { AppSpinner } from "./components/AppSpinner";
 
 // Lazy load pages
 const LoginPage = lazy(() => import("./view/LoginPage"));
@@ -30,13 +30,7 @@ function App() {
   return (
     <SessionHandler>
       <BrowserRouter>
-        <Suspense
-          fallback={
-            <div className="text-center h-screen w-full bg-white text-blue-600 flex justify-center items-center">
-              <CircleSpinner size={36} />
-            </div>
-          }
-        >
+        <Suspense fallback={<AppSpinner />}>
           <Routes>
             {/* Public routes */}
             <Route

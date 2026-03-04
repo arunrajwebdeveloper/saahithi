@@ -213,7 +213,7 @@ export class UsersService {
       .find()
       .sort({ createdAt: -1 })
       .limit(5)
-      .select('name email createdAt')
+      .select('firstName lastName email createdAt')
       .lean()
       .exec();
   }
