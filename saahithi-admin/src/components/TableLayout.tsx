@@ -14,7 +14,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { MoreHorizontalIcon } from "lucide-react";
 import { Avatar } from "./Avatar";
 
 export function TableLayout() {
@@ -36,24 +35,6 @@ export function TableLayout() {
             </div>
           </TableCell>
           <TableCell>257</TableCell>
-          <TableCell className="text-right">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="size-8">
-                  <MoreHorizontalIcon />
-                  <span className="sr-only">Open menu</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem>Edit</DropdownMenuItem>
-                <DropdownMenuItem>Duplicate</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem variant="destructive">
-                  Delete
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </TableCell>
         </TableRow>
         <TableRow>
           <TableCell className="font-medium">
@@ -63,24 +44,6 @@ export function TableLayout() {
             </div>
           </TableCell>
           <TableCell>129</TableCell>
-          <TableCell className="text-right">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="size-8">
-                  <MoreHorizontalIcon />
-                  <span className="sr-only">Open menu</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem>Edit</DropdownMenuItem>
-                <DropdownMenuItem>Duplicate</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem variant="destructive">
-                  Delete
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </TableCell>
         </TableRow>
         <TableRow>
           <TableCell className="font-medium">
@@ -90,24 +53,6 @@ export function TableLayout() {
             </div>
           </TableCell>
           <TableCell>110</TableCell>
-          <TableCell className="text-right">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="size-8">
-                  <MoreHorizontalIcon />
-                  <span className="sr-only">Open menu</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem>Edit</DropdownMenuItem>
-                <DropdownMenuItem>Duplicate</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem variant="destructive">
-                  Delete
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </TableCell>
         </TableRow>
       </TableBody>
     </Table>

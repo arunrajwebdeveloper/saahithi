@@ -27,8 +27,15 @@ import {
   TagIcon,
   Trash2Icon,
 } from "lucide-react";
+import type { RangeType } from "@/types/analytics.types";
 
-export function ButtonGroupElement() {
+export function ButtonGroupElement({
+  selected,
+  onChangeRange,
+}: {
+  selected: RangeType;
+  onChangeRange: (range: RangeType) => void;
+}) {
   const [label, setLabel] = React.useState("personal");
 
   return (
@@ -39,12 +46,30 @@ export function ButtonGroupElement() {
         </Button>
       </ButtonGroup> */}
       <ButtonGroup>
-        <Button variant="outline">Day</Button>
-        <Button variant="outline">Week</Button>
-        <Button variant="outline" className="bg-emerald-500 text-white">
+        <Button
+          onClick={() => onChangeRange("day")}
+          variant={selected === "day" ? "default" : "outline"}
+        >
+          Day
+        </Button>
+        <Button
+          onClick={() => onChangeRange("week")}
+          variant={selected === "week" ? "default" : "outline"}
+        >
+          Week
+        </Button>
+        <Button
+          onClick={() => onChangeRange("month")}
+          variant={selected === "month" ? "default" : "outline"}
+        >
           Month
         </Button>
-        <Button variant="outline">Year</Button>
+        <Button
+          onClick={() => onChangeRange("year")}
+          variant={selected === "year" ? "default" : "outline"}
+        >
+          Year
+        </Button>
       </ButtonGroup>
       {/* <ButtonGroup>
         <Button variant="outline">Snooze</Button>

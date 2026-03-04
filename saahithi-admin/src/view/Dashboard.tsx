@@ -23,11 +23,18 @@ const Dashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  const { analytics, isLoadingAnalytics, isFetchingAnalytics } = useAnalytics({
+  const {
+    analytics,
+    overallProgress,
+    range,
+    isLoadingDashboard,
+    isLoadingOverallProgress,
+    onChangeRange,
+  } = useAnalytics({
     enabled: true,
   });
 
-  if (isLoadingAnalytics || isFetchingAnalytics)
+  if (isLoadingDashboard)
     return (
       <div className="w-full h-dvh flex fixed top-0 left-0 z-6000 bg-slate-100">
         <CircleSpinner size={24} className="m-auto text-blue-500" />
@@ -36,16 +43,16 @@ const Dashboard = () => {
 
   const {
     totalUsers,
+    totalPosts,
+    userGrowth,
+    postGrowth,
     totalPremiumUsers,
     mostActiveAuthors,
     recentUsers,
-    totalPosts,
     publishedPosts,
     unpublishedPosts,
     totalCategories,
     categories,
-    userGrowth,
-    postGrowth,
     recentPosts,
     categoryDistribution,
   } = analytics;
@@ -66,7 +73,11 @@ const Dashboard = () => {
                 {formatNumber(totalUsers)}
               </h2>
               <p className="font-normal text-base text-gray-500">Total Users</p>
-              <div className="min-h-6"></div>
+              <div className="min-h-6">
+                <p className="font-normal text-sm text-emerald-600">
+                  {totalPremiumUsers} Premium members
+                </p>
+              </div>
             </div>
           </div>
           <div className="w-1/4 h-72 bg-white rounded-lg flex justify-center">
@@ -145,11 +156,33 @@ const Dashboard = () => {
       </div>
 
       <div className="mb-20">
+        <div className="w-full">
+          <div className="flex justify-between items-center w-full mb-8">
+            <h1 className="font-medium text-xl text-slate-900">
+              Total Progress
+            </h1>
+            <ButtonGroupElement
+              selected={range}
+              onChangeRange={onChangeRange}
+            />
+          </div>
+          <div className="flex w-full gap-x-6">
+            <div className="w-full bg-white rounded-lg">
+              <ChartBarInteractive
+                chartData={overallProgress}
+                isLoading={isLoadingOverallProgress}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="mb-20">
         <div className="flex w-full gap-x-6">
           <div className="w-1/2">
-            <h1 className="font-medium text-xl text-slate-900 mb-8">
+            {/* <h1 className="font-medium text-xl text-slate-900 mb-8">
               Growth Summary
-            </h1>
+            </h1> */}
             <div className="flex w-full gap-x-6">
               <div className="w-full h-72 bg-white rounded-lg">
                 <ChartLineMultiple height={250} />
@@ -158,27 +191,11 @@ const Dashboard = () => {
           </div>
 
           <div className="w-1/2">
-            <h1 className="font-medium text-xl text-slate-900 mb-8">
+            {/* <h1 className="font-medium text-xl text-slate-900 mb-8">
               Category Distribution
-            </h1>
+            </h1> */}
             <div className="w-full bg-white rounded-lg">
               <ChartPieDonut />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="mb-20">
-        <div className="w-full">
-          <div className="flex justify-between items-center w-full mb-8">
-            <h1 className="font-medium text-xl text-slate-900">
-              Total Progress
-            </h1>
-            <ButtonGroupElement />
-          </div>
-          <div className="flex w-full gap-x-6">
-            <div className="w-full bg-white rounded-lg">
-              <ChartBarInteractive />
             </div>
           </div>
         </div>

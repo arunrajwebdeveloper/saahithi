@@ -52,7 +52,7 @@ const PageLayout = ({ children }: { children: ReactNode }) => {
               [&::-webkit-scrollbar-track]:bg-slate-100
               [&::-webkit-scrollbar-thumb]:bg-slate-400"
       >
-        <header className="w-full h-12.5 sticky top-0 px-4 z-2000 border-b border-b-slate-300 bg-slate-100">
+        <header className="w-full h-16 sticky top-0 px-4 z-2000 border-b border-b-slate-300 bg-slate-100">
           <div className="max-w-10/12 mx-auto h-full flex justify-between items-center">
             <div className="flex items-center select-none pointer-events-none">
               <img
@@ -67,7 +67,7 @@ const PageLayout = ({ children }: { children: ReactNode }) => {
             </div>
           </div>
         </header>
-        <div className="max-w-10/12 w-full mx-auto px-4 py-16">{children}</div>
+        <div className="max-w-10/12 w-full mx-auto px-4 py-20">{children}</div>
       </div>
     </div>
   );

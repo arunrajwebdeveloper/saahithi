@@ -61,10 +61,40 @@ export class AdminService {
       this.contentService.getProgressData(range),
     ]);
 
+    const mergedDataMap = new Map<
+      string,
+      {
+        date: string;
+        user: number;
+        post: number;
+      }
+    >();
+
+    userStats.forEach((item) => {
+      mergedDataMap.set(item._id, {
+        date: item._id,
+        user: item.count,
+        post: 0,
+      });
+    });
+
+    postStats.forEach((item) => {
+      if (mergedDataMap.has(item._id)) {
+        mergedDataMap.get(item._id)!.post = item.count;
+      } else {
+        mergedDataMap.set(item._id, {
+          date: item._id,
+          user: 0,
+          post: item.count,
+        });
+      }
+    });
+
     return {
       range,
-      users: userStats,
-      posts: postStats,
+      data: Array.from(mergedDataMap.values()).sort(
+        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+      ),
     };
   }
 

@@ -6,4 +6,10 @@ export const analyticsAPI = {
     const response = await apiClient.get<ApiResponse<any>>("/admin/stats");
     return response.data.result;
   },
+  getOverallProgress: async (range: "day" | "week" | "month" | "year") => {
+    const response = await apiClient.get<ApiResponse<any>>(
+      `/admin/progress?range=${range}`,
+    );
+    return response.data.result;
+  },
 };
