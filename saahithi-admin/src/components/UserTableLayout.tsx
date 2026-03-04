@@ -1,5 +1,6 @@
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Avatar } from "./Avatar";
+import { useRelativeTime } from "@/utils/dateFormatter";
 
 export function UserTableLayout({ data }: { data: any }) {
   return (
@@ -11,11 +12,13 @@ export function UserTableLayout({ data }: { data: any }) {
             email,
             firstName,
             lastName,
+            createdAt,
           }: {
             _id: string;
             email: string;
             firstName: string;
             lastName: string;
+            createdAt: string;
           }) => {
             return (
               <TableRow key={_id}>
@@ -29,6 +32,11 @@ export function UserTableLayout({ data }: { data: any }) {
                       </p>
                     </div>
                   </div>
+                </TableCell>
+                <TableCell className="font-medium">
+                  <p className="font-light text-xs text-end text-slate-600">
+                    {useRelativeTime(createdAt)}
+                  </p>
                 </TableCell>
               </TableRow>
             );

@@ -8,18 +8,7 @@ import {
 import { Block, BlockSchema } from './block.schema';
 import { User } from '@/modules/users/schemas/user.schema';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-
-export enum ContentCategory {
-  Novel = 'novel',
-  Poem = 'poem',
-  Essay = 'essay',
-  Drama = 'drama',
-  Fable = 'fable',
-  Article = 'article',
-  Tutorial = 'tutorial',
-  CaseStudy = 'caseStudy',
-  Interview = 'interview',
-}
+import { ContentCategory } from '@/common/enums/content';
 
 export type ContentDocument = HydratedDocument<Content>;
 

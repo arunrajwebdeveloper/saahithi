@@ -7,6 +7,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Avatar } from "./Avatar";
+import { useRelativeTime } from "@/utils/dateFormatter";
 
 export function PostTableLayout({ data }: { data: any }) {
   return (
@@ -23,10 +24,12 @@ export function PostTableLayout({ data }: { data: any }) {
             _id,
             title,
             author,
+            createdAt,
           }: {
             _id: string;
             title: string;
             author: any;
+            createdAt: string;
           }) => {
             const { firstName, lastName } = author;
 
@@ -42,6 +45,11 @@ export function PostTableLayout({ data }: { data: any }) {
                       </p>
                     </div>
                   </div>
+                </TableCell>
+                <TableCell className="font-medium">
+                  <p className="font-light text-xs text-end text-slate-600">
+                    {useRelativeTime(createdAt)}
+                  </p>
                 </TableCell>
               </TableRow>
             );

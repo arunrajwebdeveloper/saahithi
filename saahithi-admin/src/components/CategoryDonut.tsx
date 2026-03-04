@@ -1,5 +1,3 @@
-"use client";
-
 import { Pie, PieChart } from "recharts";
 import {
   Card,
@@ -28,15 +26,14 @@ export function CategoryDonut({ data = [] }: { data: CategoryData[] }) {
   const processedData = data.map((item, index) => ({
     name: item.category,
     value: item.count,
-    // Assigns --chart-1, --chart-2, etc. dynamically
-    fill: `var(--chart-${(index % 5) + 1})`,
+    fill: `var(--chart-${(index % 9) + 1})`,
   }));
 
   const chartConfig = data.reduce(
     (acc, item, index) => {
       acc[item.category] = {
         label: item.category.charAt(0).toUpperCase() + item.category.slice(1),
-        color: `hsl(var(--chart-${(index % 5) + 1}))`,
+        color: `hsl(var(--chart-${(index % 9) + 1}))`,
       };
       return acc;
     },

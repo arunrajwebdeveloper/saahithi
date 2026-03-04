@@ -18,10 +18,19 @@ export function ActiveAuthorTableLayout({ data }: { data: any }) {
                 <TableCell className="font-medium">
                   <div className="flex items-center gap-x-2">
                     <Avatar />
-                    <span>{author?.name}</span>
+                    <div>
+                      <span>{author?.name}</span>
+                      <p className="font-light text-xs text-gray-500 leading-tight">
+                        {author?.email}
+                      </p>
+                    </div>
                   </div>
                 </TableCell>
-                <TableCell>{`${postCount} posts`}</TableCell>
+                <TableCell className="font-medium">
+                  <p className="font-light text-xs text-end text-slate-600">
+                    {`${postCount} posts`}
+                  </p>
+                </TableCell>
               </TableRow>
             );
           },

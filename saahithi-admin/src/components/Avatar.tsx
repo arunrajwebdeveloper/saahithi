@@ -4,13 +4,19 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar";
 
-export function Avatar() {
+export function Avatar({
+  src = null,
+  alt = "@shadcn",
+}: {
+  src?: string | null;
+  alt?: string;
+}) {
   return (
     <AvatarWrap>
       <AvatarImage
-        src="https://github.com/shadcn.png"
-        alt="@shadcn"
-        className="grayscale"
+        src={src || "https://github.com/shadcn.png"}
+        alt={alt}
+        // className="grayscale"
       />
       <AvatarFallback>CN</AvatarFallback>
     </AvatarWrap>
