@@ -10,7 +10,6 @@ import {
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { ChartLineMultiple } from "@/components/ChartLineMultiple";
-import { ChartPieDonut } from "@/components/ChartPieDonut";
 import { ChartBarInteractive } from "@/components/ChartBarInteractive";
 import { ButtonGroupElement } from "@/components/ButtonGroupElement";
 import { UserTableLayout } from "@/components/UserTableLayout";
@@ -20,6 +19,7 @@ import { cn } from "@/lib/utils";
 import { AppSpinner } from "@/components/AppSpinner";
 import { ActiveAuthorTableLayout } from "@/components/ActiveAuthorTableLayout";
 import { PostTableLayout } from "@/components/PostTableLayout";
+import { CategoryDonut } from "@/components/CategoryDonut";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -46,10 +46,6 @@ const Dashboard = () => {
     totalPremiumUsers,
     mostActiveAuthors,
     recentUsers,
-    publishedPosts,
-    unpublishedPosts,
-    totalCategories,
-    categories,
     recentPosts,
     categoryDistribution,
   } = analytics;
@@ -192,7 +188,7 @@ const Dashboard = () => {
               Category Distribution
             </h1> */}
             <div className="w-full bg-white rounded-lg">
-              <ChartPieDonut />
+              <CategoryDonut data={categoryDistribution} />
             </div>
           </div>
         </div>
