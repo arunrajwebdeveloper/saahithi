@@ -83,7 +83,7 @@ export function ChartLineMultiple({
         />
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig} className="max-h-64 w-full">
+        <ChartContainer config={chartConfig} className="max-h-73.5 w-full">
           <LineChart
             accessibilityLayer
             data={data}
