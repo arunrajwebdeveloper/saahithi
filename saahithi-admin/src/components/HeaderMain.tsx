@@ -1,6 +1,8 @@
+import { ModeToggle } from "./ModeToggle";
+
 const HeaderMain = () => {
   return (
-    <header className="w-full h-16 sticky top-0 px-4 z-2000 bg-white border-b border-b-slate-200">
+    <header className="w-full h-16 sticky top-0 px-4 z-40 bg-card border-b border-b-slate-200">
       <div className="max-w-10/12 mx-auto h-full flex justify-between items-center">
         <div className="flex items-center select-none pointer-events-none">
           <img
@@ -13,6 +15,8 @@ const HeaderMain = () => {
             Admin
           </p>
         </div>
+
+        <ModeToggle />
       </div>
     </header>
   );
