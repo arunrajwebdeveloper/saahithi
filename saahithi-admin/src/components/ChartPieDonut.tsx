@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/card";
 import {
   ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
@@ -77,6 +79,7 @@ export function ChartPieDonut() {
               nameKey="browser"
               innerRadius={60}
             />
+            <ChartLegend content={<ChartLegendContent nameKey="browser" />} />
           </PieChart>
         </ChartContainer>
       </CardContent>

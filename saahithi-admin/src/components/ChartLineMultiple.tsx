@@ -38,7 +38,11 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function ChartLineMultiple() {
+export function ChartLineMultiple({
+  height = "auto",
+}: {
+  height?: number | string;
+}) {
   return (
     <Card>
       <CardHeader>
@@ -46,7 +50,7 @@ export function ChartLineMultiple() {
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
+        <ChartContainer config={chartConfig} style={{ height, width: "100%" }}>
           <LineChart
             accessibilityLayer
             data={chartData}
@@ -66,17 +70,17 @@ export function ChartLineMultiple() {
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
             <Line
               dataKey="desktop"
-              type="monotone"
+              type="linear"
               stroke="var(--color-desktop)"
               strokeWidth={2}
-              dot={false}
+              dot={true}
             />
             <Line
               dataKey="mobile"
-              type="monotone"
+              type="linear"
               stroke="var(--color-mobile)"
               strokeWidth={2}
-              dot={false}
+              dot={true}
             />
           </LineChart>
         </ChartContainer>

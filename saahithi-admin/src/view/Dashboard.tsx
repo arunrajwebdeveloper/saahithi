@@ -11,6 +11,9 @@ import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { ChartLineMultiple } from "@/components/ChartLineMultiple";
 import { ChartPieDonut } from "@/components/ChartPieDonut";
+import { ChartBarInteractive } from "@/components/ChartBarInteractive";
+import { ButtonGroupElement } from "@/components/ButtonGroupElement";
+import { TableLayout } from "@/components/TableLayout";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -19,7 +22,7 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen w-full">
       <div className="mb-20">
-        <h1 className="font-medium text-2xl text-slate-900 mb-8">
+        <h1 className="font-medium text-xl text-slate-900 mb-8">
           Analytics Overview
         </h1>
         <div className="flex w-full gap-x-6">
@@ -79,28 +82,78 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-      <div>
+
+      <div className="mb-20">
         <div className="flex w-full gap-x-6">
           <div className="w-1/2">
-            <h1 className="font-medium text-2xl text-slate-900 mb-8">Title</h1>
+            <h1 className="font-medium text-xl text-slate-900 mb-8">
+              Growth Summary
+            </h1>
             <div className="flex w-full gap-x-6">
               <div className="w-full h-72 bg-white rounded-lg">
-                <ChartLineMultiple />
+                <ChartLineMultiple height={250} />
               </div>
             </div>
           </div>
 
           <div className="w-1/2">
-            <h1 className="font-medium text-2xl text-slate-900 mb-8">
+            <h1 className="font-medium text-xl text-slate-900 mb-8">
               Category Distribution
             </h1>
-            {/* <div className="flex w-full"> */}
-            <div className="w-full h-72 bg-white rounded-lg">
+            <div className="w-full bg-white rounded-lg">
               <ChartPieDonut />
             </div>
-            {/* <ChartPieDonut /> */}
-            {/* <ChartLineMultiple /> */}
-            {/* </div> */}
+          </div>
+        </div>
+      </div>
+
+      <div className="mb-20">
+        <div className="w-full">
+          <div className="flex justify-between items-center w-full mb-8">
+            <h1 className="font-medium text-xl text-slate-900">
+              Total Progress
+            </h1>
+            <ButtonGroupElement />
+          </div>
+          <div className="flex w-full gap-x-6">
+            <div className="w-full bg-white rounded-lg">
+              <ChartBarInteractive />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="mb-20">
+        <div className="flex w-full gap-x-6">
+          <div className="w-1/3">
+            <h1 className="font-medium text-xl text-slate-900 mb-8">
+              Most Active Authors
+            </h1>
+            <div className="flex w-full gap-x-6">
+              <div className="w-full  bg-white rounded-lg p-4">
+                <TableLayout />
+              </div>
+            </div>
+          </div>
+
+          <div className="w-1/3">
+            <h1 className="font-medium text-xl text-slate-900 mb-8">
+              Recent Users
+            </h1>
+            <div className="flex w-full gap-x-6">
+              <div className="w-full bg-white rounded-lg p-4">
+                <TableLayout />
+              </div>
+            </div>
+          </div>
+
+          <div className="w-1/3">
+            <h1 className="font-medium text-xl text-slate-900 mb-8">
+              Recent Posts
+            </h1>
+            <div className="w-full bg-white rounded-lg p-4">
+              <TableLayout />
+            </div>
           </div>
         </div>
       </div>
