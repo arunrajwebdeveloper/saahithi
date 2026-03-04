@@ -37,7 +37,7 @@ const PageLayout = ({ children }: { children: ReactNode }) => {
   return (
     <div className="h-dvh w-full bg-slate-100 overflow-hidden flex">
       <aside
-        className="w-80 h-dvh ps-10 pe-4 overflow-y-auto overflow-x-hidden flex-none border-e border-e-slate-300 bg-slate-100 transition duration-300 
+        className="w-80 h-dvh ps-10 pe-4 overflow-y-auto overflow-x-hidden flex-none bg-white border-e border-e-slate-200 transition duration-300 
               [&::-webkit-scrollbar]:w-1
               [&::-webkit-scrollbar-track]:bg-slate-100
               [&::-webkit-scrollbar-thumb]:bg-slate-100
@@ -52,7 +52,7 @@ const PageLayout = ({ children }: { children: ReactNode }) => {
               [&::-webkit-scrollbar-track]:bg-slate-100
               [&::-webkit-scrollbar-thumb]:bg-slate-400"
       >
-        <header className="w-full h-16 sticky top-0 px-4 z-2000 border-b border-b-slate-300 bg-slate-100">
+        <header className="w-full h-16 sticky top-0 px-4 z-2000 bg-white border-b border-b-slate-200">
           <div className="max-w-10/12 mx-auto h-full flex justify-between items-center">
             <div className="flex items-center select-none pointer-events-none">
               <img

@@ -23,7 +23,6 @@ export function TableLayout() {
         <TableRow>
           <TableHead>User</TableHead>
           <TableHead>Total Posts</TableHead>
-          <TableHead className="text-right">Actions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
