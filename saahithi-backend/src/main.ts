@@ -29,6 +29,7 @@ async function bootstrap() {
           zippedArchive: true,
           maxSize: '20m',
           maxFiles: '14d', // Keeps logs for 14 days
+          auditFile: 'logs/.audit/log-audit.json',
           format: winston.format.combine(
             winston.format.timestamp(),
             winston.format.json(), // JSON is best for file logs
