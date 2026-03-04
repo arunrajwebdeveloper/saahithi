@@ -253,7 +253,12 @@ export class ContentService {
           ? 100
           : 0
         : ((thisMonth - lastMonth) / lastMonth) * 100;
-    return { thisMonth, lastMonth, growth: Number(growth.toFixed(2)) };
+    return {
+      thisMonth,
+      lastMonth,
+      growth: Number(growth.toFixed(2)),
+      isPositive: growth >= 0,
+    };
   }
 
   async getMostActiveAuthors() {

@@ -14,10 +14,35 @@ import { ChartPieDonut } from "@/components/ChartPieDonut";
 import { ChartBarInteractive } from "@/components/ChartBarInteractive";
 import { ButtonGroupElement } from "@/components/ButtonGroupElement";
 import { TableLayout } from "@/components/TableLayout";
+import { useAnalytics } from "@/hooks/useAnalytics";
+import { formatNumber } from "@/utils";
+import { cn } from "@/lib/utils";
 
 const Dashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+
+  const { analytics, isLoadingAnalytics, isFetchingAnalytics } = useAnalytics({
+    enabled: true,
+  });
+
+  if (isLoadingAnalytics) return null;
+
+  const {
+    totalUsers,
+    totalPremiumUsers,
+    mostActiveAuthors,
+    recentUsers,
+    totalPosts,
+    publishedPosts,
+    unpublishedPosts,
+    totalCategories,
+    categories,
+    userGrowth,
+    postGrowth,
+    recentPosts,
+    categoryDistribution,
+  } = analytics;
 
   return (
     <div className="min-h-screen w-full">
@@ -31,7 +56,9 @@ const Dashboard = () => {
               <div className="bg-blue-200 text-blue-600 mx-auto w-16 h-16 rounded-full flex mb-5">
                 <User size={28} className="m-auto" />
               </div>
-              <h2 className="font-bold text-6xl text-slate-800">4.6k</h2>
+              <h2 className="font-bold text-6xl text-slate-800">
+                {formatNumber(totalUsers)}
+              </h2>
               <p className="font-normal text-base text-gray-500">Total Users</p>
               <div className="min-h-6"></div>
             </div>
@@ -41,7 +68,9 @@ const Dashboard = () => {
               <div className="bg-orange-200 text-orange-600 mx-auto w-16 h-16 rounded-full flex mb-5">
                 <ScrollText size={28} className="m-auto" />
               </div>
-              <h2 className="font-bold text-6xl text-slate-800">4.6k</h2>
+              <h2 className="font-bold text-6xl text-slate-800">
+                {formatNumber(totalPosts)}
+              </h2>
               <p className="font-normal text-base text-gray-500">Total Posts</p>
               <div className="min-h-6"></div>
             </div>
@@ -51,14 +80,27 @@ const Dashboard = () => {
               <div className="bg-green-200 text-green-600 mx-auto w-16 h-16 rounded-full flex mb-5">
                 <User size={28} className="m-auto" />
               </div>
-              <h2 className="font-bold text-6xl text-slate-800">128</h2>
+              <h2 className="font-bold text-6xl text-slate-800">
+                {formatNumber(userGrowth.thisMonth)}
+              </h2>
               <p className="font-normal text-base text-gray-500">User Growth</p>
               <div className="text-gray-400">
-                <p className="font-normal text-sm">Last month: 3</p>
+                <p className="font-normal text-sm">
+                  Last month: {userGrowth.lastMonth}
+                </p>
               </div>
-              <div className="absolute top-6 right-6 flex justify-center items-center text-green-500 gap-x-1">
-                <TrendingUp size={18} />
-                <p className="font-normal text-sm">310%</p>
+              <div
+                className={cn(
+                  "absolute top-6 right-6  flex justify-center items-center gap-x-1",
+                  userGrowth.isPositive ? "text-green-500" : "text-red-500",
+                )}
+              >
+                {userGrowth.isPositive ? (
+                  <TrendingUp size={18} />
+                ) : (
+                  <TrendingDown size={18} />
+                )}
+                <p className="font-normal text-sm">{userGrowth.growth}%</p>
               </div>
             </div>
           </div>
@@ -67,16 +109,29 @@ const Dashboard = () => {
               <div className="bg-yellow-200 text-yellow-600 mx-auto w-16 h-16 rounded-full flex mb-5">
                 <FileText size={28} className="m-auto" />
               </div>
-              <h2 className="font-bold text-6xl text-slate-800">184</h2>
+              <h2 className="font-bold text-6xl text-slate-800">
+                {formatNumber(postGrowth.thisMonth)}
+              </h2>
               <p className="font-normal text-base text-gray-500">
                 Posts Growth
               </p>
               <div className="text-gray-400">
-                <p className="font-normal text-sm">Last month: 225</p>
+                <p className="font-normal text-sm">
+                  Last month: {postGrowth.lastMonth}
+                </p>
               </div>
-              <div className="absolute top-6 right-6  flex justify-center items-center text-red-500 gap-x-1">
-                <TrendingDown size={18} />
-                <p className="font-normal text-sm">12%</p>
+              <div
+                className={cn(
+                  "absolute top-6 right-6  flex justify-center items-center gap-x-1",
+                  postGrowth.isPositive ? "text-green-500" : "text-red-500",
+                )}
+              >
+                {postGrowth.isPositive ? (
+                  <TrendingUp size={18} />
+                ) : (
+                  <TrendingDown size={18} />
+                )}
+                <p className="font-normal text-sm">{postGrowth.growth}%</p>
               </div>
             </div>
           </div>
