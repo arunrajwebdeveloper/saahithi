@@ -12,4 +12,10 @@ export const analyticsAPI = {
     );
     return response.data.result;
   },
+  getEngagementTrends: async (range: string | null) => {
+    const response = await apiClient.get<ApiResponse<any>>(
+      `/admin/trends?range=${range}`,
+    );
+    return response.data.result;
+  },
 };

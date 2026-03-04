@@ -249,4 +249,23 @@ export class UsersService {
       { $sort: { _id: 1 } },
     ]);
   }
+
+  async getSignupTrends(startDate: Date, dateFormat: string) {
+    return this.userModel.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: startDate },
+          status: { $ne: UserStatus.TERMINATED },
+        },
+      },
+      {
+        $group: {
+          _id: { $dateToString: { format: dateFormat, date: '$createdAt' } },
+          totalSignups: { $sum: 1 },
+          premiumSignups: { $sum: { $cond: ['$isPremium', 1, 0] } },
+        },
+      },
+      { $sort: { _id: 1 } },
+    ]);
+  }
 }

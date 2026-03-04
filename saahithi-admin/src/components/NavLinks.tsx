@@ -19,13 +19,13 @@ export function NavLinks({
 }) {
   return (
     <SidebarProvider
-      style={
-        {
-          "--sidebar-width": "calc(var(--spacing) * 72)",
-          "--header-height": "calc(var(--spacing) * 12)",
-        } as React.CSSProperties
-      }
-      className="flex items-center"
+      // style={
+      //   {
+      //     "--sidebar-width": "calc(var(--spacing) * 72)",
+      //     "--header-height": "calc(var(--spacing) * 12)",
+      //   } as React.CSSProperties
+      // }
+      className="flex items-center min-h-auto h-auto"
     >
       <SidebarGroup>
         <SidebarGroupContent>

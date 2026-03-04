@@ -371,4 +371,30 @@ export class ContentService {
       { $sort: { _id: 1 } },
     ]);
   }
+
+  async getContentTrends(startDate: Date, dateFormat: string) {
+    return this.contentModel.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: startDate },
+          isTrashed: false,
+        },
+      },
+      {
+        $group: {
+          _id: { $dateToString: { format: dateFormat, date: '$createdAt' } },
+          posts: { $sum: 1 },
+          uniqueAuthors: { $addToSet: '$author' },
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          posts: 1,
+          activeAuthors: { $size: '$uniqueAuthors' },
+        },
+      },
+      { $sort: { _id: 1 } },
+    ]);
+  }
 }

@@ -44,7 +44,18 @@ const PageLayout = ({ children }: { children: ReactNode }) => {
               hover:[&::-webkit-scrollbar-track]:bg-slate-100
               hover:[&::-webkit-scrollbar-thumb]:bg-slate-400"
       >
-        <NavLinks items={navMain} />
+        <div className="flex flex-col justify-between h-dvh">
+          <div className="mb-10 mt-10 ms-4">
+            <img
+              className="h-4.5 align-middle"
+              src="./sahithi-short-logo.svg"
+              alt="sahithi short logo"
+              loading="lazy"
+            />
+          </div>
+          <NavLinks items={navMain} />
+          <div></div>
+        </div>
       </aside>
       <div
         className="w-full h-dvh flex-1 overflow-y-auto overflow-x-hidden 

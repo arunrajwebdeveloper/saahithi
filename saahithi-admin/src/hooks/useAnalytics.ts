@@ -1,6 +1,7 @@
 import { analyticsAPI } from "@/api/endpoints/analytics.api";
 import {
   GET_ANALYTICS,
+  GET_ENGAGEMENT_TRENDS,
   GET_OVERALL_PROGRESS,
 } from "@/constants/analytics.constants";
 import { RangeType } from "@/types/analytics.types";
@@ -9,9 +10,15 @@ import { useState } from "react";
 
 export const useAnalytics = ({ enabled = false }: { enabled: boolean }) => {
   const [range, setRange] = useState<RangeType>(RangeType.MONTH);
+  const [engagementRange, setEngagementRange] = useState<string | null>(
+    "month",
+  );
 
   const onChangeRange = (range: RangeType) => {
     setRange(range);
+  };
+  const onChangeEngagementTrendsRange = (range: string | null) => {
+    setEngagementRange(range);
   };
 
   const {
@@ -34,6 +41,16 @@ export const useAnalytics = ({ enabled = false }: { enabled: boolean }) => {
     enabled: enabled && !!range,
   });
 
+  const {
+    data: engagementTrends,
+    isLoading: isLoadingEngagementTrends,
+    isFetching: isFetchingEngagementTrends,
+  } = useQuery({
+    queryKey: [GET_ENGAGEMENT_TRENDS, engagementRange],
+    queryFn: () => analyticsAPI.getEngagementTrends(engagementRange),
+    enabled: enabled && !!engagementRange,
+  });
+
   return {
     analytics,
     overallProgress,
@@ -41,6 +58,11 @@ export const useAnalytics = ({ enabled = false }: { enabled: boolean }) => {
     isLoadingOverallProgress,
     isFetchingAnalytics,
     isFetchingOverallProgress,
+    engagementTrends,
+    isLoadingEngagementTrends,
+    isFetchingEngagementTrends,
+    engagementRange,
+    onChangeEngagementTrendsRange,
     range,
     onChangeRange,
   };

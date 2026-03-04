@@ -88,6 +88,14 @@ export class AdminController {
     return this.adminService.getDashboardStats();
   }
 
+  @Get('trends')
+  @ApiOperation({ summary: 'Trends analytics data' })
+  getEngagementTrends(
+    @Query('range') range: 'day' | 'week' | 'month' | 'year',
+  ) {
+    return this.adminService.getEngagementTrends(range);
+  }
+
   @Get('progress')
   @ApiOperation({ summary: 'Progress report for the admin dashboard' })
   getProgressData(

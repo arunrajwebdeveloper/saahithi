@@ -1,14 +1,12 @@
 import {
   FileText,
   Gem,
-  Layers2,
   ScrollText,
   TrendingDown,
   TrendingUp,
   User,
 } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
 import { ChartLineMultiple } from "@/components/ChartLineMultiple";
 import { ChartBarInteractive } from "@/components/ChartBarInteractive";
 import { ButtonGroupElement } from "@/components/ButtonGroupElement";
@@ -23,7 +21,6 @@ import { CategoryDonut } from "@/components/CategoryDonut";
 
 const Dashboard = () => {
   const { user } = useAuth();
-  const navigate = useNavigate();
 
   const {
     analytics,
@@ -31,7 +28,11 @@ const Dashboard = () => {
     range,
     isLoadingDashboard,
     isLoadingOverallProgress,
+    isLoadingEngagementTrends,
+    engagementTrends,
     onChangeRange,
+    engagementRange,
+    onChangeEngagementTrendsRange,
   } = useAnalytics({
     enabled: true,
   });
@@ -52,6 +53,42 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen w-full">
+      <div className="mb-16">
+        <h1 className="font-medium text-3xl text-slate-900 mb-2">
+          Welcome back, {user?.firstName ?? "Admin"}!
+        </h1>
+        <p className="font-normal text-base text-gray-500">
+          Your community grew by
+          <span
+            className={cn(
+              "mx-1",
+              userGrowth.isPositive ? "text-green-500" : "text-red-500",
+            )}
+          >
+            <small>{userGrowth.growth}%</small>
+            {userGrowth.isPositive ? (
+              <TrendingUp size={18} className="inline-block" />
+            ) : (
+              <TrendingDown size={18} className="inline-block" />
+            )}
+          </span>
+          this period, with a
+          <span
+            className={cn(
+              "mx-1",
+              postGrowth.isPositive ? "text-green-500" : "text-red-500",
+            )}
+          >
+            <small>{postGrowth.growth}%</small>
+            {postGrowth.isPositive ? (
+              <TrendingUp size={18} className="inline-block" />
+            ) : (
+              <TrendingDown size={18} className="inline-block" />
+            )}
+          </span>
+          increase in content activity.
+        </p>
+      </div>
       <div className="mb-20">
         <h1 className="font-medium text-xl text-slate-900 mb-8">
           Analytics Overview
@@ -88,7 +125,7 @@ const Dashboard = () => {
           <div className="w-1/4 h-72 bg-white rounded-lg flex justify-center relative">
             <div className="m-auto space-y-2 text-center">
               <div className="bg-green-200 text-green-600 mx-auto w-16 h-16 rounded-full flex mb-5">
-                <User size={28} className="m-auto" />
+                <Gem size={28} className="m-auto" />
               </div>
               <h2 className="font-bold text-6xl text-slate-800">
                 {formatNumber(userGrowth.thisMonth)}
@@ -177,8 +214,13 @@ const Dashboard = () => {
               Growth Summary
             </h1> */}
             <div className="flex w-full gap-x-6">
-              <div className="w-full h-72 bg-white rounded-lg">
-                <ChartLineMultiple height={250} />
+              <div className="w-full bg-white rounded-lg">
+                <ChartLineMultiple
+                  data={engagementTrends}
+                  isLoading={isLoadingEngagementTrends}
+                  engagementRange={engagementRange}
+                  onChangeEngagementTrendsRange={onChangeEngagementTrendsRange}
+                />
               </div>
             </div>
           </div>

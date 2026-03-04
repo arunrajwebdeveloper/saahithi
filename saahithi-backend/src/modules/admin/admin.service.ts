@@ -11,6 +11,24 @@ export class AdminService {
     private readonly contentService: ContentService,
   ) {}
 
+  private getRangeConfig(range: string) {
+    const now = new Date();
+    let startDate = new Date();
+    let dateFormat = '%Y-%m-%d';
+
+    if (range === 'year') {
+      startDate.setFullYear(now.getFullYear() - 1);
+      dateFormat = '%Y-%m';
+    } else if (range === 'month') {
+      startDate.setMonth(now.getMonth() - 1);
+    } else if (range === 'week') {
+      startDate.setDate(now.getDate() - 7);
+    } else {
+      startDate.setHours(0, 0, 0, 0);
+    }
+    return { startDate, dateFormat };
+  }
+
   async getDashboardStats() {
     const [
       totalUsers,
@@ -53,6 +71,47 @@ export class AdminService {
       recentPosts,
       categoryDistribution,
     };
+  }
+
+  async getEngagementTrends(range: 'day' | 'week' | 'month' | 'year') {
+    const { startDate, dateFormat } = this.getRangeConfig(range);
+
+    const [userStats, contentStats] = await Promise.all([
+      this.userService.getSignupTrends(startDate, dateFormat),
+      this.contentService.getContentTrends(startDate, dateFormat),
+    ]);
+
+    const trendMap = new Map<string, any>();
+
+    userStats.forEach((u) => {
+      trendMap.set(u._id, {
+        date: u._id,
+        signups: u.totalSignups,
+        premiumSignups: u.premiumSignups,
+        posts: 0,
+        activeAuthors: 0,
+      });
+    });
+
+    contentStats.forEach((c) => {
+      const existing = trendMap.get(c._id);
+      if (existing) {
+        existing.posts = c.posts;
+        existing.activeAuthors = c.activeAuthors;
+      } else {
+        trendMap.set(c._id, {
+          date: c._id,
+          signups: 0,
+          premiumSignups: 0,
+          posts: c.posts,
+          activeAuthors: c.activeAuthors,
+        });
+      }
+    });
+
+    return Array.from(trendMap.values()).sort((a, b) =>
+      a.date.localeCompare(b.date),
+    );
   }
 
   async getProgressData(range: 'day' | 'week' | 'month' | 'year') {
