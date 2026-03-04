@@ -89,7 +89,7 @@ const Dashboard = () => {
           increase in content activity.
         </p>
       </div>
-      <div className="mb-20">
+      <div className="mb-12">
         <h1 className="font-medium text-xl text-slate-900 mb-8">
           Analytics Overview
         </h1>
@@ -185,7 +185,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className="mb-20">
+      <div className="mb-12">
         <div className="w-full">
           <div className="flex justify-between items-center w-full mb-8">
             <h1 className="font-medium text-xl text-slate-900">
@@ -207,7 +207,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className="mb-20">
+      <div className="mb-12">
         <div className="flex w-full gap-x-6">
           <div className="w-1/2">
             {/* <h1 className="font-medium text-xl text-slate-900 mb-8">
@@ -236,7 +236,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className="mb-20">
+      <div className="mb-12">
         <div className="flex w-full gap-x-6">
           <div className="w-1/3">
             <h1 className="font-medium text-xl text-slate-900 mb-8">
