@@ -58,7 +58,7 @@ export function ChartBarInteractive({
       user: data.reduce((acc: any, curr: any) => acc + curr.user, 0),
       post: data.reduce((acc: any, curr: any) => acc + curr.post, 0),
     }),
-    [],
+    [range],
   );
 
   return (
