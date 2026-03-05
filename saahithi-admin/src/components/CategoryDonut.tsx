@@ -15,6 +15,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
+import { useMemo } from "react";
 
 interface CategoryData {
   category: string;
@@ -23,23 +24,32 @@ interface CategoryData {
 }
 
 export function CategoryDonut({ data = [] }: { data: CategoryData[] }) {
-  const processedData = data.map((item, index) => ({
-    name: item.category,
-    value: item.count,
-    fill: `var(--chart-${(index % 9) + 1})`,
-  }));
+  const processedData = useMemo(
+    () =>
+      data.map((item, index) => ({
+        name: item.category,
+        value: item.count,
+        fill: `var(--chart-${(index % 9) + 1})`,
+      })),
+    [],
+  );
 
-  const chartConfig = data.reduce(
-    (acc, item, index) => {
-      acc[item.category] = {
-        label: item.category.charAt(0).toUpperCase() + item.category.slice(1),
-        color: `hsl(var(--chart-${(index % 9) + 1}))`,
-      };
-      return acc;
-    },
-    {
-      count: { label: "Posts" },
-    } as ChartConfig,
+  const chartConfig = useMemo(
+    () =>
+      data.reduce(
+        (acc, item, index) => {
+          acc[item.category] = {
+            label:
+              item.category.charAt(0).toUpperCase() + item.category.slice(1),
+            color: `hsl(var(--chart-${(index % 9) + 1}))`,
+          };
+          return acc;
+        },
+        {
+          count: { label: "Posts" },
+        } as ChartConfig,
+      ),
+    [],
   );
 
   return (
