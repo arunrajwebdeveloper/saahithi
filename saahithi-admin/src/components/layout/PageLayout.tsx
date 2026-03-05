@@ -4,7 +4,7 @@ import SidebarMain from "../SidebarMain";
 
 const PageLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="h-dvh w-full bg-slate-100 overflow-hidden flex">
+    <div className="h-dvh w-full bg-slate-100 dark:bg-[#091123] overflow-hidden flex">
       <SidebarMain />
       <div
         className="w-full h-dvh flex-1 overflow-y-auto overflow-x-hidden 

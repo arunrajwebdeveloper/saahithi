@@ -17,6 +17,7 @@ import { AppSpinner } from "@/components/AppSpinner";
 import { ActiveAuthorTableLayout } from "@/components/ActiveAuthorTableLayout";
 import { PostTableLayout } from "@/components/PostTableLayout";
 import { CategoryDonut } from "@/components/CategoryDonut";
+import { Card } from "@/components/ui/card";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -44,10 +45,10 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen w-full">
       <div className="mb-16 select-none pointer-events-none">
-        <h1 className="font-medium text-3xl text-slate-900 mb-2">
+        <h1 className="font-medium text-3xl text-card-foreground mb-2">
           Welcome back, {user?.firstName ?? "Admin"}!
         </h1>
-        <p className="font-normal text-base text-gray-500">
+        <p className="font-normal text-base text-gray-500 dark:text-gray-400">
           Your community
           <span className="mx-1">
             {userGrowth.isPositive ? "expanded" : "contracted"}
@@ -87,16 +88,16 @@ const Dashboard = () => {
         </p>
       </div>
       <div className="mb-12">
-        <h1 className="font-medium text-xl text-slate-900 mb-8">
+        <h1 className="font-medium text-xl text-card-foreground mb-8">
           Analytics Overview
         </h1>
         <div className="flex w-full gap-x-6">
-          <div className="w-1/4 h-72 bg-white rounded-lg flex justify-center">
+          <Card className="w-1/4 h-72 rounded-lg flex justify-center">
             <div className="m-auto space-y-2 text-center">
               <div className="bg-blue-200 text-blue-600 mx-auto w-16 h-16 rounded-full flex mb-5">
                 <User size={28} className="m-auto" />
               </div>
-              <h2 className="font-bold text-6xl text-slate-800">
+              <h2 className="font-bold text-6xl text-card-foreground">
                 {formatNumber(totalUsers)}
               </h2>
               <p className="font-normal text-base text-gray-500">Total Users</p>
@@ -106,13 +107,13 @@ const Dashboard = () => {
                 </p>
               </div>
             </div>
-          </div>
-          <div className="w-1/4 h-72 bg-white rounded-lg flex justify-center">
+          </Card>
+          <Card className="w-1/4 h-72 rounded-lg flex justify-center">
             <div className="m-auto space-y-2 text-center">
               <div className="bg-orange-200 text-orange-600 mx-auto w-16 h-16 rounded-full flex mb-5">
                 <ScrollText size={28} className="m-auto" />
               </div>
-              <h2 className="font-bold text-6xl text-slate-800">
+              <h2 className="font-bold text-6xl text-card-foreground">
                 {formatNumber(totalPosts)}
               </h2>
               <p className="font-normal text-base text-gray-500">Total Posts</p>
@@ -122,13 +123,13 @@ const Dashboard = () => {
                 </p>
               </div>
             </div>
-          </div>
-          <div className="w-1/4 h-72 bg-white rounded-lg flex justify-center relative">
+          </Card>
+          <Card className="w-1/4 h-72 rounded-lg flex justify-center relative">
             <div className="m-auto space-y-2 text-center">
               <div className="bg-green-200 text-green-600 mx-auto w-16 h-16 rounded-full flex mb-5">
                 <Gem size={28} className="m-auto" />
               </div>
-              <h2 className="font-bold text-6xl text-slate-800">
+              <h2 className="font-bold text-6xl text-card-foreground">
                 {formatNumber(userGrowth.currentPeriod)}
               </h2>
               <p className="font-normal text-base text-gray-500">User Growth</p>
@@ -151,13 +152,13 @@ const Dashboard = () => {
                 <p className="font-normal text-sm">{userGrowth.growth}%</p>
               </div>
             </div>
-          </div>
-          <div className="w-1/4 h-72 bg-white rounded-lg flex justify-center relative">
+          </Card>
+          <Card className="w-1/4 h-72 rounded-lg flex justify-center relative">
             <div className="m-auto space-y-2 text-center">
               <div className="bg-yellow-200 text-yellow-600 mx-auto w-16 h-16 rounded-full flex mb-5">
                 <FileText size={28} className="m-auto" />
               </div>
-              <h2 className="font-bold text-6xl text-slate-800">
+              <h2 className="font-bold text-6xl text-card-foreground">
                 {formatNumber(postGrowth.currentPeriod)}
               </h2>
               <p className="font-normal text-base text-gray-500">
@@ -182,21 +183,21 @@ const Dashboard = () => {
                 <p className="font-normal text-sm">{postGrowth.growth}%</p>
               </div>
             </div>
-          </div>
+          </Card>
         </div>
       </div>
 
       <div className="mb-12">
         <div className="w-full">
           <div className="flex justify-between items-center w-full mb-8">
-            <h1 className="font-medium text-xl text-slate-900">
+            <h1 className="font-medium text-xl text-card-foreground">
               Total Progress
             </h1>
           </div>
           <div className="flex w-full gap-x-6">
-            <div className="w-full bg-white rounded-lg">
+            <Card className="w-full">
               <ChartBarInteractive chartData={progressData} />
-            </div>
+            </Card>
           </div>
         </div>
       </div>
@@ -205,16 +206,16 @@ const Dashboard = () => {
         <div className="flex w-full gap-x-6">
           <div className="w-1/2">
             <div className="flex w-full gap-x-6">
-              <div className="w-full bg-white rounded-lg">
+              <Card className="w-full">
                 <ChartLineMultiple data={engagementTrends} />
-              </div>
+              </Card>
             </div>
           </div>
 
           <div className="w-1/2">
-            <div className="w-full bg-white rounded-lg">
+            <Card className="w-full">
               <CategoryDonut data={categoryDistribution} />
-            </div>
+            </Card>
           </div>
         </div>
       </div>
@@ -222,34 +223,34 @@ const Dashboard = () => {
       <div className="mb-12">
         <div className="flex w-full gap-x-6">
           <div className="w-1/3">
-            <h1 className="font-medium text-xl text-slate-900 mb-8">
+            <h1 className="font-medium text-xl text-card-foreground mb-8">
               Most Active Authors
             </h1>
             <div className="flex w-full gap-x-6">
-              <div className="w-full  bg-white rounded-lg p-4">
+              <Card className="w-full p-4">
                 <ActiveAuthorTableLayout data={mostActiveAuthors} />
-              </div>
+              </Card>
             </div>
           </div>
 
           <div className="w-1/3">
-            <h1 className="font-medium text-xl text-slate-900 mb-8">
+            <h1 className="font-medium text-xl text-card-foreground mb-8">
               Recent Users
             </h1>
             <div className="flex w-full gap-x-6">
-              <div className="w-full bg-white rounded-lg p-4">
+              <Card className="w-full p-4">
                 <UserTableLayout data={recentUsers} />
-              </div>
+              </Card>
             </div>
           </div>
 
           <div className="w-1/3">
-            <h1 className="font-medium text-xl text-slate-900 mb-8">
+            <h1 className="font-medium text-xl text-card-foreground mb-8">
               Recent Posts
             </h1>
-            <div className="w-full bg-white rounded-lg p-4">
+            <Card className="w-full p-4">
               <PostTableLayout data={recentPosts} />
-            </div>
+            </Card>
           </div>
         </div>
       </div>

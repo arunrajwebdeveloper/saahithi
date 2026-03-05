@@ -33,7 +33,7 @@ export function NavLinks({
             {items.map((item) => {
               return (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton className="outline-0 border-0 ring-0 font-medium text-slate-600 cursor-pointer">
+                  <SidebarMenuButton className="outline-0 border-0 ring-0 font-medium text-foreground cursor-pointer">
                     {item.icon && <item.icon />}
                     <span>{item.title}</span>
                   </SidebarMenuButton>

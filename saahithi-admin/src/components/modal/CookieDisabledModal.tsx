@@ -1,11 +1,12 @@
 import { Button } from "../common/Modal";
+import { Card } from "../ui/card";
 
 const CookieDisabledModal = () => {
   const handleRetry = () => window.location.reload();
 
   return (
-    <div className="fixed inset-0 bg-gray-900/50 flex items-center justify-center z-99999 select-none">
-      <div className="bg-white flex px-8 py-12 rounded-lg shadow-xl max-w-sm w-full mx-4 max-h-[90vh] min-h-96 overflow-hidden">
+    <div className="fixed inset-0 bg-gray-900/50 dark:bg-slate-950/50 flex items-center justify-center z-99999 select-none">
+      <Card className="flex px-8 py-12 rounded-lg shadow-xl max-w-sm w-full mx-4 max-h-[90vh] min-h-96 overflow-hidden">
         <div className="m-auto">
           <div className="mb-6 text-center text-yellow-400">
             <svg
@@ -22,14 +23,14 @@ const CookieDisabledModal = () => {
               />
             </svg>
           </div>
-          <h2 className="text-2xl lg:text-3xl font-bold text-gray-800 text-center mb-4 lg:mb-6">
+          <h2 className="text-2xl lg:text-3xl font-bold text-gray-800 dark:text-white text-center mb-4 lg:mb-6">
             Cookies are disabled
           </h2>
-          <p className="text-gray-900 text-base m-0 text-center">
+          <p className="text-gray-900 dark:text-gray-300 text-base m-0 text-center">
             Your browser’s cookies are disabled. Please enable cookies to
             continue using this app securely.
           </p>
-          <div className="text-sm text-gray-400 mt-4 text-center">
+          <div className="text-sm text-gray-400 dark:text-gray-500 mt-4 text-center">
             Check your browser settings under <br />
             <span className="text-gray-500">Privacy & Security → Cookies</span>
           </div>
@@ -39,7 +40,7 @@ const CookieDisabledModal = () => {
             </Button>
           </div>
         </div>
-      </div>
+      </Card>
     </div>
   );
 };

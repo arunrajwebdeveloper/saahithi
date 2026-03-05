@@ -1,6 +1,7 @@
 import { Unlink } from "lucide-react";
 import { useState, useEffect } from "react";
 import type { FC } from "react";
+import { Card } from "../ui/card";
 
 const OfflineModal: FC = () => {
   const [isOnline, setIsOnline] = useState(true);
@@ -49,20 +50,20 @@ const OfflineModal: FC = () => {
   }
 
   return (
-    <div className="fixed inset-0 bg-gray-900/50 flex items-center justify-center z-99999 select-none">
-      <div className="bg-white flex px-8 py-12 rounded-lg shadow-xl max-w-sm w-full mx-4 max-h-[90vh] min-h-96 overflow-hidden">
+    <div className="fixed inset-0 bg-gray-900/50 dark:bg-slate-950/50 flex items-center justify-center z-99999 select-none">
+      <Card className="flex px-8 py-12 rounded-lg shadow-xl max-w-sm w-full mx-4 max-h-[90vh] min-h-96 overflow-hidden">
         <div className="m-auto">
           <div className="mb-6 text-center text-yellow-400">
             <Unlink size={80} className="mx-auto" />
           </div>
-          <h2 className="text-2xl lg:text-3xl font-bold text-gray-800 text-center mb-4 lg:mb-6">
+          <h2 className="text-2xl lg:text-3xl font-bold text-gray-800 dark:text-white text-center mb-4 lg:mb-6">
             You're Offline
           </h2>
-          <p className="text-gray-900 text-base m-0 text-center">
+          <p className="text-gray-900 dark:text-gray-300 text-base m-0 text-center">
             Please check your internet connection and try again.
           </p>
         </div>
-      </div>
+      </Card>
     </div>
   );
 };

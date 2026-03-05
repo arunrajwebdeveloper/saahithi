@@ -54,7 +54,7 @@ export function ChartLineMultiple({ data = [] }: { data: EngagementData[] }) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig} className="max-h-73.5 w-full">
+        <ChartContainer config={chartConfig} className="max-h-72 w-full">
           <LineChart
             accessibilityLayer
             data={data}
