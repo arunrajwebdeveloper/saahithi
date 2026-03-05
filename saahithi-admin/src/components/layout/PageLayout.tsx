@@ -5,7 +5,7 @@ import { SidebarInset, SidebarProvider } from "../ui/sidebar";
 
 const PageLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="h-dvh w-full bg-slate-100 dark:bg-[#091123] overflow-hidden flex">
+    <div className="h-dvh w-full overflow-hidden flex">
       <SidebarProvider
         style={
           {
@@ -16,7 +16,7 @@ const PageLayout = ({ children }: { children: ReactNode }) => {
         <SidebarMain />
         <SidebarInset>
           <div
-            className="w-full h-dvh flex-1 overflow-y-auto overflow-x-hidden 
+            className="w-full h-dvh flex-1 overflow-y-auto overflow-x-hidden bg-slate-100 dark:bg-[#091123]
               [&::-webkit-scrollbar]:w-1
               [&::-webkit-scrollbar-track]:bg-slate-100
               [&::-webkit-scrollbar-thumb]:bg-slate-400"
