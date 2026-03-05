@@ -1,6 +1,7 @@
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Avatar } from "./Avatar";
 import { useRelativeTime } from "@/utils/dateFormatter";
+import { BadgeCustom } from "./BadgeCustom";
 
 export function UserTableLayout({ data }: { data: any }) {
   return (
@@ -35,7 +36,7 @@ export function UserTableLayout({ data }: { data: any }) {
                 </TableCell>
                 <TableCell className="font-medium">
                   <p className="font-light text-xs text-end text-slate-600">
-                    {useRelativeTime(createdAt)}
+                    <BadgeCustom content={useRelativeTime(createdAt)} />
                   </p>
                 </TableCell>
               </TableRow>

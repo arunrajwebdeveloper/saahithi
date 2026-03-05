@@ -204,9 +204,6 @@ const Dashboard = () => {
       <div className="mb-12">
         <div className="flex w-full gap-x-6">
           <div className="w-1/2">
-            {/* <h1 className="font-medium text-xl text-slate-900 mb-8">
-              Growth Summary
-            </h1> */}
             <div className="flex w-full gap-x-6">
               <div className="w-full bg-white rounded-lg">
                 <ChartLineMultiple data={engagementTrends} />
@@ -215,9 +212,6 @@ const Dashboard = () => {
           </div>
 
           <div className="w-1/2">
-            {/* <h1 className="font-medium text-xl text-slate-900 mb-8">
-              Category Distribution
-            </h1> */}
             <div className="w-full bg-white rounded-lg">
               <CategoryDonut data={categoryDistribution} />
             </div>

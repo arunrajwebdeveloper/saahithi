@@ -1,5 +1,6 @@
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Avatar } from "./Avatar";
+import { BadgeCustom } from "./BadgeCustom";
 
 export function ActiveAuthorTableLayout({ data }: { data: any }) {
   return (
@@ -28,7 +29,7 @@ export function ActiveAuthorTableLayout({ data }: { data: any }) {
                 </TableCell>
                 <TableCell className="font-medium">
                   <p className="font-light text-xs text-end text-slate-600">
-                    {`${postCount} posts`}
+                    <BadgeCustom content={`${postCount} posts`} />
                   </p>
                 </TableCell>
               </TableRow>
