@@ -16,11 +16,7 @@ import {
   ChartLegendContent,
   type ChartConfig,
 } from "@/components/ui/chart";
-import CircleSpinner from "./common/CircleSpinner";
-import { RangeSelect } from "./RangeSelect";
-import { rangeList } from "@/assets/data";
 
-// This config matches the keys in your new API response
 const chartConfig = {
   posts: {
     label: "Total Posts",
@@ -48,39 +44,14 @@ interface EngagementData {
   premiumSignups: number;
 }
 
-export function ChartLineMultiple({
-  data = [],
-  isLoading,
-  engagementRange,
-  onChangeEngagementTrendsRange,
-}: {
-  data: EngagementData[];
-  isLoading: boolean;
-  engagementRange: string | null;
-  onChangeEngagementTrendsRange: (range: string | null) => void;
-}) {
-  if (isLoading)
-    return (
-      <div className="w-full h-96 flex rounded-lg bg-slate-200">
-        <CircleSpinner size={24} className="m-auto text-blue-500" />
-      </div>
-    );
-
+export function ChartLineMultiple({ data = [] }: { data: EngagementData[] }) {
   return (
     <Card>
-      <CardHeader className="flex justify-between items-center">
-        <div>
-          <CardTitle>Engagement Trends</CardTitle>
-          <CardDescription>
-            Relationship between content creation and user growth
-          </CardDescription>
-        </div>
-
-        <RangeSelect
-          data={rangeList}
-          selectedValue={engagementRange}
-          setSelectedValue={onChangeEngagementTrendsRange}
-        />
+      <CardHeader>
+        <CardTitle>Engagement Trends</CardTitle>
+        <CardDescription>
+          Relationship between content creation and user growth
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="max-h-73.5 w-full">

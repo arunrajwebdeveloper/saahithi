@@ -84,24 +84,8 @@ export class AdminController {
 
   @Get('stats')
   @ApiOperation({ summary: 'Statistics for the admin dashboard' })
-  getDashboardStats() {
-    return this.adminService.getDashboardStats();
-  }
-
-  @Get('trends')
-  @ApiOperation({ summary: 'Trends analytics data' })
-  getEngagementTrends(
-    @Query('range') range: 'day' | 'week' | 'month' | 'year',
-  ) {
-    return this.adminService.getEngagementTrends(range);
-  }
-
-  @Get('progress')
-  @ApiOperation({ summary: 'Progress report for the admin dashboard' })
-  getProgressData(
-    @Query('range') range: 'day' | 'week' | 'month' | 'year' = 'month',
-  ) {
-    return this.adminService.getProgressData(range);
+  getDashboardStats(@Query('range') range: 'day' | 'week' | 'month' | 'year') {
+    return this.adminService.getDashboardStats(range);
   }
 
   @Get('logs')

@@ -3,6 +3,7 @@ import authReducer from "./features/authSlice";
 import windowReducer from "./features/windowSlice";
 import sidebarReducer from "./features/sidebarSlice";
 import themeReducer from "./features/themeSlice";
+import dashboardReducer from "./features/dashboardSlice";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     theme: themeReducer,
     window: windowReducer,
     sidebar: sidebarReducer,
+    dashboard: dashboardReducer,
   },
 });
 

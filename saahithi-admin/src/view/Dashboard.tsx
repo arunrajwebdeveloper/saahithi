@@ -9,7 +9,6 @@ import {
 import { useAuth } from "../hooks/useAuth";
 import { ChartLineMultiple } from "@/components/ChartLineMultiple";
 import { ChartBarInteractive } from "@/components/ChartBarInteractive";
-import { ButtonGroupElement } from "@/components/ButtonGroupElement";
 import { UserTableLayout } from "@/components/UserTableLayout";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { formatNumber } from "@/utils";
@@ -21,19 +20,7 @@ import { CategoryDonut } from "@/components/CategoryDonut";
 
 const Dashboard = () => {
   const { user } = useAuth();
-
-  const {
-    analytics,
-    overallProgress,
-    range,
-    isLoadingDashboard,
-    isLoadingOverallProgress,
-    isLoadingEngagementTrends,
-    engagementTrends,
-    onChangeRange,
-    engagementRange,
-    onChangeEngagementTrendsRange,
-  } = useAnalytics({
+  const { analytics, isLoadingDashboard } = useAnalytics({
     enabled: true,
   });
 
@@ -49,6 +36,8 @@ const Dashboard = () => {
     recentUsers,
     recentPosts,
     categoryDistribution,
+    progressData,
+    engagementTrends,
   } = analytics;
 
   return (
@@ -58,7 +47,11 @@ const Dashboard = () => {
           Welcome back, {user?.firstName ?? "Admin"}!
         </h1>
         <p className="font-normal text-base text-gray-500">
-          Your community grew by
+          Your community
+          <span className="mx-1">
+            {userGrowth.isPositive ? "expanded" : "contracted"}
+          </span>
+          by
           <span
             className={cn(
               "mx-1",
@@ -86,7 +79,10 @@ const Dashboard = () => {
               <TrendingDown size={18} className="inline-block" />
             )}
           </span>
-          increase in content activity.
+          <span className="mx-1">
+            {postGrowth.isPositive ? "rise" : "fall"}
+          </span>
+          in content activity.
         </p>
       </div>
       <div className="mb-12">
@@ -128,12 +124,12 @@ const Dashboard = () => {
                 <Gem size={28} className="m-auto" />
               </div>
               <h2 className="font-bold text-6xl text-slate-800">
-                {formatNumber(userGrowth.thisMonth)}
+                {formatNumber(userGrowth.currentPeriod)}
               </h2>
               <p className="font-normal text-base text-gray-500">User Growth</p>
               <div className="text-gray-400">
                 <p className="font-normal text-sm">
-                  Last month: {userGrowth.lastMonth}
+                  Previous: {userGrowth.previousPeriod}
                 </p>
               </div>
               <div
@@ -157,14 +153,14 @@ const Dashboard = () => {
                 <FileText size={28} className="m-auto" />
               </div>
               <h2 className="font-bold text-6xl text-slate-800">
-                {formatNumber(postGrowth.thisMonth)}
+                {formatNumber(postGrowth.currentPeriod)}
               </h2>
               <p className="font-normal text-base text-gray-500">
                 Posts Growth
               </p>
               <div className="text-gray-400">
                 <p className="font-normal text-sm">
-                  Last month: {postGrowth.lastMonth}
+                  Previous: {postGrowth.previousPeriod}
                 </p>
               </div>
               <div
@@ -191,17 +187,10 @@ const Dashboard = () => {
             <h1 className="font-medium text-xl text-slate-900">
               Total Progress
             </h1>
-            <ButtonGroupElement
-              selected={range}
-              onChangeRange={onChangeRange}
-            />
           </div>
           <div className="flex w-full gap-x-6">
             <div className="w-full bg-white rounded-lg">
-              <ChartBarInteractive
-                chartData={overallProgress}
-                isLoading={isLoadingOverallProgress}
-              />
+              <ChartBarInteractive chartData={progressData} />
             </div>
           </div>
         </div>
@@ -215,12 +204,7 @@ const Dashboard = () => {
             </h1> */}
             <div className="flex w-full gap-x-6">
               <div className="w-full bg-white rounded-lg">
-                <ChartLineMultiple
-                  data={engagementTrends}
-                  isLoading={isLoadingEngagementTrends}
-                  engagementRange={engagementRange}
-                  onChangeEngagementTrendsRange={onChangeEngagementTrendsRange}
-                />
+                <ChartLineMultiple data={engagementTrends} />
               </div>
             </div>
           </div>

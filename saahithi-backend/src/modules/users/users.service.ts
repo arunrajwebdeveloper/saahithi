@@ -182,27 +182,46 @@ export class UsersService {
     return this.userModel.countDocuments({ isPremium: true }).exec();
   }
 
-  async calculateGrowth() {
+  async calculateGrowth(range: 'day' | 'week' | 'month' | 'year' = 'month') {
     const now = new Date();
-    const startOfThisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    let startOfCurrent: Date;
+    let startOfPrevious: Date;
 
-    const [thisMonth, lastMonth] = await Promise.all([
-      this.userModel.countDocuments({ createdAt: { $gte: startOfThisMonth } }),
+    if (range === 'year') {
+      startOfCurrent = new Date(now.getFullYear(), 0, 1);
+      startOfPrevious = new Date(now.getFullYear() - 1, 0, 1);
+    } else if (range === 'month') {
+      startOfCurrent = new Date(now.getFullYear(), now.getMonth(), 1);
+      startOfPrevious = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    } else if (range === 'week') {
+      startOfCurrent = new Date(now);
+      startOfCurrent.setDate(now.getDate() - 7);
+      startOfPrevious = new Date(startOfCurrent);
+      startOfPrevious.setDate(startOfCurrent.getDate() - 7);
+    } else {
+      // day
+      startOfCurrent = new Date(now.setHours(0, 0, 0, 0));
+      startOfPrevious = new Date(startOfCurrent);
+      startOfPrevious.setDate(startOfCurrent.getDate() - 1);
+    }
+
+    const [currentPeriod, previousPeriod] = await Promise.all([
+      this.userModel.countDocuments({ createdAt: { $gte: startOfCurrent } }),
       this.userModel.countDocuments({
-        createdAt: { $gte: startOfLastMonth, $lt: startOfThisMonth },
+        createdAt: { $gte: startOfPrevious, $lt: startOfCurrent },
       }),
     ]);
 
     const growth =
-      lastMonth === 0
-        ? thisMonth > 0
+      previousPeriod === 0
+        ? currentPeriod > 0
           ? 100
           : 0
-        : ((thisMonth - lastMonth) / lastMonth) * 100;
+        : ((currentPeriod - previousPeriod) / previousPeriod) * 100;
+
     return {
-      thisMonth,
-      lastMonth,
+      currentPeriod,
+      previousPeriod,
       growth: Number(growth.toFixed(2)),
       isPositive: growth >= 0,
     };

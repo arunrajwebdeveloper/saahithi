@@ -16,7 +16,6 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
-import CircleSpinner from "./common/CircleSpinner";
 
 export const description = "An interactive bar chart";
 
@@ -34,20 +33,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function ChartBarInteractive({
-  chartData,
-  isLoading,
-}: {
-  chartData: any;
-  isLoading: boolean;
-}) {
-  if (isLoading)
-    return (
-      <div className="w-full h-96 flex rounded-lg bg-slate-200">
-        <CircleSpinner size={24} className="m-auto text-blue-500" />
-      </div>
-    );
-
+export function ChartBarInteractive({ chartData }: { chartData: any }) {
   const { range, data } = chartData;
 
   const [activeChart, setActiveChart] =

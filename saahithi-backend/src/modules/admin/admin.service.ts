@@ -29,7 +29,7 @@ export class AdminService {
     return { startDate, dateFormat };
   }
 
-  async getDashboardStats() {
+  async getDashboardStats(range: 'day' | 'week' | 'month' | 'year' = 'month') {
     const [
       totalUsers,
       totalPremiumUsers,
@@ -42,6 +42,8 @@ export class AdminService {
       userGrowth,
       postGrowth,
       categoryDistribution,
+      engagementTrends,
+      progressData,
     ] = await Promise.all([
       this.userService.countAll(),
       this.userService.countPremiumUsers(),
@@ -51,9 +53,11 @@ export class AdminService {
       this.contentService.getAllCategories(),
       this.contentService.getMostActiveAuthors(),
       this.contentService.getRecentPosts(),
-      this.userService.calculateGrowth(),
-      this.contentService.calculateGrowth(),
+      this.userService.calculateGrowth(range),
+      this.contentService.calculateGrowth(range),
       this.contentService.getCategoryDistribution(),
+      this.getEngagementTrends(range),
+      this.getProgressData(range),
     ]);
 
     return {
@@ -70,6 +74,8 @@ export class AdminService {
       postGrowth,
       recentPosts,
       categoryDistribution,
+      engagementTrends,
+      progressData,
     };
   }
 

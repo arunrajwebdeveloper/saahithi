@@ -45,7 +45,7 @@ function CircleSpinner({
       className={`
         ${className} 
         origin-center 
-        [animation:spinner-fetch_.75s_step-end_infinite]
+        [animate-[spinner-fetch_.75s_step-end_infinite]
       `}
     >
       <style>{`
