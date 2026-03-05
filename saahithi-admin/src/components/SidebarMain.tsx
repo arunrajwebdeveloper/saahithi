@@ -6,7 +6,7 @@ import {
   Bug,
   CircleGauge,
   CreditCard,
-  ScrollText,
+  Server,
   Users,
 } from "lucide-react";
 import { Sidebar } from "./ui/sidebar";
@@ -40,7 +40,7 @@ const navMain = [
   {
     title: "Logs",
     url: "#",
-    icon: ScrollText,
+    icon: Server,
   },
 ];
 
