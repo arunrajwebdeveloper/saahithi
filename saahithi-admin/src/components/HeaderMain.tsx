@@ -17,10 +17,12 @@ const HeaderMain = () => {
           </p> */}
           <p className="text-base text-gray-800 mb-0">Admin</p>
         </div>
-
-        <RangeFilterButtons />
-
-        <ModeToggle />
+        <div>
+          <RangeFilterButtons />
+        </div>
+        <div>
+          <ModeToggle />
+        </div>
       </div>
     </header>
   );

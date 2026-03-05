@@ -14,40 +14,38 @@ export const RangeFilterButtons = () => {
 
   return (
     <ButtonGroup>
-      <ButtonGroup>
-        <Button
-          onClick={() => onChange("day")}
-          variant={range === "day" ? "default" : "outline"}
-          size={"lg"}
-          className="px-5 cursor-pointer"
-        >
-          Day
-        </Button>
-        <Button
-          onClick={() => onChange("week")}
-          variant={range === "week" ? "default" : "outline"}
-          size={"lg"}
-          className="px-5 cursor-pointer"
-        >
-          Week
-        </Button>
-        <Button
-          onClick={() => onChange("month")}
-          variant={range === "month" ? "default" : "outline"}
-          size={"lg"}
-          className="px-5 cursor-pointer"
-        >
-          Month
-        </Button>
-        <Button
-          onClick={() => onChange("year")}
-          variant={range === "year" ? "default" : "outline"}
-          size={"lg"}
-          className="px-5 cursor-pointer"
-        >
-          Year
-        </Button>
-      </ButtonGroup>
+      <Button
+        onClick={() => onChange("day")}
+        variant={range === "day" ? "default" : "outline"}
+        size={"lg"}
+        className="px-5 cursor-pointer"
+      >
+        Day
+      </Button>
+      <Button
+        onClick={() => onChange("week")}
+        variant={range === "week" ? "default" : "outline"}
+        size={"lg"}
+        className="px-5 cursor-pointer"
+      >
+        Week
+      </Button>
+      <Button
+        onClick={() => onChange("month")}
+        variant={range === "month" ? "default" : "outline"}
+        size={"lg"}
+        className="px-5 cursor-pointer"
+      >
+        Month
+      </Button>
+      <Button
+        onClick={() => onChange("year")}
+        variant={range === "year" ? "default" : "outline"}
+        size={"lg"}
+        className="px-5 cursor-pointer"
+      >
+        Year
+      </Button>
     </ButtonGroup>
   );
 };
