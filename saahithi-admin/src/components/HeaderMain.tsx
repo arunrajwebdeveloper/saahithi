@@ -9,7 +9,10 @@ const HeaderMain = () => {
       <div className="max-w-10/12 mx-auto h-full flex justify-between items-center">
         <div className="flex items-center ">
           <SidebarTrigger />
-          <BrandLogo className="h-5 w-max align-middle text-foreground select-none pointer-events-none" />
+          <BrandLogo
+            short
+            className="h-5 w-max align-middle text-foreground select-none pointer-events-none"
+          />
           <p className="text-base text-foreground ps-4 border-s ms-4 border-s-gray-600 mb-0 select-none pointer-events-none">
             Admin
           </p>
