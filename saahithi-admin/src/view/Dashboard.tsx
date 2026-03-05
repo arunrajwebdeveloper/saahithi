@@ -29,6 +29,7 @@ const Dashboard = () => {
   const {
     totalUsers,
     totalPosts,
+    unpublishedPosts,
     userGrowth,
     postGrowth,
     totalPremiumUsers,
@@ -42,7 +43,7 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen w-full">
-      <div className="mb-16">
+      <div className="mb-16 select-none pointer-events-none">
         <h1 className="font-medium text-3xl text-slate-900 mb-2">
           Welcome back, {user?.firstName ?? "Admin"}!
         </h1>
@@ -100,8 +101,8 @@ const Dashboard = () => {
               </h2>
               <p className="font-normal text-base text-gray-500">Total Users</p>
               <div className="min-h-6">
-                <p className="font-normal text-sm text-emerald-600">
-                  {totalPremiumUsers} Premium members
+                <p className="font-normal text-sm text-blue-600">
+                  {`${totalPremiumUsers} Premium member${totalPremiumUsers > 1 ? "s" : ""}`}
                 </p>
               </div>
             </div>
@@ -115,7 +116,11 @@ const Dashboard = () => {
                 {formatNumber(totalPosts)}
               </h2>
               <p className="font-normal text-base text-gray-500">Total Posts</p>
-              <div className="min-h-6"></div>
+              <div className="min-h-6">
+                <p className="font-normal text-sm text-orange-600">
+                  {unpublishedPosts} Unpublished
+                </p>
+              </div>
             </div>
           </div>
           <div className="w-1/4 h-72 bg-white rounded-lg flex justify-center relative">
@@ -127,7 +132,7 @@ const Dashboard = () => {
                 {formatNumber(userGrowth.currentPeriod)}
               </h2>
               <p className="font-normal text-base text-gray-500">User Growth</p>
-              <div className="text-gray-400">
+              <div className="text-green-600">
                 <p className="font-normal text-sm">
                   Previous: {userGrowth.previousPeriod}
                 </p>
@@ -158,7 +163,7 @@ const Dashboard = () => {
               <p className="font-normal text-base text-gray-500">
                 Posts Growth
               </p>
-              <div className="text-gray-400">
+              <div className="text-yellow-600">
                 <p className="font-normal text-sm">
                   Previous: {postGrowth.previousPeriod}
                 </p>
