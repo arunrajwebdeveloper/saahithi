@@ -91,8 +91,8 @@ const Dashboard = () => {
         <h1 className="font-medium text-xl text-card-foreground mb-8">
           Analytics Overview
         </h1>
-        <div className="flex w-full gap-x-6">
-          <Card className="w-1/4 h-72 rounded-lg flex justify-center">
+        <div className=" w-full grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <Card className="h-72 rounded-lg flex justify-center">
             <div className="m-auto space-y-2 text-center">
               <div className="bg-blue-200 text-blue-600 mx-auto w-16 h-16 rounded-full flex mb-5">
                 <User size={28} className="m-auto" />
@@ -108,7 +108,7 @@ const Dashboard = () => {
               </div>
             </div>
           </Card>
-          <Card className="w-1/4 h-72 rounded-lg flex justify-center">
+          <Card className="h-72 rounded-lg flex justify-center">
             <div className="m-auto space-y-2 text-center">
               <div className="bg-orange-200 text-orange-600 mx-auto w-16 h-16 rounded-full flex mb-5">
                 <ScrollText size={28} className="m-auto" />
@@ -124,7 +124,7 @@ const Dashboard = () => {
               </div>
             </div>
           </Card>
-          <Card className="w-1/4 h-72 rounded-lg flex justify-center relative">
+          <Card className="h-72 rounded-lg flex justify-center relative">
             <div className="m-auto space-y-2 text-center">
               <div className="bg-green-200 text-green-600 mx-auto w-16 h-16 rounded-full flex mb-5">
                 <Gem size={28} className="m-auto" />
@@ -153,7 +153,7 @@ const Dashboard = () => {
               </div>
             </div>
           </Card>
-          <Card className="w-1/4 h-72 rounded-lg flex justify-center relative">
+          <Card className="h-72 rounded-lg flex justify-center relative">
             <div className="m-auto space-y-2 text-center">
               <div className="bg-yellow-200 text-yellow-600 mx-auto w-16 h-16 rounded-full flex mb-5">
                 <FileText size={28} className="m-auto" />
@@ -203,26 +203,19 @@ const Dashboard = () => {
       </div>
 
       <div className="mb-12">
-        <div className="flex w-full gap-x-6">
-          <div className="w-1/2">
-            <div className="flex w-full gap-x-6">
-              <Card className="w-full">
-                <ChartLineMultiple data={engagementTrends} />
-              </Card>
-            </div>
-          </div>
-
-          <div className="w-1/2">
-            <Card className="w-full">
-              <CategoryDonut data={categoryDistribution} />
-            </Card>
-          </div>
+        <div className=" w-full grid gap-6 md:grid-cols-1 lg:grid-cols-2">
+          <Card className="w-full">
+            <ChartLineMultiple data={engagementTrends} />
+          </Card>
+          <Card className="w-full">
+            <CategoryDonut data={categoryDistribution} />
+          </Card>
         </div>
       </div>
 
       <div className="mb-12">
-        <div className="flex w-full gap-x-6">
-          <div className="w-1/3">
+        <div className="w-full grid gap-6 md:grid-cols-1 lg:grid-cols-3">
+          <div>
             <h1 className="font-medium text-xl text-card-foreground mb-8">
               Most Active Authors
             </h1>
@@ -232,8 +225,7 @@ const Dashboard = () => {
               </Card>
             </div>
           </div>
-
-          <div className="w-1/3">
+          <div>
             <h1 className="font-medium text-xl text-card-foreground mb-8">
               Recent Users
             </h1>
@@ -243,8 +235,7 @@ const Dashboard = () => {
               </Card>
             </div>
           </div>
-
-          <div className="w-1/3">
+          <div>
             <h1 className="font-medium text-xl text-card-foreground mb-8">
               Recent Posts
             </h1>

@@ -18,7 +18,7 @@ export const RangeFilterButtons = () => {
         onClick={() => onChange("day")}
         variant={range === "day" ? "default" : "outline"}
         size={"lg"}
-        className="px-5 cursor-pointer"
+        className="px-2 max-md:h-9 md:px-5 cursor-pointer text-xs md:text-base"
       >
         Day
       </Button>
@@ -26,7 +26,7 @@ export const RangeFilterButtons = () => {
         onClick={() => onChange("week")}
         variant={range === "week" ? "default" : "outline"}
         size={"lg"}
-        className="px-5 cursor-pointer"
+        className="px-2 max-md:h-9 md:px-5 cursor-pointer text-xs md:text-base"
       >
         Week
       </Button>
@@ -34,7 +34,7 @@ export const RangeFilterButtons = () => {
         onClick={() => onChange("month")}
         variant={range === "month" ? "default" : "outline"}
         size={"lg"}
-        className="px-5 cursor-pointer"
+        className="px-2 max-md:h-9 md:px-5 cursor-pointer text-xs md:text-base"
       >
         Month
       </Button>
@@ -42,7 +42,7 @@ export const RangeFilterButtons = () => {
         onClick={() => onChange("year")}
         variant={range === "year" ? "default" : "outline"}
         size={"lg"}
-        className="px-5 cursor-pointer"
+        className="px-2 max-md:h-9 md:px-5 cursor-pointer text-xs md:text-base"
       >
         Year
       </Button>

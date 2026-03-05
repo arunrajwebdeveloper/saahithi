@@ -22,7 +22,7 @@ const PageLayout = ({ children }: { children: ReactNode }) => {
               [&::-webkit-scrollbar-thumb]:bg-slate-400"
           >
             <HeaderMain />
-            <div className="max-w-10/12 w-full mx-auto px-4 py-20">
+            <div className="max-w-11/12 lg:max-w-10/12 w-full mx-auto px-2 lg:px-4 py-20">
               {children}
             </div>
           </div>

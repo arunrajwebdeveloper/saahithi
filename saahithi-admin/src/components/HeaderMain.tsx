@@ -5,15 +5,15 @@ import { SidebarTrigger } from "./ui/sidebar";
 
 const HeaderMain = () => {
   return (
-    <header className="w-full h-16 sticky top-0 px-4 z-40 bg-card border-b border-b-slate-200 dark:border-b-gray-800">
-      <div className="max-w-10/12 mx-auto h-full flex justify-between items-center">
+    <header className="w-full h-16 sticky top-0 z-40 bg-card border-b border-b-slate-200 dark:border-b-gray-800">
+      <div className="max-w-11/12 lg:max-w-10/12 px-2 lg:px-4 mx-auto h-full flex justify-between items-center">
         <div className="flex items-center ">
           <SidebarTrigger />
           <BrandLogo
             short
-            className="h-5 w-max align-middle text-foreground select-none pointer-events-none"
+            className="h-5 w-max align-middle text-foreground select-none pointer-events-none hidden md:block"
           />
-          <p className="text-base text-foreground ps-4 border-s ms-4 border-s-gray-600 mb-0 select-none pointer-events-none">
+          <p className="text-base text-foreground ps-4 border-s ms-4 hidden md:block border-s-gray-600 mb-0 select-none pointer-events-none">
             Admin
           </p>
           {/* <p className="text-base text-foreground mb-0">Admin</p> */}
