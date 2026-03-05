@@ -53,8 +53,8 @@ export function CategoryDonut({ data = [] }: { data: CategoryData[] }) {
   );
 
   return (
-    <Card className="flex flex-col">
-      <CardHeader className="items-center pb-0">
+    <Card className="py-6">
+      <CardHeader>
         <CardTitle>Content Distribution</CardTitle>
         <CardDescription>Based on post categories</CardDescription>
       </CardHeader>

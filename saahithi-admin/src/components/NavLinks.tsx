@@ -4,7 +4,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarProvider,
 } from "@/components/ui/sidebar";
 import type { LucideIcon } from "lucide-react";
 
@@ -18,31 +17,24 @@ export function NavLinks({
   }[];
 }) {
   return (
-    <SidebarProvider
-      // style={
-      //   {
-      //     "--sidebar-width": "calc(var(--spacing) * 72)",
-      //     "--header-height": "calc(var(--spacing) * 12)",
-      //   } as React.CSSProperties
-      // }
-      className="flex items-center min-h-auto h-auto"
-    >
-      <SidebarGroup>
-        <SidebarGroupContent>
-          <SidebarMenu className="space-y-3">
-            {items.map((item) => {
-              return (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton className="outline-0 border-0 ring-0 font-medium text-foreground cursor-pointer">
-                    {item.icon && <item.icon />}
-                    <span>{item.title}</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              );
-            })}
-          </SidebarMenu>
-        </SidebarGroupContent>
-      </SidebarGroup>
-    </SidebarProvider>
+    <SidebarGroup>
+      <SidebarGroupContent>
+        <SidebarMenu className="space-y-3">
+          {items.map((item) => {
+            return (
+              <SidebarMenuItem key={item.title}>
+                <SidebarMenuButton
+                  size={"lg"}
+                  className="outline-0 border-0 ring-0 font-medium text-foreground cursor-pointer"
+                >
+                  {item.icon && <item.icon />}
+                  <span>{item.title}</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            );
+          })}
+        </SidebarMenu>
+      </SidebarGroupContent>
+    </SidebarGroup>
   );
 }

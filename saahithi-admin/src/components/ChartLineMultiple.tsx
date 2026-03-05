@@ -46,7 +46,7 @@ interface EngagementData {
 
 export function ChartLineMultiple({ data = [] }: { data: EngagementData[] }) {
   return (
-    <Card>
+    <Card className="py-6">
       <CardHeader>
         <CardTitle>Engagement Trends</CardTitle>
         <CardDescription>

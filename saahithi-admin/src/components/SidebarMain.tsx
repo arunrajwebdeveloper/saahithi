@@ -1,34 +1,46 @@
 import { Avatar } from "./Avatar";
 import BrandLogo from "./BrandLogo";
 import { NavLinks } from "./NavLinks";
-import { Archive, Briefcase, Columns2, Compass, FileText } from "lucide-react";
+import {
+  BookOpenText,
+  Bug,
+  CircleGauge,
+  CreditCard,
+  ScrollText,
+  Users,
+} from "lucide-react";
 import { Sidebar } from "./ui/sidebar";
 
 const navMain = [
   {
     title: "Dashboard",
     url: "#",
-    icon: Columns2,
+    icon: CircleGauge,
   },
   {
-    title: "Lifecycle",
+    title: "Contents",
     url: "#",
-    icon: FileText,
+    icon: BookOpenText,
   },
   {
-    title: "Analytics",
+    title: "Users",
     url: "#",
-    icon: Archive,
+    icon: Users,
   },
   {
-    title: "Projects",
+    title: "Payments",
     url: "#",
-    icon: Briefcase,
+    icon: CreditCard,
   },
   {
-    title: "Team",
+    title: "Reports",
     url: "#",
-    icon: Compass,
+    icon: Bug,
+  },
+  {
+    title: "Logs",
+    url: "#",
+    icon: ScrollText,
   },
 ];
 
