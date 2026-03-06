@@ -21,7 +21,7 @@ import { Card } from "@/components/ui/card";
 
 const Dashboard = () => {
   const { user } = useAuth();
-  const { analytics, isLoadingDashboard } = useAnalytics({
+  const { range, analytics, isLoadingDashboard } = useAnalytics({
     enabled: true,
   });
 
@@ -135,7 +135,7 @@ const Dashboard = () => {
               <p className="font-normal text-base text-gray-500">User Growth</p>
               <div className="text-green-600">
                 <p className="font-normal text-sm">
-                  Previous: {userGrowth.previousPeriod}
+                  {`Previous ${range}: ${userGrowth.previousPeriod}`}
                 </p>
               </div>
               <div
@@ -166,7 +166,7 @@ const Dashboard = () => {
               </p>
               <div className="text-yellow-600">
                 <p className="font-normal text-sm">
-                  Previous: {postGrowth.previousPeriod}
+                  {`Previous ${range}: ${postGrowth.previousPeriod}`}
                 </p>
               </div>
               <div
@@ -216,32 +216,19 @@ const Dashboard = () => {
       <div className="mb-12">
         <div className="w-full grid gap-6 md:grid-cols-1 lg:grid-cols-3">
           <div>
-            <h1 className="font-medium text-xl text-card-foreground mb-8">
-              Most Active Authors
-            </h1>
-            <div className="flex w-full gap-x-6">
-              <Card className="w-full p-4">
-                <ActiveAuthorTableLayout data={mostActiveAuthors} />
-              </Card>
+            <div className="w-full">
+              <ActiveAuthorTableLayout data={mostActiveAuthors} />
             </div>
           </div>
           <div>
-            <h1 className="font-medium text-xl text-card-foreground mb-8">
-              Recent Users
-            </h1>
-            <div className="flex w-full gap-x-6">
-              <Card className="w-full p-4">
-                <UserTableLayout data={recentUsers} />
-              </Card>
+            <div className="w-full">
+              <UserTableLayout data={recentUsers} />
             </div>
           </div>
           <div>
-            <h1 className="font-medium text-xl text-card-foreground mb-8">
-              Recent Posts
-            </h1>
-            <Card className="w-full p-4">
+            <div className="w-full">
               <PostTableLayout data={recentPosts} />
-            </Card>
+            </div>
           </div>
         </div>
       </div>

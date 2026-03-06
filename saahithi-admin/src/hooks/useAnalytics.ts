@@ -17,6 +17,7 @@ export const useAnalytics = ({ enabled = false }: { enabled: boolean }) => {
   });
 
   return {
+    range,
     analytics,
     isLoadingDashboard: isLoadingAnalytics,
     isFetchingAnalytics,
