@@ -1,6 +1,8 @@
 import { lazy } from "react";
 
 const Dashboard = lazy(() => import("@/view/Dashboard"));
+const ContentListPage = lazy(() => import("@/view/ContentListPage"));
+const UserListPage = lazy(() => import("@/view/UserListPage"));
 
 export const dashboardRoutes = [
   {
@@ -9,11 +11,11 @@ export const dashboardRoutes = [
   },
   {
     path: "contents",
-    element: <h1>Contents Page</h1>,
+    element: <ContentListPage />,
   },
   {
     path: "users",
-    element: <h1>Users Page</h1>,
+    element: <UserListPage />,
   },
   {
     path: "payments",

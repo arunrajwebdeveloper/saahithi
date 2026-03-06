@@ -1,5 +1,5 @@
-import { analyticsAPI } from "@/api/endpoints/analytics.api";
-import { GET_ANALYTICS } from "@/constants/analytics.constants";
+import { dashboardAPI } from "@/api/endpoints/dashboard.api";
+import { GET_ANALYTICS } from "@/constants/dashboard.constants";
 import { useQuery } from "@tanstack/react-query";
 import { useAppSelector } from "./hooks";
 
@@ -12,7 +12,7 @@ export const useAnalytics = ({ enabled = false }: { enabled: boolean }) => {
     isFetching: isFetchingAnalytics,
   } = useQuery({
     queryKey: [GET_ANALYTICS, range],
-    queryFn: () => analyticsAPI.getAnalytics(range),
+    queryFn: () => dashboardAPI.getAnalytics(range),
     enabled: enabled && !!range,
   });
 

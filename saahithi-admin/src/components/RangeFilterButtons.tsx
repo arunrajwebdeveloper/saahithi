@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { setRange } from "@/store/features/dashboardSlice";
-import type { RangeType } from "@/types/analytics.types";
+import type { RangeType } from "@/types/dashboard.types";
 
 export const RangeFilterButtons = () => {
   const dispatch = useAppDispatch();
