@@ -1,7 +1,7 @@
+import HeaderMain from "@/components/HeaderMain";
+import SidebarMain from "@/components/SidebarMain";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import type { ReactNode } from "react";
-import HeaderMain from "../HeaderMain";
-import SidebarMain from "../SidebarMain";
-import { SidebarInset, SidebarProvider } from "../ui/sidebar";
 
 const PageLayout = ({ children }: { children: ReactNode }) => {
   return (
