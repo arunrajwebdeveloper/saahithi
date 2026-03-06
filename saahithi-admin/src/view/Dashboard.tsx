@@ -9,13 +9,13 @@ import {
 import { useAuth } from "../hooks/useAuth";
 import { ChartLineMultiple } from "@/components/ChartLineMultiple";
 import { ChartBarInteractive } from "@/components/ChartBarInteractive";
-import { UserTableLayout } from "@/components/UserTableLayout";
+import { UserTableSummary } from "@/components/UserTableSummary";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { formatNumber } from "@/utils";
 import { cn } from "@/lib/utils";
 import { AppSpinner } from "@/components/AppSpinner";
-import { ActiveAuthorTableLayout } from "@/components/ActiveAuthorTableLayout";
-import { PostTableLayout } from "@/components/PostTableLayout";
+import { ActiveAuthorTableSummary } from "@/components/ActiveAuthorTableSummary";
+import { PostTableSummary } from "@/components/PostTableSummary";
 import { CategoryDonut } from "@/components/CategoryDonut";
 import { Card } from "@/components/ui/card";
 
@@ -217,17 +217,17 @@ const Dashboard = () => {
         <div className="w-full grid gap-6 md:grid-cols-1 lg:grid-cols-3">
           <div>
             <div className="w-full">
-              <ActiveAuthorTableLayout data={mostActiveAuthors} />
+              <ActiveAuthorTableSummary data={mostActiveAuthors} />
             </div>
           </div>
           <div>
             <div className="w-full">
-              <UserTableLayout data={recentUsers} />
+              <UserTableSummary data={recentUsers} />
             </div>
           </div>
           <div>
             <div className="w-full">
-              <PostTableLayout data={recentPosts} />
+              <PostTableSummary data={recentPosts} />
             </div>
           </div>
         </div>
