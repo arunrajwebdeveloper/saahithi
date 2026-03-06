@@ -99,6 +99,8 @@ export class ContentService {
     const [contents, total] = await Promise.all([
       this.contentModel
         .find(filter)
+        .select('-nodes')
+        .populate('author', '-password -warningCount')
         .sort(sort)
         .skip(skip)
         .limit(limit)
