@@ -1,9 +1,13 @@
+import { useLocation } from "react-router-dom";
 import BrandLogo from "./BrandLogo";
 import { ModeToggle } from "./ModeToggle";
 import { RangeFilterButtons } from "./RangeFilterButtons";
 import { SidebarTrigger } from "./ui/sidebar";
 
 const HeaderMain = () => {
+  const location = useLocation();
+  const isDashboard = location.pathname === "/dashboard";
+
   return (
     <header className="w-full h-16 sticky top-0 z-40 bg-card border-b border-b-slate-200 dark:border-b-gray-800">
       <div className="max-w-11/12 lg:max-w-10/12 px-2 lg:px-4 mx-auto h-full flex justify-between items-center">
@@ -18,9 +22,11 @@ const HeaderMain = () => {
           </p>
           {/* <p className="text-base text-foreground mb-0">Admin</p> */}
         </div>
-        <div>
-          <RangeFilterButtons />
-        </div>
+        {isDashboard && (
+          <div>
+            <RangeFilterButtons />
+          </div>
+        )}
         <div>
           <ModeToggle />
         </div>

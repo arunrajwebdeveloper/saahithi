@@ -1,48 +1,8 @@
 import { Avatar } from "./Avatar";
 import BrandLogo from "./BrandLogo";
 import { NavLinks } from "./NavLinks";
-import {
-  BookOpenText,
-  Bug,
-  CircleGauge,
-  CreditCard,
-  Server,
-  Users,
-} from "lucide-react";
 import { Sidebar } from "./ui/sidebar";
-
-const navMain = [
-  {
-    title: "Dashboard",
-    url: "#",
-    icon: CircleGauge,
-  },
-  {
-    title: "Contents",
-    url: "#",
-    icon: BookOpenText,
-  },
-  {
-    title: "Users",
-    url: "#",
-    icon: Users,
-  },
-  {
-    title: "Payments",
-    url: "#",
-    icon: CreditCard,
-  },
-  {
-    title: "Reports",
-    url: "#",
-    icon: Bug,
-  },
-  {
-    title: "Logs",
-    url: "#",
-    icon: Server,
-  },
-];
+import { sidebarNavigationList } from "@/assets/sidebarNavigationList";
 
 const SidebarMain = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
   return (
@@ -62,7 +22,7 @@ const SidebarMain = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
               className="h-5 w-max align-middle text-foreground"
             />
           </div>
-          <NavLinks items={navMain} />
+          <NavLinks items={sidebarNavigationList} />
           <div className="mb-16 mt-4 ps-4">
             <Avatar size="lg" />
           </div>
