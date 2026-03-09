@@ -14,6 +14,7 @@ export const useAnalytics = ({ enabled = false }: { enabled: boolean }) => {
     queryKey: [GET_ANALYTICS, range],
     queryFn: () => dashboardAPI.getAnalytics(range),
     enabled: enabled && !!range,
+    placeholderData: (previousData) => previousData,
   });
 
   return {
