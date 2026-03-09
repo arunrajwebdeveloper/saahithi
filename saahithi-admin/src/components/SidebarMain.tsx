@@ -1,6 +1,6 @@
-import { Avatar } from "./Avatar";
 import BrandLogo from "./BrandLogo";
 import { NavLinks } from "./NavLinks";
+import { ProfileSummaryDropdown } from "./ProfileSummaryDropdown";
 import { Sidebar } from "./ui/sidebar";
 import { sidebarNavigationList } from "@/assets/sidebarNavigationList";
 
@@ -24,7 +24,7 @@ const SidebarMain = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
           </div>
           <NavLinks items={sidebarNavigationList} />
           <div className="mb-16 mt-4 ps-4">
-            <Avatar size="lg" />
+            <ProfileSummaryDropdown />
           </div>
         </div>
       </aside>
