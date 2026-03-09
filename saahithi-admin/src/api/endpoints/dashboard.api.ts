@@ -15,8 +15,10 @@ export const dashboardAPI = {
     );
     return response.data.result;
   },
-  getUserList: async () => {
-    const response = await apiClient.get<ApiResponse<any>>(`/admin/user-list`);
+  getUserList: async ({ page, limit }: { page: string; limit: string }) => {
+    const response = await apiClient.get<ApiResponse<any>>(
+      `/admin/user-list?page=${page}&limit=${limit}`,
+    );
     return response.data.result;
   },
 };

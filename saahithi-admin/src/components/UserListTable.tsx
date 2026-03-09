@@ -7,8 +7,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Avatar } from "./Avatar";
-import { useRelativeTime } from "@/utils/dateFormatter";
 import { Card } from "./ui/card";
+import { TimeDisplay } from "./TimeDisplay";
 
 export function UserListTable({ data }: { data: any }) {
   return (
@@ -71,8 +71,8 @@ export function UserListTable({ data }: { data: any }) {
                       {isPremium ? "Premium" : "Regular"}
                     </TableCell>
                     <TableCell className="font-medium">
-                      <p>{`Created: ${useRelativeTime(createdAt)}`}</p>
-                      <p>{`Updated: ${useRelativeTime(updatedAt)}`}</p>
+                      <TimeDisplay date={createdAt} prefix="Created:" />
+                      <TimeDisplay date={updatedAt} prefix="Updated:" />
                     </TableCell>
                     <TableCell className="font-medium">Edit / view</TableCell>
                   </TableRow>

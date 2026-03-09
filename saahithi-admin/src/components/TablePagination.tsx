@@ -46,7 +46,7 @@ export function TablePagination({ total, hasNext, hasPrev }: any) {
     if (params.page) searchParams.set("page", params.page.toString());
     if (params.limit) {
       searchParams.set("limit", params.limit);
-      searchParams.set("page", "1"); // Reset to page 1 when limit changes
+      searchParams.set("page", "1");
     }
     setSearchParams(searchParams);
   };
