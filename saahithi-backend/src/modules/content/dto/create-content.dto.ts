@@ -8,9 +8,9 @@ import {
   IsNotEmpty,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { ContentCategory } from '../schemas/content.schema';
 import { BlockDto } from './block.dto';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ContentCategory } from '@/common/enums/content';
 
 export class CreateContentDto {
   @ApiProperty({

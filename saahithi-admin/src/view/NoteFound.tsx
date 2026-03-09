@@ -45,7 +45,7 @@ const NoteFound = () => {
         <h1 className="text-3xl font-bold text-gray-900">Page Not Found</h1>
         <p className="text-gray-600">Sorry, we can't find that page.</p>
         <div className="flex justify-center">
-          <Button onClick={() => navigate("/notes")} variant="primary">
+          <Button onClick={() => navigate("/dashboard")} variant="primary">
             Go back
           </Button>
         </div>

@@ -1,27 +1,30 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useAppSelector } from "../../hooks/hooks";
+import PageLayout from "@/layout/PageLayout";
+import { useAppSelector } from "@/hooks/hooks";
 
 interface ProtectedRouteProps {
-  children?: React.ReactNode;
-  // requiredRole?: string;
+  requiredRole?: string;
 }
 
-export const ProtectedRoute = ({
-  children,
-}: // requiredRole,
-ProtectedRouteProps) => {
-  const { isAuthenticated } = useAppSelector((state) => state.auth);
+export const ProtectedRoute = ({ requiredRole }: ProtectedRouteProps) => {
+  const { isAuthenticated, loading, user } = useAppSelector(
+    (state) => state.auth,
+  );
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated && !loading) {
     return <Navigate to="/login" replace />;
   }
 
   // Role-based access control
-  // if (requiredRole && user?.role !== requiredRole) {
-  //   return <Navigate to="/unauthorized" replace />;
-  // }
+  if (requiredRole && user?.role !== requiredRole) {
+    return <Navigate to="/unauthorized" replace />;
+  }
 
-  return children ? <>{children}</> : <Outlet />;
+  return (
+    <PageLayout>
+      <Outlet />
+    </PageLayout>
+  );
 };
 
 // Public Route (redirects to dashboard if already logged in)
@@ -30,7 +33,7 @@ export const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   if (isAuthenticated) {
-    return <Navigate to="/notes" replace />;
+    return <Navigate to="/dashboard" replace />;
   }
 
   return <>{children}</>;

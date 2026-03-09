@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App.tsx";
 import StoreProvider from "./providers/StoreProvider.tsx";
 import { SidebarManager } from "./components/SidebarManager.tsx";
+import { ThemeWatcher } from "./components/ThemeWatcher.tsx";
 
 if (!navigator.cookieEnabled) {
   alert("Cookies are disabled. This app will not work correctly.");
@@ -12,6 +13,7 @@ if (!navigator.cookieEnabled) {
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <StoreProvider>
+      <ThemeWatcher />
       <SidebarManager />
       <App />
     </StoreProvider>

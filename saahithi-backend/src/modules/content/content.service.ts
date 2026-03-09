@@ -99,6 +99,8 @@ export class ContentService {
     const [contents, total] = await Promise.all([
       this.contentModel
         .find(filter)
+        .select('-nodes')
+        .populate('author', '-password -warningCount')
         .sort(sort)
         .skip(skip)
         .limit(limit)
@@ -233,27 +235,49 @@ export class ContentService {
     return this.contentModel.distinct('category').exec();
   }
 
-  async calculateGrowth() {
+  async calculateGrowth(range: 'day' | 'week' | 'month' | 'year' = 'month') {
     const now = new Date();
-    const startOfThisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    let startOfCurrent: Date;
+    let startOfPrevious: Date;
 
-    const [thisMonth, lastMonth] = await Promise.all([
+    if (range === 'year') {
+      startOfCurrent = new Date(now.getFullYear(), 0, 1);
+      startOfPrevious = new Date(now.getFullYear() - 1, 0, 1);
+    } else if (range === 'month') {
+      startOfCurrent = new Date(now.getFullYear(), now.getMonth(), 1);
+      startOfPrevious = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    } else if (range === 'week') {
+      startOfCurrent = new Date(now);
+      startOfCurrent.setDate(now.getDate() - 7);
+      startOfPrevious = new Date(startOfCurrent);
+      startOfPrevious.setDate(startOfCurrent.getDate() - 7);
+    } else {
+      // day
+      startOfCurrent = new Date(now.setHours(0, 0, 0, 0));
+      startOfPrevious = new Date(startOfCurrent);
+      startOfPrevious.setDate(startOfCurrent.getDate() - 1);
+    }
+
+    const [currentPeriod, previousPeriod] = await Promise.all([
+      this.contentModel.countDocuments({ createdAt: { $gte: startOfCurrent } }),
       this.contentModel.countDocuments({
-        createdAt: { $gte: startOfThisMonth },
-      }),
-      this.contentModel.countDocuments({
-        createdAt: { $gte: startOfLastMonth, $lt: startOfThisMonth },
+        createdAt: { $gte: startOfPrevious, $lt: startOfCurrent },
       }),
     ]);
 
     const growth =
-      lastMonth === 0
-        ? thisMonth > 0
+      previousPeriod === 0
+        ? currentPeriod > 0
           ? 100
           : 0
-        : ((thisMonth - lastMonth) / lastMonth) * 100;
-    return { thisMonth, lastMonth, growth: Number(growth.toFixed(2)) };
+        : ((currentPeriod - previousPeriod) / previousPeriod) * 100;
+
+    return {
+      currentPeriod,
+      previousPeriod,
+      growth: Number(growth.toFixed(2)),
+      isPositive: growth >= 0,
+    };
   }
 
   async getMostActiveAuthors() {
@@ -361,6 +385,32 @@ export class ContentService {
         $group: {
           _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
           count: { $sum: 1 },
+        },
+      },
+      { $sort: { _id: 1 } },
+    ]);
+  }
+
+  async getContentTrends(startDate: Date, dateFormat: string) {
+    return this.contentModel.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: startDate },
+          isTrashed: false,
+        },
+      },
+      {
+        $group: {
+          _id: { $dateToString: { format: dateFormat, date: '$createdAt' } },
+          posts: { $sum: 1 },
+          uniqueAuthors: { $addToSet: '$author' },
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          posts: 1,
+          activeAuthors: { $size: '$uniqueAuthors' },
         },
       },
       { $sort: { _id: 1 } },

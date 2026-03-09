@@ -19,7 +19,7 @@ function ConfirmModal({
   isLoading = false,
 }: ConfirmModalProps) {
   return (
-    <Modal show={isShow} onHide={onClose} className="!max-w-94">
+    <Modal show={isShow} onHide={onClose} className="max-w-94!">
       <Modal.Header closeButton onClose={onClose}>
         <Modal.Title>
           <div className="py-2">{title}</div>
