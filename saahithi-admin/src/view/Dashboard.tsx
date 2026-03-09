@@ -188,28 +188,23 @@ const Dashboard = () => {
       </div>
 
       <div className="mb-12">
-        <div className="w-full">
-          <div className="flex justify-between items-center w-full mb-8">
-            <h1 className="font-medium text-xl text-card-foreground">
-              Total Progress
-            </h1>
-          </div>
-          <div className="flex w-full gap-x-6">
-            <Card className="w-full">
-              <ChartBarInteractive chartData={progressData} />
-            </Card>
-          </div>
-        </div>
-      </div>
-
-      <div className="mb-12">
-        <div className=" w-full grid gap-6 md:grid-cols-1 lg:grid-cols-2">
+        <div className="w-full grid gap-6 md:grid-cols-1 lg:grid-cols-2">
           <Card className="w-full">
             <ChartLineMultiple data={engagementTrends} />
           </Card>
           <Card className="w-full">
             <CategoryDonut data={categoryDistribution} />
           </Card>
+        </div>
+      </div>
+
+      <div className="mb-12">
+        <div className="w-full">
+          <div className="flex w-full gap-x-6">
+            <Card className="w-full">
+              <ChartBarInteractive chartData={progressData} />
+            </Card>
+          </div>
         </div>
       </div>
 
