@@ -7,12 +7,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Avatar } from "./Avatar";
-import { useRelativeTime } from "@/utils/dateFormatter";
 import { Card } from "./ui/card";
+import { TimeDisplay } from "./TimeDisplay";
 
 export function ContentListTable({ data }: { data: any }) {
   return (
-    <Card className="w-full py-4 ">
+    <Card className="w-full py-4">
       <div className="px-4">
         <Table>
           <TableHeader>
@@ -79,8 +79,8 @@ export function ContentListTable({ data }: { data: any }) {
                       {isPublished ? "Published" : "Drafted"}
                     </TableCell>
                     <TableCell className="font-medium">
-                      <p>{`Created: ${useRelativeTime(createdAt)}`}</p>
-                      <p>{`Updated: ${useRelativeTime(updatedAt)}`}</p>
+                      <TimeDisplay date={createdAt} prefix="Created:" />
+                      <TimeDisplay date={updatedAt} prefix="Updated:" />
                     </TableCell>
                     <TableCell className="font-medium">Edit / view</TableCell>
                   </TableRow>

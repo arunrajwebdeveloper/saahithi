@@ -9,9 +9,10 @@ export const dashboardAPI = {
     );
     return response.data.result;
   },
-  getContentList: async () => {
-    const response =
-      await apiClient.get<ApiResponse<any>>(`/admin/content-list`);
+  getContentList: async ({ page, limit }: { page: string; limit: string }) => {
+    const response = await apiClient.get<ApiResponse<any>>(
+      `/admin/content-list?page=${page}&limit=${limit}`,
+    );
     return response.data.result;
   },
   getUserList: async () => {
