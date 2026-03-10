@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import AuthLayout from "@/layout/AuthLayout";
 
 const RegisterPage = () => {
   const [firstName, setFirstName] = useState("");
@@ -10,7 +11,7 @@ const RegisterPage = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const { register, isRegisterLoading, registerError } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.SubmitEvent) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
@@ -22,11 +23,7 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen select-none w-full flex flex-col justify-between items-center  bg-blue-900">
-      <div className="pt-5 p-b-2">
-        <h2 className="text-white font-semibold text-3xl">NOTI</h2>
-      </div>
-
+    <AuthLayout>
       <div className="max-w-md w-full space-y-8 p-8">
         <div>
           <h2 className="text-2xl text-white font-bold text-left">
@@ -121,7 +118,7 @@ const RegisterPage = () => {
       <div className="text-center py-4">
         <p className="text-white text-xs">&copy;{new Date().getFullYear()}</p>
       </div>
-    </div>
+    </AuthLayout>
   );
 };
 

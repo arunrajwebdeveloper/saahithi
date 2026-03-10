@@ -1,23 +1,20 @@
 import { useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { Link } from "react-router-dom";
+import AuthLayout from "@/layout/AuthLayout";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { login, isLoginLoading, loginError } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.SubmitEvent) => {
     e.preventDefault();
     login({ email, password });
   };
 
   return (
-    <div className="min-h-screen select-none w-full flex flex-col items-center justify-between bg-blue-900">
-      <div className="pt-5 p-b-2">
-        <h2 className="text-white font-semibold text-3xl">NOTI</h2>
-      </div>
-
+    <AuthLayout>
       <div className="max-w-md w-full space-y-8 p-8">
         <div>
           <h2 className="text-2xl text-white font-bold text-left">Sign in</h2>
@@ -74,7 +71,7 @@ const LoginPage = () => {
       <div className="text-center py-4">
         <p className="text-white text-xs">&copy;{new Date().getFullYear()}</p>
       </div>
-    </div>
+    </AuthLayout>
   );
 };
 
