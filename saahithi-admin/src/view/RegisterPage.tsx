@@ -114,10 +114,6 @@ const RegisterPage = () => {
           )}
         </form>
       </div>
-
-      <div className="text-center py-4">
-        <p className="text-white text-xs">&copy;{new Date().getFullYear()}</p>
-      </div>
     </AuthLayout>
   );
 };
