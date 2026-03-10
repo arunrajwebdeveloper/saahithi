@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import AuthLayout from "@/layout/AuthLayout";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { InputPassword } from "@/components/ui/input-password";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -36,9 +37,8 @@ const LoginPage = () => {
           </div>
 
           <div>
-            <Input
+            <InputPassword
               id="password"
-              type="password"
               placeholder="Password *"
               required
               value={password}
