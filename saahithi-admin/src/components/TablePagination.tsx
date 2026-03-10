@@ -5,8 +5,6 @@ import {
   PaginationEllipsis,
   PaginationItem,
   PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
 } from "@/components/ui/pagination";
 import {
   Select,
@@ -16,7 +14,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { ChevronsLeft, ChevronsRight } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+} from "lucide-react";
 
 const getPaginationRange = (current: number, total: number) => {
   const delta = 1;
@@ -89,11 +92,16 @@ export function TablePagination({ total, hasNext, hasPrev }: any) {
             </PaginationItem>
 
             <PaginationItem>
-              <PaginationPrevious
+              <Button
                 className="cursor-pointer"
+                variant="ghost"
+                size="lg"
                 onClick={() => hasPrev && updateUrl({ page: currentPage - 1 })}
-                aria-disabled={!hasPrev}
-              />
+                disabled={!hasPrev}
+              >
+                <ChevronLeft className="h-4 w-4" />
+                <span className="hidden sm:block">Previous</span>
+              </Button>
             </PaginationItem>
 
             {pages.map((page, idx) => (
@@ -113,11 +121,16 @@ export function TablePagination({ total, hasNext, hasPrev }: any) {
             ))}
 
             <PaginationItem>
-              <PaginationNext
+              <Button
                 className="cursor-pointer"
+                variant="ghost"
+                size="lg"
                 onClick={() => hasNext && updateUrl({ page: currentPage + 1 })}
-                aria-disabled={!hasNext}
-              />
+                disabled={!hasNext}
+              >
+                <span className="hidden sm:block">Next</span>
+                <ChevronRight className="h-4 w-4" />
+              </Button>
             </PaginationItem>
 
             <PaginationItem>
