@@ -4,6 +4,7 @@ import { useAuth } from "../hooks/useAuth";
 import AuthLayout from "@/layout/AuthLayout";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { InputPassword } from "@/components/ui/input-password";
 
 const RegisterPage = () => {
   const [firstName, setFirstName] = useState("");
@@ -68,9 +69,8 @@ const RegisterPage = () => {
           </div>
 
           <div>
-            <Input
+            <InputPassword
               id="password"
-              type="password"
               placeholder="Password *"
               required
               value={password}
@@ -80,9 +80,8 @@ const RegisterPage = () => {
           </div>
 
           <div>
-            <Input
+            <InputPassword
               id="confirmPassword"
-              type="password"
               placeholder="Confirm Password *"
               required
               value={confirmPassword}
