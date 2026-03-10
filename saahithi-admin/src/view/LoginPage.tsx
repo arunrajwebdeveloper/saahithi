@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { Link } from "react-router-dom";
 import AuthLayout from "@/layout/AuthLayout";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -17,45 +19,45 @@ const LoginPage = () => {
     <AuthLayout>
       <div className="max-w-md w-full space-y-8 p-8">
         <div>
-          <h2 className="text-2xl text-white font-bold text-left">Sign in</h2>
+          <h2 className="text-2xl font-bold text-left">Sign in</h2>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <input
+            <Input
               id="email"
               type="email"
               placeholder="Email Address *"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-4 text-white bg-white/10 border-0 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-100/20"
+              className="w-full px-4 py-6 border-2 rounded-lg"
             />
           </div>
 
           <div>
-            <input
+            <Input
               id="password"
               type="password"
               placeholder="Password *"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-4 text-white bg-white/10 border-0 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-100/20"
+              className="w-full px-4 py-6 border-2 rounded-lg"
             />
           </div>
 
-          <button
+          <Button
             type="submit"
             disabled={isLoginLoading}
-            className="w-full p-4 cursor-pointer bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full px-4 py-6 cursor-pointer bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoginLoading ? "Signing in..." : "Sign in"}
-          </button>
+          </Button>
 
           <div className="flex items-center gap-2 text-sm font-medium mt-6">
-            <p className="text-white">Don't have an account?</p>
-            <Link className="text-white underline" to="/register">
+            <p>Don't have an account?</p>
+            <Link className="underline" to="/register">
               Create an account
             </Link>
           </div>

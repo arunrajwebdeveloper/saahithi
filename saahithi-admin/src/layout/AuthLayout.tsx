@@ -5,7 +5,7 @@ const AuthLayout = ({ children }: { children: ReactNode }) => {
   return (
     <div className="min-h-screen select-none overflow-hidden flex bg-[url('./auth-banner.webp')] w-full bg-no-repeat bg-cover bg-center">
       <div className="w-110 m-auto bg-card p-6 rounded-lg shadow-2xl">
-        <div className="">
+        <div className="my-3">
           <BrandLogo
             short
             className="h-5 w-max align-middle text-foreground mx-auto"
