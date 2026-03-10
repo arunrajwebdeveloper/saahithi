@@ -3,8 +3,8 @@ import type { ReactNode } from "react";
 
 const AuthLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="min-h-screen select-none overflow-hidden flex bg-[url('./auth-banner.avif')] w-full bg-no-repeat bg-cover bg-center">
-      <div className="w-110 m-auto bg-card p-6 rounded-lg shadow-2xl">
+    <div className="min-h-screen select-none overflow-hidden flex bg-[url('./auth-banner.jpg')] w-full bg-no-repeat bg-cover bg-center">
+      <div className="w-110 m-auto bg-card/85 p-6 rounded-lg shadow-2xl backdrop-blur-md">
         <div className="my-3">
           <BrandLogo
             short
