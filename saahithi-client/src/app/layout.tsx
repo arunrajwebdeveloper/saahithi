@@ -1,15 +1,13 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Lexend_Deca } from "next/font/google";
+import { initApiLayer } from "@/lib/api/init";
+import { Providers } from "@/providers";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+export const lexendDeca = Lexend_Deca({
+  subsets: ["latin"], // Specify the desired subsets
+  display: "swap", // Recommended for better performance
+  variable: "--font-lexend-deca", // Optional: Define a CSS variable for easier styling
 });
 
 export const metadata: Metadata = {
@@ -22,12 +20,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  initApiLayer();
+
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <body className={`${lexendDeca.variable} antialiased`}>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

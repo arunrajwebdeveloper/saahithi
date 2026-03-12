@@ -41,10 +41,11 @@ async function bootstrap() {
 
   const configService = app.get(ConfigService);
   const client_url = configService.get<string>('CLIENT_URL')!;
+  const admin_url = configService.get<string>('ADMIN_URL')!;
 
   // app.enableCors();
   app.enableCors({
-    origin: [client_url],
+    origin: [client_url, admin_url],
     credentials: true, // Allow cookies
   });
 
