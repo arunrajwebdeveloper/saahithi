@@ -1,14 +1,8 @@
 import { http } from "@/lib/api/http";
 
 const contentApi = {
-  create: (data: any) =>
-    http.post("/content", {
-      body: data,
-    }),
-  update: (id: any, data: any) =>
-    http.patch(`/content/${id}`, {
-      body: data,
-    }),
+  create: (data: any) => http.post("/content", data),
+  update: (id: any, data: any) => http.patch(`/content/${id}`, data),
   saveAsDraft: (id: any) => http.patch(`/content/${id}/draft`),
   publish: (id: any) => http.patch(`/content/${id}/publish`),
   trash: (id: any) => http.patch(`/content/${id}/trash`),

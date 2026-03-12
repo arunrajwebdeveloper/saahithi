@@ -31,14 +31,16 @@ export async function apiClient<TResponse, TBody = unknown>(
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), timeout);
 
+      const isFormData = body instanceof FormData;
+
       let config: RequestInit = {
         method,
         headers: {
-          "Content-Type": "application/json",
+          ...(!isFormData && { "Content-Type": "application/json" }),
           ...headers,
         },
         credentials: "include",
-        body: body ? JSON.stringify(body) : undefined,
+        body: body ? (isFormData ? body : JSON.stringify(body)) : undefined,
         signal: controller.signal,
       };
 
