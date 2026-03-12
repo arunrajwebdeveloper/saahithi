@@ -1,4 +1,13 @@
-import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { Roles } from '@/common/decorators/roles.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -19,6 +28,7 @@ import { PaginationDto } from '../../common/dto/pagination.dto';
 import { User } from '../users/schemas/user.schema';
 import { Content } from '../content/schemas/content.schema';
 import { Block } from '../content/schemas/block.schema';
+import { UpdateUserDto } from '../users/dto/update-user.dto';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles(UserRole.ADMIN)
@@ -86,6 +96,39 @@ export class AdminController {
   @ApiOperation({ summary: 'Statistics for the admin dashboard' })
   getDashboardStats(@Query('range') range: 'day' | 'week' | 'month' | 'year') {
     return this.adminService.getDashboardStats(range);
+  }
+
+  @Patch('update/:id')
+  @ApiOperation({ summary: 'Update a profile with ID' })
+  async updateUser(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return this.userService.update(id, updateUserDto);
+  }
+
+  @Patch('activate/:id')
+  @ApiOperation({ summary: 'Activate a user with ID' })
+  async activeUser(@Param('id') id: string) {
+    return this.userService.activeUser(id);
+  }
+
+  @Patch('inactivate/:id')
+  @ApiOperation({ summary: 'Inactivate a user with ID' })
+  async inactiveUser(@Param('id') id: string) {
+    return this.userService.inactiveUser(id);
+  }
+
+  @Patch('terminate/:id')
+  @ApiOperation({ summary: 'Terminate a user with ID' })
+  async terminateUser(@Param('id') id: string) {
+    return this.userService.terminateUser(id);
+  }
+
+  @Delete('delete/:id')
+  @ApiOperation({ summary: 'Delete a user with ID' })
+  async permanentDelete(@Param('id') id: string) {
+    return this.userService.permanentDelete(id);
   }
 
   @Get('logs')

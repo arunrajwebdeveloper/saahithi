@@ -48,7 +48,7 @@ export class UserController {
     return userObject as UserDocument;
   }
 
-  @Patch('update/:id')
+  @Patch('update')
   @ApiOperation({ summary: 'Update current user profile' })
   async updateCurrentUser(
     @Req() req: any,
@@ -57,36 +57,15 @@ export class UserController {
     return this.userService.update(req.user?.userId, updateUserDto);
   }
 
-  @Patch('update/:id')
-  @ApiOperation({ summary: 'Update a profile with ID' })
-  async updateUser(
-    @Param('id') id: string,
-    @Body() updateUserDto: UpdateUserDto,
-  ) {
-    return this.userService.update(id, updateUserDto);
+  @Patch('inactivate')
+  @ApiOperation({ summary: 'Inactivate a current user' })
+  async inactiveUser(@Req() req: any) {
+    return this.userService.inactiveUser(req.user?.userId);
   }
 
-  @Patch('activate/:id')
-  @ApiOperation({ summary: 'Activate a user with ID' })
-  async activeUser(@Param('id') id: string) {
-    return this.userService.activeUser(id);
-  }
-
-  @Patch('inactivate/:id')
-  @ApiOperation({ summary: 'Inactivate a user with ID' })
-  async inactiveUser(@Param('id') id: string) {
-    return this.userService.inactiveUser(id);
-  }
-
-  @Patch('terminate/:id')
-  @ApiOperation({ summary: 'Terminate a user with ID' })
-  async terminateUser(@Param('id') id: string) {
-    return this.userService.terminateUser(id);
-  }
-
-  @Delete('delete/:id')
-  @ApiOperation({ summary: 'Delete a user with ID' })
-  async permanentDelete(@Param('id') id: string) {
-    return this.userService.permanentDelete(id);
+  @Delete('delete')
+  @ApiOperation({ summary: 'Delete current user' })
+  async permanentDelete(@Req() req: any) {
+    return this.userService.permanentDelete(req.user?.userId);
   }
 }
