@@ -1,21 +1,46 @@
 "use client";
 
-import { http } from "@/lib/api/http";
-import { useAuth } from "@/providers/auth-provider";
+import { useAuth } from "@/providers/AuthProvider";
+import authApi from "@/services/auth";
+import userApi from "@/services/user";
+import { useRouter } from "next/navigation";
+import { SubmitEvent } from "react";
 
 export default function Login() {
+  const router = useRouter();
   const { setUser } = useAuth();
 
-  async function handleLogin() {
-    await http.post("/auth/login", {
-      email: "test@mail.com",
-      password: "123456",
-    });
+  async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
+    event.preventDefault();
 
-    const user = await http.get("/auth/me");
+    const formData = new FormData(event.currentTarget);
+    const email = formData.get("email");
+    const password = formData.get("password");
 
-    setUser(user as any); // rewrite it
+    await authApi.login({ email, password });
+
+    const user = await userApi.getCurrentUser();
+    setUser(user as any);
+    router.push("/dashboard");
   }
 
-  return <button onClick={handleLogin}>Login</button>;
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        type="email"
+        name="email"
+        placeholder="Email"
+        required
+        defaultValue={"arunrajcvkl@gmail.com"}
+      />
+      <input
+        type="password"
+        name="password"
+        placeholder="Password"
+        required
+        defaultValue={"12345678"}
+      />
+      <button type="submit">Login</button>
+    </form>
+  );
 }

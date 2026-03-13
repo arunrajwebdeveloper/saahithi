@@ -1,31 +1,33 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect } from "react";
-import { http } from "@/lib/api/http";
+import userApi from "@/services/user";
+import authApi from "@/services/auth";
 
-interface User {
-  id: string;
-  email: string;
-}
+// interface User {
+//   id: string;
+//   email: string;
+// }
 
 interface AuthContextType {
-  user: User | null;
+  user: any;
   loading: boolean;
-  setUser: (user: User | null) => void;
+  setUser: (user: any) => void;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   async function loadUser() {
     try {
-      const me = await http.get<User>("/user/me");
+      const me = await userApi.getCurrentUser();
       setUser(me);
     } catch {
       setUser(null);
+      authApi.logout();
     } finally {
       setLoading(false);
     }
