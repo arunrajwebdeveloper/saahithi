@@ -6,7 +6,7 @@ import { dedupeRequest } from "./request-cache";
 import { handleRateLimit } from "./rate-limit";
 import { requestInterceptors, responseInterceptors } from "./interceptors";
 import { ApiRequestOptions } from "./types";
-import authApi from "@/services/auth";
+import authApi from "@/services/auth.services";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL!;
 const DEFAULT_TIMEOUT = 10000;

@@ -1,6 +1,6 @@
 "use client";
 
-import authApi from "@/services/auth";
+import authApi from "@/services/auth.services";
 import React from "react";
 
 const dashboardPage = () => {

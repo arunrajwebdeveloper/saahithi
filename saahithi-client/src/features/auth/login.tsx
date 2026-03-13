@@ -1,8 +1,8 @@
 "use client";
 
 import { useAuth } from "@/providers/AuthProvider";
-import authApi from "@/services/auth";
-import userApi from "@/services/user";
+import authApi from "@/services/auth.services";
+import userApi from "@/services/user.services";
 import { useRouter } from "next/navigation";
 import { SubmitEvent } from "react";
 
