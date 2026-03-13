@@ -8,6 +8,8 @@ import { UsersModule } from './modules/users/users.module';
 import { GatewayModule } from './common/gateway/gateway.module';
 import { EventsModule } from './common/events/events.module';
 import { CloudinaryModule } from './common/cloudinary/cloudinary.module';
+import { FeedsModule } from './modules/feeds/feeds.module';
+import { InteractionsModule } from './modules/interactions/interactions.module';
 
 @Module({
   imports: [
@@ -34,6 +36,8 @@ import { CloudinaryModule } from './common/cloudinary/cloudinary.module';
     AuthModule,
     UsersModule,
     ContentModule,
+    FeedsModule,
+    InteractionsModule,
   ],
 })
 export class AppModule {}

@@ -1,6 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { User, UserDocument } from './schemas/user.schema';
 import { RegisterUserDto } from '../auth/dto/register-user.dto';
 import { ConfigService } from '@nestjs/config';
@@ -286,5 +290,59 @@ export class UsersService {
       },
       { $sort: { _id: 1 } },
     ]);
+  }
+
+  async followUser(followerId: string, targetId: string) {
+    if (followerId === targetId) {
+      throw new BadRequestException('You cannot follow yourself');
+    }
+
+    // Add target to the follower's 'following' list
+    const followerUpdate = await this.userModel.findOneAndUpdate(
+      { _id: followerId, following: { $ne: new Types.ObjectId(targetId) } },
+      { $push: { following: new Types.ObjectId(targetId) } },
+      { new: true },
+    );
+
+    if (!followerUpdate) {
+      throw new BadRequestException(
+        'Already following this user or user not found',
+      );
+    }
+
+    // Increment the followerCount of the target user
+    await this.userModel.findByIdAndUpdate(targetId, {
+      $inc: { followerCount: 1 },
+    });
+
+    return { message: 'Followed successfully' };
+  }
+
+  async unfollowUser(followerId: string, targetId: string) {
+    //  Remove target from follower's list
+    const followerUpdate = await this.userModel.findOneAndUpdate(
+      { _id: followerId, following: new Types.ObjectId(targetId) },
+      { $pull: { following: new Types.ObjectId(targetId) } },
+      { new: true },
+    );
+
+    if (!followerUpdate) {
+      throw new BadRequestException('You are not following this user');
+    }
+
+    //  Decrement the followerCount of the target user
+    await this.userModel.findByIdAndUpdate(targetId, {
+      $inc: { followerCount: -1 },
+    });
+
+    return { message: 'Unfollowed successfully' };
+  }
+
+  async isFollowing(followerId: string, targetId: string): Promise<boolean> {
+    const user = await this.userModel.exists({
+      _id: followerId,
+      following: new Types.ObjectId(targetId),
+    });
+    return !!user;
   }
 }

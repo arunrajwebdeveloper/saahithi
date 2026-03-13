@@ -74,6 +74,23 @@ export class Content {
   })
   @Prop({ type: [String], default: [], index: true })
   imageRegistry!: string[];
+
+  @ApiProperty({ example: 1250 })
+  @Prop({ default: 0, index: true })
+  views!: number;
+
+  @ApiProperty({ example: 45 })
+  @Prop({ default: 0, index: true })
+  likesCount!: number;
+
+  // For the "Trending" sidebar, we often need a "Popularity Score"
+  // calculated by an algorithm (e.g., views per hour)
+  @Prop({ default: 0, index: true })
+  trendingScore!: number;
+
+  @ApiProperty({ description: 'Tags for better related-content matching' })
+  @Prop({ type: [String], default: [], index: true })
+  tags!: string[];
 }
 
 export const ContentSchema = SchemaFactory.createForClass(Content);

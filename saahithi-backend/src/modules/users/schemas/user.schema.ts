@@ -1,7 +1,7 @@
 import { UserRole, UserStatus } from '@/common/enums/user';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Schema as MongooseSchema, Types } from 'mongoose';
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -44,6 +44,25 @@ export class User {
   @ApiProperty({ example: 'avatars/12345', required: false, nullable: true })
   @Prop({ type: String, default: null })
   avatarPublicId?: string | null;
+
+  @ApiProperty({
+    example: ['tech', 'lifestyle'],
+    description: 'Categories the user is interested in',
+  })
+  @Prop({ type: [String], default: [], index: true })
+  interests!: string[];
+
+  @ApiProperty({
+    description: 'List of Author IDs this user follows',
+  })
+  @Prop({
+    type: [{ type: MongooseSchema.Types.ObjectId, ref: 'User' }],
+    default: [],
+  })
+  following!: Types.ObjectId[];
+
+  @Prop({ default: 0 })
+  followerCount!: number;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

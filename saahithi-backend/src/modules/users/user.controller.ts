@@ -8,12 +8,14 @@ import {
   Param,
   Body,
   Delete,
+  Post,
 } from '@nestjs/common';
 import { UserDocument } from './schemas/user.schema';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { GetUser } from '@/common/decorators/get-user.decorator';
 
 @UseGuards(JwtAuthGuard)
 @ApiTags('Users')
@@ -36,8 +38,7 @@ export class UserController {
     description: 'User not found.',
   })
   @Get('me')
-  async getMe(@Req() req: any): Promise<UserDocument | null> {
-    const userId = req.user?.userId;
+  async getMe(@GetUser('userId') userId: string): Promise<UserDocument | null> {
     const user = await this.userService.findOneById(userId);
 
     if (!user) {
@@ -51,21 +52,37 @@ export class UserController {
   @Patch('update')
   @ApiOperation({ summary: 'Update current user profile' })
   async updateCurrentUser(
-    @Req() req: any,
+    @GetUser('userId') userId: string,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    return this.userService.update(req.user?.userId, updateUserDto);
+    return this.userService.update(userId, updateUserDto);
   }
 
   @Patch('inactivate')
   @ApiOperation({ summary: 'Inactivate a current user' })
-  async inactiveUser(@Req() req: any) {
-    return this.userService.inactiveUser(req.user?.userId);
+  async inactiveUser(@GetUser('userId') userId: string) {
+    return this.userService.inactiveUser(userId);
   }
 
   @Delete('delete')
   @ApiOperation({ summary: 'Delete current user' })
-  async permanentDelete(@Req() req: any) {
-    return this.userService.permanentDelete(req.user?.userId);
+  async permanentDelete(@GetUser('userId') userId: string) {
+    return this.userService.permanentDelete(userId);
+  }
+
+  @Post('follow/:targetId')
+  async follow(
+    @Param('targetId') targetId: string,
+    @GetUser('userId') userId: string,
+  ) {
+    return this.userService.followUser(userId, targetId);
+  }
+
+  @Delete('unfollow/:targetId')
+  async unfollow(
+    @Param('targetId') targetId: string,
+    @GetUser('userId') userId: string,
+  ) {
+    return this.userService.unfollowUser(userId, targetId);
   }
 }

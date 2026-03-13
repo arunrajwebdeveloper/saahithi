@@ -66,8 +66,11 @@ export class ContentController {
   @ApiOperation({ summary: "Current user's content list" })
   @UseGuards(RolesGuard)
   @Roles(UserRole.USER)
-  findMyContents(@Req() req: any, @Query() paginationDto: PaginationDto) {
-    return this.contentService.findUserContent(req.user?.userId, paginationDto);
+  findMyContents(
+    @GetUser('userId') userId: string,
+    @Query() paginationDto: PaginationDto,
+  ) {
+    return this.contentService.findUserContent(userId, paginationDto);
   }
 
   @Get(':id')
