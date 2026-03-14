@@ -21,7 +21,7 @@ export default function Login() {
 
     const user = await userApi.getCurrentUser();
     setUser(user as any);
-    router.push("/dashboard");
+    router.push("/feeds");
   }
 
   return (

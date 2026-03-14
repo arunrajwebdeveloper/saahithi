@@ -33,7 +33,7 @@ export async function proxy(request: NextRequest) {
   // --- LOGIC 1: AUTHENTICATED USERS vs AUTH PAGES ---
   // Redirect logged-in users away from /login or /register
   if (session && ROUTES.AUTH.some((path) => pathname.startsWith(path))) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    return NextResponse.redirect(new URL("/feeds", request.url));
   }
 
   // --- LOGIC 2: ROLE-BASED ACCESS CONTROL (RBAC) ---
