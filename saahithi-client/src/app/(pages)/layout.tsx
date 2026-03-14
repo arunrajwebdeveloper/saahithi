@@ -4,7 +4,7 @@ export default function PageLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <section className="min-h-screen w-full flex">
+    <section className="h-screen w-full overflow-y-auto overflow-x-hidden flex">
       <>{children}</>
     </section>
   );
